@@ -27,7 +27,7 @@ const slides = [
   },
   {
     label: "Loja Rise • Novo drop em breve",
-    title: <>Vista o movimento. <em>Espere o inesperado.</em></>,
+    title: <>Vista o movimento. <em>Espere o <span className="hero-no-break">inesperado.</span></em></>,
     text: "Conheça a coleção atual e acompanhe o lançamento das próximas camisetas do Rise.",
     href: "/loja",
     action: "Ver a coleção",
