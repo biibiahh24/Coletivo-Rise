@@ -44,11 +44,14 @@ export default function LojaPage() {
       </section>
 
       <section className="section-shell drop-teaser" aria-labelledby="drop-title">
-        <div className="drop-number" aria-hidden="true">02</div>
+        <div className="drop-media">
+          <img src="/assets/nova-colecao-brasil-jesus.jpeg" alt="Prévia da nova camiseta Rise Brasil pertence a Jesus" />
+          <span>Nova coleção</span>
+        </div>
         <div className="drop-copy">
           <span className="eyebrow light"><Sparkles size={16} /> Próximo lançamento</span>
-          <h2 id="drop-title">Uma nova coleção está se levantando.</h2>
-          <p>Novos modelos do Coletivo Rise estão sendo preparados. Acompanhe o Instagram para ver o lançamento primeiro.</p>
+          <h2 id="drop-title">O Brasil pertence a Jesus.</h2>
+          <p>A próxima coleção do Coletivo Rise carrega uma declaração de fé inspirada em Salmos 33:12. Acompanhe o Instagram para conhecer a data e os detalhes do lançamento.</p>
           <a href="https://www.instagram.com/coletivo_rise/" target="_blank" rel="noreferrer" className="button button-light">Acompanhar lançamento <ArrowUpRight /></a>
         </div>
         <div className="drop-seal"><Shirt /><span>Em breve</span></div>

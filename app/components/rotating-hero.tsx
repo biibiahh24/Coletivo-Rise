@@ -12,8 +12,8 @@ const slides = [
     href: "/#quem-somos",
     action: "Conheça o coletivo",
     icon: Sparkles,
-    image: "/assets/jovens-rise.jpeg",
-    alt: "Jovens reunidos no Coletivo Rise",
+    image: "/assets/encontro-rise-04.jpeg",
+    alt: "Jovens reunidos em um encontro do Coletivo Rise",
   },
   {
     label: "Acampamento Rise • 2027",
@@ -22,8 +22,8 @@ const slides = [
     href: "/inscricao",
     action: "Garantir minha vaga",
     icon: Flame,
-    image: "/assets/camiseta-rise-02.jpeg",
-    alt: "Jovens vestindo a camiseta do Coletivo Rise",
+    image: "/assets/acampamento-memoria-01.jpg",
+    alt: "Jovens participando de uma atividade no Acampamento Rise",
   },
   {
     label: "Loja Rise • Novo drop em breve",

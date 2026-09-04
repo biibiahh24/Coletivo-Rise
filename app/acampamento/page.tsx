@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, CalendarDays, Flame, Heart, MapPin, Music2, Sparkles, UsersRound } from "lucide-react";
+import { ArrowUpRight, BookOpen, CalendarDays, Camera, Flame, Heart, MapPin, Music2, Sparkles, UsersRound } from "lucide-react";
 import { SectionHero } from "../components/section-hero";
 
 export const metadata: Metadata = {
@@ -12,6 +12,15 @@ const schedule = [
   { day: "01", title: "Abertura", icon: UsersRound, text: "Recepção, louvor, palavra de boas-vindas e atividades de integração." },
   { day: "02", title: "Adoração", icon: Music2, text: "Momentos de oração, ensino profundo e comunhão entre os jovens." },
   { day: "03", title: "Envio", icon: Flame, text: "Celebração, compromissos e envio para viver o propósito no dia a dia." },
+];
+
+const campMemories = [
+  { image: "/assets/acampamento-memoria-02.jpg", label: "Encontro", alt: "Jovem vivendo um momento de reflexão no acampamento" },
+  { image: "/assets/acampamento-memoria-03.jpg", label: "Alegria", alt: "Jovens em um momento de lazer na piscina do acampamento" },
+  { image: "/assets/acampamento-memoria-04.jpg", label: "Identidade", alt: "Jovem participando de uma dinâmica sobre identidade no acampamento" },
+  { image: "/assets/acampamento-memoria-06.jpg", label: "Cuidado", alt: "Momento de oração e cuidado entre jovens no acampamento" },
+  { image: "/assets/acampamento-memoria-08.jpg", label: "Palavra", alt: "Jovem lendo a Bíblia durante o acampamento" },
+  { image: "/assets/acampamento-memoria-09.jpg", label: "Comunhão", alt: "Jovens conversando e sorrindo durante o acampamento" },
 ];
 
 export default function AcampamentoPage() {
@@ -62,9 +71,27 @@ export default function AcampamentoPage() {
           </div>
         </div>
         <div className="gallery-mosaic">
-          <img className="gallery-main" src="/assets/jovens-rise.jpeg" alt="Jovens reunidos no Coletivo Rise" />
-          <img src="/assets/camiseta-rise-03.jpeg" alt="Jovens usando a coleção Rise" />
-          <img src="/assets/camiseta-rise-01.jpeg" alt="Camiseta do Coletivo Rise" />
+          <img className="gallery-main" src="/assets/acampamento-memoria-01.jpg" alt="Jovens participando de uma atividade ao ar livre no acampamento" />
+          <img src="/assets/acampamento-memoria-05.jpg" alt="Momento de louvor e oração no acampamento" />
+          <img src="/assets/acampamento-memoria-07.jpg" alt="Amigas se abraçando durante o acampamento" />
+        </div>
+      </section>
+
+      <section className="section-shell camp-memory-wall" aria-labelledby="memory-wall-title">
+        <div className="camp-memory-heading">
+          <div>
+            <span className="eyebrow"><Camera size={16} /> Edições anteriores</span>
+            <h2 id="memory-wall-title">Há momentos que uma foto não explica. <em>Mas ajuda a lembrar.</em></h2>
+          </div>
+          <p><BookOpen size={19} /> Palavra, cuidado, alegria e comunhão vividos de verdade.</p>
+        </div>
+        <div className="camp-memory-grid">
+          {campMemories.map((memory, index) => (
+            <figure className={`camp-memory-card camp-memory-${index + 1}`} key={memory.image}>
+              <img src={memory.image} alt={memory.alt} />
+              <figcaption><span>0{index + 1}</span>{memory.label}</figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 

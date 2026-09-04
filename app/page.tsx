@@ -6,6 +6,8 @@ import {
   Camera,
   MapPin,
   MessageCircle,
+  Music2,
+  Play,
   Shirt,
   Sparkles,
   UsersRound,
@@ -27,6 +29,20 @@ const experiences = [
     text: "Peças oficiais para vestir aquilo em que essa geração acredita.",
     href: "/loja",
   },
+];
+
+const moments = [
+  { image: "/assets/encontro-rise-01.jpeg", alt: "Jovens do Coletivo Rise reunidos após um encontro" },
+  { image: "/assets/encontro-rise-02.jpeg", alt: "Coletivo Rise reunido em um momento de comunhão" },
+  { image: "/assets/encontro-rise-03.jpeg", alt: "Jovens reunidos em uma noite do Coletivo Rise" },
+  { image: "/assets/encontro-rise-04.jpeg", alt: "Equipe e jovens do Coletivo Rise celebrando juntos" },
+];
+
+const worshipMoments = [
+  { video: "/assets/adoracao-violao.mp4", poster: "/assets/poster-adoracao-violao.jpg", title: "Adoração", text: "Uma voz, um violão e corações voltados para Jesus." },
+  { video: "/assets/adoracao-cajon.mp4", poster: "/assets/poster-adoracao-cajon.jpg", title: "Entrega", text: "Cada som se torna uma expressão de fé." },
+  { video: "/assets/clamor-rise.mp4", poster: "/assets/poster-clamor-rise.jpg", title: "Clamor", text: "Orações sinceras por uma geração transformada." },
+  { video: "/assets/adoracao-rise.mp4", poster: "/assets/poster-adoracao-rise.jpg", title: "Presença", text: "Momentos simples que carregam um propósito eterno." },
 ];
 
 export default function Home() {
@@ -61,7 +77,7 @@ export default function Home() {
 
       <section className="section-shell about-section" id="quem-somos" aria-labelledby="about-title">
         <div className="about-visual">
-          <img src="/assets/camiseta-rise-02.jpeg" alt="Jovens do Coletivo Rise usando a coleção oficial" />
+          <img src="/assets/encontro-rise-02.jpeg" alt="Jovens do Coletivo Rise reunidos em comunhão" />
           <div className="about-stamp" aria-hidden="true">
             <Flame size={28} />
             <span>Uma geração<br />que se levanta</span>
@@ -106,11 +122,58 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="moments-section" aria-labelledby="moments-title">
+        <div className="section-shell moments-heading">
+          <div>
+            <span className="eyebrow light"><Camera size={16} /> Nossa vida juntos</span>
+            <h2 id="moments-title">Mais que reuniões. <em>Uma família em movimento.</em></h2>
+          </div>
+          <p>Registros reais de encontros, amizade, serviço e tudo o que Deus tem construído entre nós.</p>
+        </div>
+        <div className="section-shell moments-grid">
+          {moments.map((moment, index) => (
+            <figure className={`moment-card moment-${index + 1}`} key={moment.image}>
+              <img src={moment.image} alt={moment.alt} />
+              <figcaption><span>0{index + 1}</span> Coletivo Rise</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-shell worship-section" aria-labelledby="worship-title">
+        <div className="worship-heading">
+          <div>
+            <span className="eyebrow"><Music2 size={16} /> Adoração e clamor</span>
+            <h2 id="worship-title">Quando nos reunimos, Jesus é o centro.</h2>
+          </div>
+          <blockquote>
+            “Tudo o que tem fôlego louve ao Senhor.”
+            <cite>Salmos 150:6</cite>
+          </blockquote>
+        </div>
+        <div className="worship-grid">
+          {worshipMoments.map((moment, index) => (
+            <article className="worship-card" key={moment.video}>
+              <div className="worship-video">
+                <video controls playsInline preload="metadata" poster={moment.poster}>
+                  <source src={moment.video} type="video/mp4" />
+                  Seu navegador não consegue reproduzir este vídeo.
+                </video>
+                <span className="video-number">0{index + 1}</span>
+                <span className="video-hint"><Play size={14} fill="currentColor" /> Assistir</span>
+              </div>
+              <h3>{moment.title}</h3>
+              <p>{moment.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="section-shell instagram-stage" aria-labelledby="instagram-title">
         <div className="instagram-images" aria-hidden="true">
-          <img src="/assets/jovens-rise.jpeg" alt="" />
-          <img src="/assets/camiseta-rise-03.jpeg" alt="" />
-          <img src="/assets/camiseta-rise-01.jpeg" alt="" />
+          <img src="/assets/encontro-rise-04.jpeg" alt="" />
+          <img src="/assets/encontro-rise-01.jpeg" alt="" />
+          <img src="/assets/encontro-rise-03.jpeg" alt="" />
         </div>
         <div className="instagram-copy">
           <span className="eyebrow"><Camera size={16} /> Siga o movimento</span>
