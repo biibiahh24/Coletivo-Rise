@@ -34,17 +34,18 @@ Funcionalidades
 * Animações, transições e efeitos interativos;
 * Navegação acessível e adaptada para dispositivos móveis.
 
-Tecnologias utilizadas
+## Tecnologias utilizadas
 
-* TypeScript
-* JavaScript
-* React
-* Vinext
-* Vite
-* HTML
-* CSS
-* Node.js
-* Git e GitHub
+- **TypeScript**
+- **JavaScript**
+- **React**
+- **Next.js**
+- **Vinext**
+- **Vite**
+- **HTML**
+- **CSS**
+- **Node.js**
+- **Git e GitHub**
 
 Como executar o projeto
 
