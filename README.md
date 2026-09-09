@@ -1,93 +1,113 @@
-# vinext-starter
+Coletivo Rise — Site Oficial
 
-A clean full-stack starter running on [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and Drizzle support.
+Site oficial do Coletivo Rise, um movimento cristão formado por jovens que desejam viver o propósito de Deus, fortalecer relacionamentos e impactar esta geração.
 
-## Prerequisites
+“Levanta-te, resplandece, porque já vem a tua luz.” — Isaías 60:1
 
-- Node.js `>=22.13.0`
-- Linux with `flock`, `curl`, and GNU `timeout`
+Sobre o projeto
 
-## Sites Lifecycle
+O site foi desenvolvido para centralizar as principais informações do Coletivo Rise, apresentar nossas atividades e facilitar o contato de jovens que desejam participar do movimento.
 
-The Sites lifecycle CLI runs the locked dependency install before returning this checkout. Edit the source under `app/`, then checkpoint when a coherent milestone is ready to inspect or share. The remote Sites builder runs `npm run build` against the pushed commit. Do not repeat install or build as a normal pre-checkpoint step.
+Esta versão reúne conteúdos sobre:
 
-This starter does not use `wrangler.jsonc`.
+* encontros do coletivo;
+* células;
+* Acampamento Rise;
+* coleções de camisetas;
+* inscrições;
+* pedidos pelo WhatsApp;
+* fotografias e vídeos reais;
+* redes sociais oficiais.
 
-`install:ci` is intentionally a single, non-retrying `npm ci`. It refuses a concurrent install for the same project, consumes a matching image-seeded npm cache with `--prefer-offline` while retaining registry fallback for a missing cache object, otherwise downloads and verifies the complete vinext tarball recorded in `package-lock.json`, limits npm to one socket, and terminates a stalled install. `build` applies a short timeout. These helpers target Linux and use GNU `timeout`; they are not native macOS scripts.
+Funcionalidades
 
-Scripts that need writable project-scoped home, npm, XDG, and temporary paths use `scripts/sites-env.sh`. The `dev` and `start` scripts honor the caller's runtime environment and keep Wrangler logs inside the checkout. The generated `.sites-runtime/` directory is disposable and ignored by Git.
+* Página inicial com conteúdo rotativo;
+* Design responsivo para computadores e celulares;
+* Apresentação das células do coletivo;
+* Página dedicada ao Acampamento Rise 2027;
+* Galeria com memórias dos encontros e acampamentos;
+* Vídeos de adoração, louvor e clamor;
+* Loja com apresentação das camisetas;
+* Formulários de inscrição;
+* Integração com WhatsApp;
+* Integração com o Instagram oficial;
+* Animações, transições e efeitos interativos;
+* Navegação acessível e adaptada para dispositivos móveis.
 
-## Included Shape
+Tecnologias utilizadas
 
-- edit site code under `app/`
-- `app/chatgpt-auth.ts` provides optional dispatch-owned ChatGPT sign-in helpers
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/index.ts` reads the D1 binding from the Cloudflare Worker environment
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+* TypeScript
+* JavaScript
+* React
+* Vinext
+* Vite
+* HTML
+* CSS
+* Node.js
+* Git e GitHub
 
-## Workspace Auth Headers
+Como executar o projeto
 
-OpenAI workspace sites can read the current user's email from `oai-authenticated-user-email`.
+Pré-requisitos
 
-SIWC-authenticated workspace sites may also receive `oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty `name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by `oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
+Antes de começar, instale:
 
-Treat the full name as optional and fall back to email when it is absent:
+* Node.js 22.13.0 ou superior
+* npm
+* Git
 
-```tsx
-import { headers } from "next/headers";
+Instalação
 
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
+Clone o repositório:
 
-  const displayName = fullName ?? email;
-  // ...
-}
-```
+git clone https://github.com/biibiahh24/Coletivo-Rise.git
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+Entre na pasta do projeto:
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs optional or required ChatGPT sign-in:
+cd Coletivo-Rise
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send anonymous visitors through Sign in with ChatGPT.
-- In a Server Component, start sign-in with `<a href={chatGPTSignInPath(returnTo)} target="_top">`. The auth helper module is server-only; do not import it into a Client Component.
-- Do not use `fetch`, XHR, a client-side router, or a framework link that can prefetch the sign-in route. SIWC must start as a top-level navigation.
-- Never request the AuthAPI authorization endpoint directly. The dispatch-owned `/signin-with-chatgpt` route must start the SIWC flow.
-- Use `chatGPTSignOutPath(returnTo)` for browser sign-out links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because they depend on per-request identity headers.
+Instale as dependências:
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the OAuth cookies, and identity header injection. Do not implement app routes for those reserved paths. Routes that do not import and call the helper remain anonymous-compatible.
+npm install
 
-SIWC establishes identity only; it does not prove workspace membership. Use the Sites hosting platform's access policy controls for workspace-wide restrictions, or enforce explicit server-side membership or allowlist checks.
+Inicie o servidor local:
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write actions tied to the current ChatGPT user. Leave public content anonymous.
+npx vite
 
-## Diagnostic Commands
+Depois, abra no navegador o endereço exibido no terminal. Normalmente:
 
-- `npm run install:ci`: perform the one bounded lockfile install
-- `npm run dev`: start the Vite/Vinext development server
-- `npm run build`: build the deployable Sites artifact
-- `npm run start`: start the built Vinext application
-- `npm test`: build and verify the rendered development-preview metadata
-- `npm run db:generate`: generate Drizzle migrations after schema changes
+http://localhost:5173
 
-Use build commands for targeted diagnosis after a remote failure, not as part of the normal checkpoint path.
+Versões publicadas
 
-The timeout defaults can be overridden for a controlled canary with `SITES_INSTALL_TIMEOUT`, `SITES_INSTALL_KILL_AFTER`, `SITES_BUILD_TIMEOUT`, and `SITES_BUILD_KILL_AFTER`. A timeout fails the command; the helpers never retry an unchanged install or build.
+* V4: primeira versão oficial, preservada pela tag v1.0.0;
+* V6: inclusão de fotografias, vídeos, nova coleção e melhorias visuais;
+* V8: aprimoramentos de responsividade, posicionamento e apresentação da página inicial.
 
-## Learn More
+As versões anteriores permanecem disponíveis na área de Releases do GitHub.
 
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+Redes sociais
+
+Acompanhe o Coletivo Rise pelo Instagram:
+
+@coletivo_rise
+
+Status do projeto
+
+O projeto continua em desenvolvimento e receberá novas melhorias relacionadas a:
+
+* segurança dos formulários;
+* integração com Google Sheets;
+* organização dos pedidos de camisetas;
+* confirmação pelo WhatsApp;
+* proteção contra envios automatizados;
+* acessibilidade;
+* desempenho e otimização das mídias.
+
+Autoria
+
+Projeto desenvolvido por Beatriz Ramos para o Coletivo Rise.
+
+⸻
+
+Rise — uma geração em movimento.
