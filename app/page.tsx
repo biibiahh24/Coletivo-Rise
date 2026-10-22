@@ -32,10 +32,10 @@ const experiences = [
 ];
 
 const moments = [
-  { image: "/assets/encontro-rise-01.jpeg", alt: "Jovens do Coletivo Rise reunidos após um encontro" },
-  { image: "/assets/encontro-rise-02.jpeg", alt: "Coletivo Rise reunido em um momento de comunhão" },
-  { image: "/assets/encontro-rise-03.jpeg", alt: "Jovens reunidos em uma noite do Coletivo Rise" },
-  { image: "/assets/encontro-rise-04.jpeg", alt: "Equipe e jovens do Coletivo Rise celebrando juntos" },
+  { image: "/assets/inicio-rise-adoracao-coletiva.jpeg", alt: "Jovens do Coletivo Rise adorando juntos durante um encontro" },
+  { image: "/assets/inicio-rise-palavra.jpeg", alt: "Lideranças compartilhando a Palavra em um encontro Rise" },
+  { image: "/assets/inicio-rise-oracao.jpeg", alt: "Jovens em oração durante uma reunião do Coletivo Rise" },
+  { image: "/assets/inicio-rise-clamor.jpeg", alt: "Jovens vivendo um momento de clamor e entrega" },
 ];
 
 const worshipMoments = [
@@ -77,7 +77,7 @@ export default function Home() {
 
       <section className="section-shell about-section" id="quem-somos" aria-labelledby="about-title">
         <div className="about-visual">
-          <img src="/assets/encontro-rise-02.jpeg" alt="Jovens do Coletivo Rise reunidos em comunhão" />
+          <img src="/assets/inicio-rise-comunidade.jpeg" alt="Jovens do Coletivo Rise reunidos ao redor de uma mesa ao ar livre" />
           <div className="about-stamp" aria-hidden="true">
             <Flame size={28} />
             <span>Uma geração<br />que se levanta</span>
@@ -133,7 +133,7 @@ export default function Home() {
         <div className="section-shell moments-grid">
           {moments.map((moment, index) => (
             <figure className={`moment-card moment-${index + 1}`} key={moment.image}>
-              <img src={moment.image} alt={moment.alt} />
+              <img src={moment.image} alt={moment.alt} loading="lazy" />
               <figcaption><span>0{index + 1}</span> Coletivo Rise</figcaption>
             </figure>
           ))}
@@ -171,9 +171,9 @@ export default function Home() {
 
       <section className="section-shell instagram-stage" aria-labelledby="instagram-title">
         <div className="instagram-images" aria-hidden="true">
-          <img src="/assets/encontro-rise-04.jpeg" alt="" />
-          <img src="/assets/encontro-rise-01.jpeg" alt="" />
-          <img src="/assets/encontro-rise-03.jpeg" alt="" />
+          <img src="/assets/inicio-rise-louvor.jpeg" alt="" loading="lazy" />
+          <img src="/assets/inicio-rise-presenca.jpeg" alt="" loading="lazy" />
+          <img src="/assets/inicio-rise-missoes.jpeg" alt="" loading="lazy" />
         </div>
         <div className="instagram-copy">
           <span className="eyebrow"><Camera size={16} /> Siga o movimento</span>
@@ -203,3 +203,4 @@ export default function Home() {
     </main>
   );
 }
+
