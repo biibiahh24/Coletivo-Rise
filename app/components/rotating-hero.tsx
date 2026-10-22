@@ -88,4 +88,3 @@ export function RotatingHero() {
     </section>
   );
 }
-

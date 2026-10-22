@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowUpRight, Check, PackageCheck, Ruler, Shirt, Sparkles } from "lucide-react";
-import { ProductGallery } from "../components/product-gallery";
+import { EditionCarousel } from "../components/edition-carousel";
 import { ShirtOrder } from "../components/shirt-order";
 import { SectionHero } from "../components/section-hero";
 
@@ -8,12 +8,6 @@ export const metadata: Metadata = {
   title: "Loja Rise",
   description: "Conheça a primeira coleção oficial do Coletivo Rise.",
 };
-
-const products = [
-  { edition: "Edição 01", image: "/assets/camiseta-rise-01.jpeg" },
-  { edition: "Edição 02", image: "/assets/camiseta-rise-02.jpeg" },
-  { edition: "Edição 03", image: "/assets/camiseta-rise-03.jpeg" },
-];
 
 export default function LojaPage() {
   return (
@@ -29,17 +23,19 @@ export default function LojaPage() {
       </SectionHero>
 
       <section className="section-shell collection-feature" id="colecao">
-        <ProductGallery />
+        <div className="store-intro-visual">
+          <img src="/assets/camiseta-rise-editorial.jpeg" alt="Jovens do Coletivo Rise apresentando a primeira coleção oficial" />
+          <span>Vista a mensagem</span>
+        </div>
         <div className="collection-copy">
-          <span className="eyebrow"><Sparkles size={16} /> Coleção 01</span>
-          <h2>Uma geração que se levanta.</h2>
-          <p>A camiseta oficial une a identidade do Coletivo Rise à mensagem de Joel 2:28–29.</p>
-          <div className="product-meta">
-            <div><span>Valor</span><strong>R$ 49,90</strong></div>
-            <div><span>Tamanhos</span><strong>P ao GG</strong></div>
+          <span className="eyebrow"><Sparkles size={16} /> Loja oficial Rise</span>
+          <h2>Fé, identidade e propósito em cada peça.</h2>
+          <p>A Loja Rise nasceu para levar a mensagem do coletivo para além dos encontros. Cada coleção transforma aquilo em que acreditamos em peças cheias de significado, feitas para uma geração que não tem medo de viver sua fé.</p>
+          <div className="store-intro-points">
+            <span><Shirt size={18} /> Coleções autorais</span>
+            <span><PackageCheck size={18} /> Pedido direto com a equipe</span>
           </div>
-          <a className="button button-orange" href="#pedido-camiseta">Montar meu pedido <ArrowUpRight size={18} /></a>
-          <p className="small-note"><PackageCheck size={17} /> Consulte disponibilidade, envio e formas de pagamento com a equipe.</p>
+          <a className="button button-orange" href="#products-title">Conhecer a Edição 01 <ArrowUpRight size={18} /></a>
         </div>
       </section>
 
@@ -59,18 +55,10 @@ export default function LojaPage() {
 
       <section className="section-shell product-section" aria-labelledby="products-title">
         <div className="section-heading split-heading">
-          <div><span className="eyebrow"><Shirt size={16} /> Modelos</span><h2 id="products-title">Escolha a sua edição.</h2></div>
-          <p>Três registros da primeira coleção para você conhecer a peça e o movimento por trás dela.</p>
+          <div><span className="eyebrow"><Shirt size={16} /> Primeira edição</span><h2 id="products-title">Uma peça. Uma mensagem.</h2></div>
+          <p>Conheça a Edição 01 em uma apresentação única, com todos os ângulos da camiseta oficial do Rise.</p>
         </div>
-        <div className="product-grid">
-          {products.map((product, index) => (
-            <article className="product-card" key={product.edition}>
-              <div className="product-image"><img src={product.image} alt={`Camiseta Rise ${product.edition}`} /><span>0{index + 1}</span></div>
-              <div><h3>Camiseta Rise</h3><p>{product.edition}</p><strong>R$ 49,90</strong></div>
-              <a href="#pedido-camiseta" aria-label={`Montar pedido da ${product.edition}`}><ArrowUpRight /></a>
-            </article>
-          ))}
-        </div>
+        <EditionCarousel />
       </section>
 
       <section className="section-shell size-section" id="tamanhos">

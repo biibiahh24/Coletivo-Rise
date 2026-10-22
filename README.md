@@ -1,114 +1,112 @@
-Coletivo Rise — Site Oficial
+# Coletivo Rise — Site Oficial
 
-Site oficial do Coletivo Rise, um movimento cristão formado por jovens que desejam viver o propósito de Deus, fortalecer relacionamentos e impactar esta geração.
+Site oficial do **Coletivo Rise**, criado para apresentar o movimento, divulgar encontros e células, organizar o Acampamento Rise 2027 e receber pedidos das coleções de camisetas.
 
-“Levanta-te, resplandece, porque já vem a tua luz.” — Isaías 60:1
+> **“Levanta-te, resplandece, porque já vem a tua luz.” — Isaías 60:1**
 
-Sobre o projeto
+## Recursos
 
-O site foi desenvolvido para centralizar as principais informações do Coletivo Rise, apresentar nossas atividades e facilitar o contato de jovens que desejam participar do movimento.
+- Página inicial responsiva com destaques rotativos;
+- Páginas de células, acampamento, loja e privacidade;
+- Fotografias e vídeos reais do coletivo;
+- Inscrição do Acampamento Rise 2027;
+- Pedidos de camisetas com confirmação pelo WhatsApp;
+- Proteção antirrobô, controle de tentativas e validação no servidor;
+- Banco de dados para inscrições e pedidos;
+- Armazenamento privado de comprovantes;
+- Painel administrativo protegido em `/admin`;
+- Busca, filtros, atualização de status e exportação CSV;
+- Registro de alterações realizadas pela equipe;
+- Sincronização opcional com Google Sheets.
 
-Esta versão reúne conteúdos sobre:
+## Tecnologias
 
-* encontros do coletivo;
-* células;
-* Acampamento Rise;
-* coleções de camisetas;
-* inscrições;
-* pedidos pelo WhatsApp;
-* fotografias e vídeos reais;
-* redes sociais oficiais.
-
-Funcionalidades
-
-* Página inicial com conteúdo rotativo;
-* Design responsivo para computadores e celulares;
-* Apresentação das células do coletivo;
-* Página dedicada ao Acampamento Rise 2027;
-* Galeria com memórias dos encontros e acampamentos;
-* Vídeos de adoração, louvor e clamor;
-* Loja com apresentação das camisetas;
-* Formulários de inscrição;
-* Integração com WhatsApp;
-* Integração com o Instagram oficial;
-* Animações, transições e efeitos interativos;
-* Navegação acessível e adaptada para dispositivos móveis.
-
-## Tecnologias utilizadas
-
-- **TypeScript**
-- **JavaScript**
-- **React**
-- **Next.js**
-- **Vinext**
-- **Vite**
-- **HTML**
-- **CSS**
-- **Node.js**
+- **TypeScript e JavaScript**
+- **React e Next.js**
+- **Vinext e Vite**
+- **Cloudflare Workers, D1, R2 e Turnstile**
+- **Drizzle ORM e SQLite**
+- **Zod**
+- **HTML e CSS**
+- **Google Apps Script**, opcional
 - **Git e GitHub**
 
-Como executar o projeto
+## Como executar localmente
 
-Pré-requisitos
+### Pré-requisitos
 
-Antes de começar, instale:
+- Node.js `22.13.0` ou superior;
+- npm;
+- Git.
 
-* Node.js 22.13.0 ou superior
-* npm
-* Git
+Clone o repositório, entre na pasta e instale as dependências:
 
-Instalação
-
-Clone o repositório:
-
+```bash
 git clone https://github.com/biibiahh24/Coletivo-Rise.git
-
-Entre na pasta do projeto:
-
 cd Coletivo-Rise
-
-Instale as dependências:
-
 npm install
+```
 
-Inicie o servidor local:
+Inicie o ambiente local:
 
+```bash
+npm run dev
+```
+
+Se estiver usando uma versão anterior no Windows e o comando acima apresentar erro com `WRANGLER_LOG_PATH`, utilize:
+
+```bash
 npx vite
+```
 
-Depois, abra no navegador o endereço exibido no terminal. Normalmente:
+Abra o endereço apresentado no terminal, normalmente `http://localhost:5173`.
 
-http://localhost:5173
+O painel pode ser visualizado localmente em `http://localhost:5173/admin`. No ambiente local ele abre automaticamente em modo de demonstração, com dados fictícios e sem permitir alterações. A autenticação real, o banco e os recursos administrativos completos são habilitados somente no site hospedado.
 
-Versões publicadas
+## Configuração segura
 
-* V4: primeira versão oficial, preservada pela tag v1.0.0;
-* V6: inclusão de fotografias, vídeos, nova coleção e melhorias visuais;
-* V8: aprimoramentos de responsividade, posicionamento e apresentação da página inicial.
+Crie um arquivo `.env.local` somente no computador, utilizando `.env.example` como referência:
 
-As versões anteriores permanecem disponíveis na área de Releases do GitHub.
+```env
+TURNSTILE_SITE_KEY=
+TURNSTILE_SECRET_KEY=
+ADMIN_EMAILS=
+RATE_LIMIT_SALT=
+GOOGLE_APPS_SCRIPT_URL=
+GOOGLE_APPS_SCRIPT_SECRET=
+```
 
-Redes sociais
+- `TURNSTILE_SITE_KEY` e `TURNSTILE_SECRET_KEY`: proteção dos formulários;
+- `ADMIN_EMAILS`: e-mails autorizados no painel, separados por vírgula;
+- `RATE_LIMIT_SALT`: valor aleatório usado no controle de tentativas;
+- chaves do Google Apps Script: opcionais, usadas somente para a cópia operacional em planilha.
 
-Acompanhe o Coletivo Rise pelo Instagram:
+Nunca envie `.env.local`, senhas, tokens ou chaves privadas ao GitHub.
 
-@coletivo_rise
+## Dados e privacidade
 
-Status do projeto
+O banco D1 é a fonte oficial das inscrições e dos pedidos. Os comprovantes ficam no armazenamento privado R2 e são entregues apenas após autenticação e autorização no painel. A exportação CSV também exige acesso administrativo e fica registrada na auditoria.
 
-O projeto continua em desenvolvimento e receberá novas melhorias relacionadas a:
+O WhatsApp recebe somente o protocolo e o resumo necessário para a confirmação. Informações de saúde não são incluídas na mensagem.
 
-* segurança dos formulários;
-* integração com Google Sheets;
-* organização dos pedidos de camisetas;
-* confirmação pelo WhatsApp;
-* proteção contra envios automatizados;
-* acessibilidade;
-* desempenho e otimização das mídias.
+## Versões
 
-Autoria
+- `v1.0.0`: primeira versão oficial do projeto, correspondente à fase interna V4;
+- `v6.0.0`: fotografias reais, vídeos, coleção e Acampamento Rise 2027;
+- **V8:** melhorias de responsividade e apresentação;
+- **V9 em preparação:** banco de dados, painel administrativo, CSV e segurança dos formulários.
 
-Projeto desenvolvido por Beatriz Ramos para o Coletivo Rise.
+As versões publicadas podem ser consultadas na área de **Releases** do GitHub.
 
-⸻
+## Contato
 
-Rise — uma geração em movimento.
+- Instagram: [**@coletivo_rise**](https://www.instagram.com/coletivo_rise/)
+- WhatsApp: disponível pelos botões oficiais do site.
+
+## Autoria
+
+Projeto desenvolvido por **Beatriz Ramos** para o **Coletivo Rise**.
+
+---
+
+**Rise — uma geração em movimento.**

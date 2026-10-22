@@ -1,15 +1,14 @@
+import { env } from "cloudflare:workers";
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "./schema";
 
-type D1Binding = Parameters<typeof drizzle>[0];
-const env = {} as { DB?: D1Binding };
-
 export function getDb() {
-  if (!env.DB) {
+  const runtime = env as unknown as { DB?: D1Database };
+  if (!runtime.DB) {
     throw new Error(
-      "Cloudflare D1 binding `DB` is unavailable. This Vercel deployment uses Supabase instead of D1."
+      "Cloudflare D1 binding `DB` is unavailable. Set the `d1` field in .openai/hosting.json to `DB` or let your control plane inject the real binding values before using the database."
     );
   }
 
-  return drizzle(env.DB, { schema });
+  return drizzle(runtime.DB, { schema });
 }

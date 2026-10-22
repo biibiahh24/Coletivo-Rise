@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, BookOpen, CalendarDays, Camera, Flame, Heart, MapPin, Music2, Sparkles, UsersRound } from "lucide-react";
+import { CampMemoryGallery } from "../components/camp-memory-gallery";
 import { SectionHero } from "../components/section-hero";
 
 export const metadata: Metadata = {
@@ -12,15 +13,6 @@ const schedule = [
   { day: "01", title: "Abertura", icon: UsersRound, text: "Recepção, louvor, palavra de boas-vindas e atividades de integração." },
   { day: "02", title: "Adoração", icon: Music2, text: "Momentos de oração, ensino profundo e comunhão entre os jovens." },
   { day: "03", title: "Envio", icon: Flame, text: "Celebração, compromissos e envio para viver o propósito no dia a dia." },
-];
-
-const campMemories = [
-  { image: "/assets/acampamento-memoria-02.jpg", label: "Encontro", alt: "Jovem vivendo um momento de reflexão no acampamento" },
-  { image: "/assets/acampamento-memoria-03.jpg", label: "Alegria", alt: "Jovens em um momento de lazer na piscina do acampamento" },
-  { image: "/assets/acampamento-memoria-04.jpg", label: "Identidade", alt: "Jovem participando de uma dinâmica sobre identidade no acampamento" },
-  { image: "/assets/acampamento-memoria-06.jpg", label: "Cuidado", alt: "Momento de oração e cuidado entre jovens no acampamento" },
-  { image: "/assets/acampamento-memoria-08.jpg", label: "Palavra", alt: "Jovem lendo a Bíblia durante o acampamento" },
-  { image: "/assets/acampamento-memoria-09.jpg", label: "Comunhão", alt: "Jovens conversando e sorrindo durante o acampamento" },
 ];
 
 export default function AcampamentoPage() {
@@ -85,14 +77,7 @@ export default function AcampamentoPage() {
           </div>
           <p><BookOpen size={19} /> Palavra, cuidado, alegria e comunhão vividos de verdade.</p>
         </div>
-        <div className="camp-memory-grid">
-          {campMemories.map((memory, index) => (
-            <figure className={`camp-memory-card camp-memory-${index + 1}`} key={memory.image}>
-              <img src={memory.image} alt={memory.alt} />
-              <figcaption><span>0{index + 1}</span>{memory.label}</figcaption>
-            </figure>
-          ))}
-        </div>
+        <CampMemoryGallery />
       </section>
 
       <section className="section-shell final-cta">
