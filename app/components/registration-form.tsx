@@ -31,7 +31,7 @@ export function RegistrationForm() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!participou || !camiseta || !pagamento || !confirmed || !turnstileToken) {
+    if (!participou || !camiseta || !pagamento || !confirmed) {
       toast.error("Preencha as seleções e confirme as informações para continuar.");
       return;
     }
@@ -161,7 +161,7 @@ export function RegistrationForm() {
 
         <div className="form-submit-row">
           <div><CircleDollarSign /><span>Após salvar sua inscrição com segurança, abriremos o WhatsApp com a confirmação pronta.</span></div>
-          <button className="button button-orange" type="submit" disabled={sending || !turnstileToken}>
+          <button className="button button-orange" type="submit" disabled={sending}>
             {sending ? <><LoaderCircle className="spinner" /> Enviando...</> : <>Enviar inscrição <Send size={18} /></>}
           </button>
         </div>

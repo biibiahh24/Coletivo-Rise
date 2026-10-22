@@ -22,7 +22,7 @@ export function ShirtOrder() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!edition || !size || !pagamento || !turnstileToken || !confirmed) return;
+    if (!edition || !size || !pagamento || !confirmed) return;
     const data = new FormData(event.currentTarget);
     setSending(true);
     try {
@@ -97,7 +97,7 @@ export function ShirtOrder() {
         <label htmlFor="pedido-confirmacao">Autorizo o contato da equipe sobre este pedido e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>.</label>
       </div>
       <div className="order-note"><MessageCircle /><span>O WhatsApp abrirá com o pedido organizado. Você confere e toca em enviar.</span></div>
-      <button className="button button-orange" type="submit" disabled={!size || !pagamento || !turnstileToken || !confirmed || sending}>
+      <button className="button button-orange" type="submit" disabled={!size || !pagamento || !confirmed || sending}>
         {sending ? <><LoaderCircle className="spinner" /> Salvando...</> : <>Registrar e abrir WhatsApp <Send size={18} /></>}
       </button>
     </form>

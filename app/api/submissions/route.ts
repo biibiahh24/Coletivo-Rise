@@ -95,14 +95,14 @@ async function syncOperationalSheet(runtime: RuntimeEnv, submission: Submission,
 
 export async function POST(request: Request) {
   if (isSupabaseAdminConfigured()) {
-    if (!process.env.TURNSTILE_SECRET_KEY || !process.env.RATE_LIMIT_SALT) return reply({ error: "O envio seguro ainda não foi configurado pela equipe." }, 503);
+    if (!process.env.RATE_LIMIT_SALT) return reply({ error: "O envio seguro ainda não foi configurado pela equipe." }, 503);
     const origin = request.headers.get("origin");
     if (origin && origin !== new URL(request.url).origin) return reply({ error: "Origem não autorizada." }, 403);
     let raw: unknown;
     try { raw = await request.json(); } catch { return reply({ error: "Dados inválidos." }, 400); }
     const parsed = submissionSchema.safeParse(raw);
     if (!parsed.success || parsed.data.website) return reply({ error: "Confira os campos enviados." }, 400);
-    try {
+    if (process.env.TURNSTILE_SECRET_KEY) try {
       const verification = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ secret: process.env.TURNSTILE_SECRET_KEY, response: parsed.data.turnstileToken, remoteip: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() }),
