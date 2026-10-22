@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   const { data: listed, error: allowlistLookupError } = await admin.from("admin_users").select("email").eq("email", email).maybeSingle();
   if (allowlistLookupError) {
     console.error("Admin allowlist lookup failed", allowlistLookupError.code);
-    return reply({ error: "A configuração administrativa do servidor está indisponível. Atualize a chave do Supabase na Vercel." }, 503);
+    return reply({ error: "A configuração administrativa do servidor está indisponível. Cadastre a Secret Key do Supabase na Vercel." }, 503);
   }
   if (!listed && !isConfiguredAdminEmail(email)) return reply({ error: "E-mail ou senha inválidos." }, 401);
 
@@ -49,3 +49,5 @@ export async function POST(request: Request) {
   }
   return reply({ ok: true, next: safeNext(next) });
 }
+
+
