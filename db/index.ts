@@ -1,7 +1,8 @@
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "./schema";
 
-const env = {} as { DB?: D1Database };
+type D1Binding = Parameters<typeof drizzle>[0];
+const env = {} as { DB?: D1Binding };
 
 export function getDb() {
   if (!env.DB) {
