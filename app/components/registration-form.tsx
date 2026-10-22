@@ -1,14 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { CheckCircle2, CircleDollarSign, HeartPulse, LoaderCircle, Send, Shirt, UserRound } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-const endpoint = "https://script.google.com/macros/s/AKfycbyxPtgcrvpOMVKBsMWstHwHLO62mAf4jJWU_XLEDkb8ybauLt9zi6hTq1Lxwbo2J_aI/exec";
+import { TurnstileWidget } from "./turnstile-widget";
 
 function fileToBase64(file: File) {
   return new Promise<string>((resolve, reject) => {
@@ -25,10 +24,14 @@ export function RegistrationForm() {
   const [pagamento, setPagamento] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [sending, setSending] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [resetSignal, setResetSignal] = useState(0);
+  const idempotencyKey = useRef<string | null>(null);
+  const handleToken = useCallback((token: string) => setTurnstileToken(token), []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!participou || !camiseta || !pagamento || !confirmed) {
+    if (!participou || !camiseta || !pagamento || !confirmed || !turnstileToken) {
       toast.error("Preencha as seleções e confirme as informações para continuar.");
       return;
     }
@@ -45,6 +48,12 @@ export function RegistrationForm() {
     try {
       const comprovanteBase64 = file instanceof File && file.size ? await fileToBase64(file) : "";
       const data = {
+        kind: "registration",
+        idempotencyKey: idempotencyKey.current ?? (idempotencyKey.current = crypto.randomUUID()),
+        turnstileToken,
+        website: formData.get("website"),
+        consent: confirmed,
+        privacyVersion: "2026-10",
         nome: formData.get("nome"),
         idade: formData.get("idade"),
         responsavel: formData.get("responsavel"),
@@ -63,24 +72,28 @@ export function RegistrationForm() {
         obs: formData.get("obs"),
       };
 
-      const response = await fetch(endpoint, {
+      const response = await fetch("/api/submissions", {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       });
-      if (!response.ok) throw new Error("A inscrição não foi enviada.");
+      const result = await response.json() as { protocol?: string; error?: string; receiptWarning?: boolean };
+      if (!response.ok || !result.protocol) throw new Error(result.error ?? "A inscrição não foi enviada.");
+      idempotencyKey.current = null;
       const whatsappMessage = [
         "Olá, equipe Rise! Minha inscrição para o Acampamento 2027 foi registrada no site.",
+        `Protocolo: ${result.protocol}`,
         `Nome: ${String(data.nome ?? "")}`,
         `Idade: ${String(data.idade ?? "")}`,
         `Igreja: ${String(data.igreja ?? "")}`,
         `Camiseta: ${camiseta}`,
         `Pagamento: ${pagamento}`,
-        "Gostaria de confirmar os próximos passos."
+        result.receiptWarning ? "O comprovante não foi anexado; vou enviá-lo por aqui." : "Gostaria de confirmar os próximos passos."
       ].join("\n");
       window.location.assign(`https://wa.me/5511968778688?text=${encodeURIComponent(whatsappMessage)}`);
-    } catch {
-      toast.error("Não conseguimos enviar agora. Tente novamente ou fale com a equipe pelo WhatsApp.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não conseguimos enviar agora. Tente novamente ou fale com a equipe pelo WhatsApp.");
+      setResetSignal((value) => value + 1);
     } finally {
       setSending(false);
     }
@@ -90,6 +103,7 @@ export function RegistrationForm() {
     <>
       <Toaster richColors position="top-center" />
       <form className="registration-form" onSubmit={handleSubmit}>
+        <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
         <fieldset>
           <legend><span>01</span><UserRound /> Dados pessoais</legend>
           <div className="form-grid">
@@ -140,12 +154,14 @@ export function RegistrationForm() {
 
         <div className="form-confirm">
           <Checkbox id="confirmacao" checked={confirmed} onCheckedChange={(value) => setConfirmed(Boolean(value))} />
-          <label htmlFor="confirmacao">Confirmo que as informações são verdadeiras e autorizo o contato da equipe Rise sobre esta inscrição.</label>
+          <label htmlFor="confirmacao">Confirmo que as informações são verdadeiras, autorizo o contato da equipe Rise e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>. Em caso de participante menor, declaro ser responsável ou possuir sua autorização.</label>
         </div>
 
+        <TurnstileWidget action="registration" onToken={handleToken} resetSignal={resetSignal} />
+
         <div className="form-submit-row">
-          <div><CircleDollarSign /><span>Após salvar na planilha, abriremos o WhatsApp com a confirmação pronta para envio.</span></div>
-          <button className="button button-orange" type="submit" disabled={sending}>
+          <div><CircleDollarSign /><span>Após salvar sua inscrição com segurança, abriremos o WhatsApp com a confirmação pronta.</span></div>
+          <button className="button button-orange" type="submit" disabled={sending || !turnstileToken}>
             {sending ? <><LoaderCircle className="spinner" /> Enviando...</> : <>Enviar inscrição <Send size={18} /></>}
           </button>
         </div>
