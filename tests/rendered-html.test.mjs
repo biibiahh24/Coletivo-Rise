@@ -18,14 +18,27 @@ test("keeps administrative exports and submissions on server routes", async () =
 
   assert.match(submissionRoute, /camp_registrations/);
   assert.match(submissionRoute, /TURNSTILE_SECRET_KEY/);
-  assert.match(exportRoute, /getAdminFromHeaders/);
+  assert.match(exportRoute, /getAdminForRequest/);
+  assert.match(exportRoute, /createSupabaseAdminClient/);
   assert.match(exportRoute, /text\/csv/);
   assert.match(demoExportRoute, /process\.env\.NODE_ENV !== "production"/);
   assert.match(demoExportRoute, /Content-Disposition/);
-  assert.match(adminPage, /requireChatGPTUser/);
+  assert.match(adminPage, /getAdminForRequest/);
+  assert.match(adminPage, /redirect\("\/admin\/login\?next=\/admin"\)/);
   assert.match(adminPage, /Modo de demonstração local/);
   assert.match(adminPage, /process\.env\.NODE_ENV !== "production"/);
   assert.match(adminPage, /\/api\/admin\/demo-export/);
+});
+
+test("provides a Supabase-backed administrative login", async () => {
+  const loginPage = await readFile(new URL("app/admin/login/page.tsx", root), "utf8");
+  const loginRoute = await readFile(new URL("app/api/admin/login/route.ts", root), "utf8");
+  const proxy = await readFile(new URL("proxy.ts", root), "utf8");
+
+  assert.match(loginPage, /LoginForm/);
+  assert.match(loginRoute, /signInWithPassword/);
+  assert.match(loginRoute, /admin_users/);
+  assert.match(proxy, /getClaims/);
 });
 
 test("links the registration page to the protected admin area", async () => {

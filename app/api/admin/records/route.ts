@@ -1,6 +1,6 @@
-import { env } from "@/lib/runtime-env";
 import { z } from "zod";
 import { getAdminAuthConfigurationError, getAdminForRequest, sameOrigin } from "@/lib/admin-auth";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -37,17 +37,18 @@ export async function PATCH(request: Request) {
   const parsed = updateSchema.safeParse(raw);
   if (!parsed.success) return reply({ error: "Atualização inválida." }, 400);
 
-  const runtime = env as unknown as { DB?: D1Database };
-  if (!runtime.DB) return reply({ error: "Banco indisponível." }, 503);
   const now = Math.floor(Date.now() / 1000);
   const data = parsed.data;
-  const statement = data.kind === "registration"
-    ? runtime.DB.prepare("UPDATE camp_registrations SET registration_status = ?, payment_status = ?, updated_at = ? WHERE id = ?")
-    : runtime.DB.prepare("UPDATE shirt_orders SET order_status = ?, payment_status = ?, updated_at = ? WHERE id = ?");
-
-  const result = await statement.bind(data.status, data.paymentStatus, now, data.id).run();
-  if (!result.meta.changes) return reply({ error: "Registro não encontrado." }, 404);
-  await runtime.DB.prepare("INSERT INTO admin_audit_logs (actor_email, action, entity_type, entity_id, details, created_at) VALUES (?, ?, ?, ?, ?, ?)")
-    .bind(admin.email, "status_update", data.kind, data.id, JSON.stringify({ status: data.status, paymentStatus: data.paymentStatus }), now).run();
+  const db = createSupabaseAdminClient();
+  const table = data.kind === "registration" ? "camp_registrations" : "shirt_orders";
+  const statusField = data.kind === "registration" ? "registration_status" : "order_status";
+  const { data: updated, error } = await db.from(table)
+    .update({ [statusField]: data.status, payment_status: data.paymentStatus, updated_at: now })
+    .eq("id", data.id)
+    .select("id")
+    .maybeSingle();
+  if (error) return reply({ error: "Não foi possível atualizar o registro." }, 500);
+  if (!updated) return reply({ error: "Registro não encontrado." }, 404);
+  await db.from("admin_audit_logs").insert({ actor_email: admin.email, action: "status_update", entity_type: data.kind, entity_id: data.id, details: { status: data.status, paymentStatus: data.paymentStatus }, created_at: now });
   return reply({ ok: true });
 }

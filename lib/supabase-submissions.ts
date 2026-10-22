@@ -26,11 +26,19 @@ function decodeReceipt(base64: string, mimeType: string) {
 export async function persistSupabaseSubmission(submission: Submission, request: Request) {
   const db = createSupabaseAdminClient();
   const now = Math.floor(Date.now() / 1000);
-  const { data: duplicate } = await db.from("submission_receipts").select("protocol").eq("idempotency_key", submission.idempotencyKey).maybeSingle();
+  const { data: duplicate, error: duplicateError } = await db.from("submission_receipts").select("protocol").eq("idempotency_key", submission.idempotencyKey).maybeSingle();
+  if (duplicateError) {
+    console.error("Supabase submission lookup failed", duplicateError.code);
+    throw new Error("submission_backend_unavailable");
+  }
   if (duplicate?.protocol) return { protocol: duplicate.protocol, duplicate: true, receiptWarning: false };
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const { data: allowed, error: limitError } = await db.rpc("consume_submission_attempt", { p_fingerprint_hash: await fingerprint(ip), p_kind: submission.kind, p_now: now, p_window_start: now - 15 * 60 });
-  if (limitError || allowed !== true) throw new Error("rate_limited");
+  if (limitError) {
+    console.error("Supabase rate-limit RPC failed", limitError.code);
+    throw new Error("submission_backend_unavailable");
+  }
+  if (allowed !== true) throw new Error("rate_limited");
 
   const id = protocol(submission.kind);
   let receiptKey: string | null = null;

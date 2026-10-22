@@ -1,14 +1,14 @@
-import { env } from "@/lib/runtime-env";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { Download, FileCheck2, LogOut, Search, ShieldCheck, Shirt, UsersRound } from "lucide-react";
-import { chatGPTSignOutPath, requireChatGPTUser } from "@/app/chatgpt-auth";
-import { getAdminFromHeaders } from "@/lib/admin-auth";
+import { redirect } from "next/navigation";
+import { getAdminForRequest } from "@/lib/admin-auth";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { AdminActions } from "./admin-actions";
+import { AdminSignOut } from "./admin-sign-out";
 
 export const dynamic = "force-dynamic";
 
-type RuntimeEnv = { DB?: D1Database };
 type SearchParams = Promise<{ view?: string; q?: string; status?: string }>;
 
 type Registration = {
@@ -72,32 +72,16 @@ function statusLabel(value: string) {
 export default async function AdminPage({ searchParams }: { searchParams: SearchParams }) {
   const requestHeaders = await headers();
   const localDemo = isLocalDevelopment(requestHeaders);
-  if (!localDemo) await requireChatGPTUser("/admin");
   const admin = localDemo
     ? { email: "demonstracao@localhost", displayName: "Equipe Rise" }
-    : getAdminFromHeaders(requestHeaders);
-  if (!admin) {
-    return (
-      <main className="admin-page admin-access-page">
-        <section className="admin-access-card">
-          <ShieldCheck />
-          <p className="eyebrow">Área protegida</p>
-          <h1>Acesso não autorizado</h1>
-          <p>Esta conta não está na lista de líderes autorizados. Entre com a conta cadastrada pela administração do Rise.</p>
-          <a className="button button-orange" href={chatGPTSignOutPath("/admin")}>Sair desta conta</a>
-        </section>
-      </main>
-    );
-  }
+    : await getAdminForRequest(requestHeaders);
+  if (!admin) redirect("/admin/login?next=/admin");
 
-  const runtime = env as unknown as RuntimeEnv;
-  if (!localDemo && !runtime.DB) throw new Error("Banco de dados indisponível.");
+  const db = localDemo ? null : createSupabaseAdminClient();
   const params = await searchParams;
   const view = params.view === "shirts" ? "shirts" : "registrations";
   const query = (params.q ?? "").trim().slice(0, 120);
   const filterStatus = (params.status ?? "").trim();
-  const like = `%${query.replaceAll("%", "\\%").replaceAll("_", "\\_")}%`;
-
   const counts = localDemo
     ? {
         registrations: demoRegistrations.length,
@@ -105,11 +89,17 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         paid: demoRegistrations.filter((item) => item.payment_status === "paid").length,
         shirts: demoShirts.length,
       }
-    : await runtime.DB!.prepare(`SELECT
-        (SELECT COUNT(*) FROM camp_registrations) AS registrations,
-        (SELECT COUNT(*) FROM camp_registrations WHERE registration_status = 'confirmed') AS confirmed,
-        (SELECT COUNT(*) FROM camp_registrations WHERE payment_status = 'paid') AS paid,
-        (SELECT COUNT(*) FROM shirt_orders) AS shirts`).first<{ registrations: number; confirmed: number; paid: number; shirts: number }>();
+    : await Promise.all([
+        db!.from("camp_registrations").select("*", { count: "exact", head: true }),
+        db!.from("camp_registrations").select("*", { count: "exact", head: true }).eq("registration_status", "confirmed"),
+        db!.from("camp_registrations").select("*", { count: "exact", head: true }).eq("payment_status", "paid"),
+        db!.from("shirt_orders").select("*", { count: "exact", head: true }),
+      ]).then(([registrations, confirmed, paid, shirts]) => ({
+        registrations: registrations.count ?? 0,
+        confirmed: confirmed.count ?? 0,
+        paid: paid.count ?? 0,
+        shirts: shirts.count ?? 0,
+      }));
 
   let registrations: Registration[] = [];
   let shirts: ShirtOrder[] = [];
@@ -121,12 +111,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         (!filterStatus || item.registration_status === filterStatus),
       );
     } else {
-      const result = await runtime.DB!.prepare(`SELECT * FROM camp_registrations
-        WHERE (? = '' OR full_name LIKE ? ESCAPE '\\' OR protocol LIKE ? ESCAPE '\\' OR phone LIKE ? ESCAPE '\\')
-          AND (? = '' OR registration_status = ?)
-        ORDER BY created_at DESC LIMIT 500`)
-        .bind(query, like, like, like, filterStatus, filterStatus).all<Registration>();
-      registrations = result.results;
+      let request = db!.from("camp_registrations").select("*").order("created_at", { ascending: false }).limit(500);
+      if (filterStatus) request = request.eq("registration_status", filterStatus);
+      const result = await request;
+      if (result.error) throw result.error;
+      const normalizedQuery = query.toLocaleLowerCase("pt-BR");
+      registrations = (result.data as Registration[]).filter((item) => !normalizedQuery
+        || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery)));
     }
   } else {
     if (localDemo) {
@@ -136,12 +127,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         (!filterStatus || item.order_status === filterStatus),
       );
     } else {
-      const result = await runtime.DB!.prepare(`SELECT * FROM shirt_orders
-        WHERE (? = '' OR full_name LIKE ? ESCAPE '\\' OR protocol LIKE ? ESCAPE '\\' OR phone LIKE ? ESCAPE '\\')
-          AND (? = '' OR order_status = ?)
-        ORDER BY created_at DESC LIMIT 500`)
-        .bind(query, like, like, like, filterStatus, filterStatus).all<ShirtOrder>();
-      shirts = result.results;
+      let request = db!.from("shirt_orders").select("*").order("created_at", { ascending: false }).limit(500);
+      if (filterStatus) request = request.eq("order_status", filterStatus);
+      const result = await request;
+      if (result.error) throw result.error;
+      const normalizedQuery = query.toLocaleLowerCase("pt-BR");
+      shirts = (result.data as ShirtOrder[]).filter((item) => !normalizedQuery
+        || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery)));
     }
   }
 
@@ -156,7 +148,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
           </div>
           {localDemo
             ? <Link className="admin-signout" href="/"><LogOut /> Voltar ao site</Link>
-            : <a className="admin-signout" href={chatGPTSignOutPath("/")}><LogOut /> Sair</a>}
+            : <AdminSignOut />}
         </header>
 
         {localDemo && (

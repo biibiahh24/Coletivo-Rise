@@ -5,6 +5,7 @@ import {
   type AdminIdentity,
 } from "@/lib/admin-auth-core";
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createSupabaseAdminClient, isSupabaseAdminConfigured } from "@/lib/supabase/admin";
 
 type AdminRuntimeEnv = {
   ADMIN_EMAILS?: string;
@@ -24,6 +25,10 @@ function configuredAdminEmails() {
   );
 }
 
+export function isConfiguredAdminEmail(email: string) {
+  return configuredAdminEmails().has(email.trim().toLowerCase());
+}
+
 function configuredAdminAuth(): AdminAuthConfig {
   const runtime = process.env as AdminRuntimeEnv;
   return {
@@ -34,7 +39,7 @@ function configuredAdminAuth(): AdminAuthConfig {
 }
 
 export function getAdminAuthConfigurationError() {
-  if (isSupabaseConfigured() && configuredAdminEmails().size > 0) return null;
+  if (isSupabaseConfigured() && isSupabaseAdminConfigured()) return null;
   return getConfigurationError(configuredAdminAuth());
 }
 
@@ -55,8 +60,10 @@ export async function getAdminForRequest(requestHeaders: Pick<Headers, "get">): 
       const supabase = await createSupabaseServerClient();
       const { data: { user } } = await supabase.auth.getUser();
       const email = user?.email?.trim().toLowerCase();
-      if (user && email && configuredAdminEmails().has(email)) {
-        return { email, displayName: (user.user_metadata?.full_name as string | undefined) ?? email };
+      if (user && email) {
+        const db = createSupabaseAdminClient();
+        const { data: allowed } = await db.from("admin_users").select("email").eq("email", email).maybeSingle();
+        if (allowed) return { email, displayName: (user.user_metadata?.full_name as string | undefined) ?? email };
       }
     } catch {
       // Configuration errors must not turn into an authorization bypass.

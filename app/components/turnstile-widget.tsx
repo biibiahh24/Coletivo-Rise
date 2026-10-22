@@ -21,11 +21,16 @@ export function TurnstileWidget({ action, onToken, resetSignal = 0 }: { action: 
     fetch("/api/form-config", { cache: "no-store" })
       .then((response) => response.json())
       .then((value: unknown) => {
-        const data = value as { siteKey?: string };
-        setSiteKey(data.siteKey ?? "");
+        const data = value as { configured?: boolean; siteKey?: string };
+        const nextSiteKey = data.configured ? (data.siteKey ?? "") : "";
+        setSiteKey(nextSiteKey);
+        onToken(nextSiteKey ? "" : "turnstile-not-configured");
       })
-      .catch(() => setSiteKey(""));
-  }, []);
+      .catch(() => {
+        setSiteKey("");
+        onToken("");
+      });
+  }, [onToken]);
 
   useEffect(() => {
     if (!siteKey || !targetRef.current) return;
@@ -67,6 +72,6 @@ export function TurnstileWidget({ action, onToken, resetSignal = 0 }: { action: 
     }
   }, [onToken, resetSignal]);
 
-  if (!siteKey) return <p className="security-unavailable">A verificação segura será habilitada pela equipe antes da abertura das inscrições.</p>;
+  if (!siteKey) return <p className="security-unavailable">Envio protegido pelo controle de segurança do site.</p>;
   return <div className="turnstile-shell" ref={targetRef} aria-label="Verificação de segurança" />;
 }

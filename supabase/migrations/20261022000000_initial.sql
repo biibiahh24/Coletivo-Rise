@@ -67,6 +67,10 @@ begin
   return allowed;
 end $$;
 
+-- Only the trusted server client may consume rate-limit slots.
+revoke all on function public.consume_submission_attempt(text, text, bigint, bigint) from public, anon, authenticated;
+grant execute on function public.consume_submission_attempt(text, text, bigint, bigint) to service_role;
+
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('receipts', 'receipts', false, 5242880, array['application/pdf','image/jpeg','image/png','image/webp']::text[])
 on conflict (id) do update set public = false, file_size_limit = 5242880;

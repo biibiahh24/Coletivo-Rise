@@ -1,5 +1,5 @@
-import { env } from "@/lib/runtime-env";
-import { getAdminAuthConfigurationError, getAdminForRequest, getAdminFromHeaders } from "@/lib/admin-auth";
+import { getAdminAuthConfigurationError, getAdminForRequest } from "@/lib/admin-auth";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -11,26 +11,23 @@ function csvCell(value: unknown) {
 
 export async function GET(request: Request) {
   if (getAdminAuthConfigurationError()) return Response.json({ error: "Autenticação administrativa não configurada." }, { status: 503, headers: { "Cache-Control": "no-store" } });
-  const admin = await getAdminForRequest(request.headers) ?? getAdminFromHeaders(request.headers);
+  const admin = await getAdminForRequest(request.headers);
   if (!admin) return Response.json({ error: "Acesso não autorizado." }, { status: 403, headers: { "Cache-Control": "no-store" } });
-  const runtime = env as unknown as { DB?: D1Database };
-  if (!runtime.DB) return Response.json({ error: "Banco indisponível." }, { status: 503 });
+  const db = createSupabaseAdminClient();
 
   const kind = new URL(request.url).searchParams.get("kind") === "shirt" ? "shirt" : "registration";
   let headers: string[];
   let rows: Record<string, unknown>[];
   if (kind === "registration") {
     headers = ["Protocolo", "Nome", "Idade", "Responsável", "Telefone", "Igreja", "Cidade/Bairro", "Alergias", "Medicação", "Restrição alimentar", "Já participou", "Camiseta", "Pagamento", "Status do pagamento", "Status da inscrição", "Comprovante", "Observações", "Consentimento em", "Versão da política", "Criado em"];
-    const result = await runtime.DB.prepare(`SELECT protocol, full_name, age, guardian_name, phone, church, location,
-      allergies, medication, dietary_restrictions, attended_before, shirt_size, payment_method, payment_status,
-      registration_status, CASE WHEN receipt_key IS NULL THEN 'Não' ELSE 'Sim' END AS has_receipt, notes,
-      consent_at, privacy_version, created_at FROM camp_registrations ORDER BY created_at DESC LIMIT 5000`).all<Record<string, unknown>>();
-    rows = result.results;
+    const result = await db.from("camp_registrations").select("protocol, full_name, age, guardian_name, phone, church, location, allergies, medication, dietary_restrictions, attended_before, shirt_size, payment_method, payment_status, registration_status, receipt_key, notes, consent_at, privacy_version, created_at").order("created_at", { ascending: false }).limit(5000);
+    if (result.error) return Response.json({ error: "Não foi possível exportar os dados." }, { status: 500 });
+    rows = (result.data as Record<string, unknown>[]).map(({ receipt_key, ...row }) => ({ ...row, has_receipt: receipt_key ? "Sim" : "Não" }));
   } else {
     headers = ["Protocolo", "Nome", "Telefone", "Modelo", "Tamanho", "Quantidade", "Pagamento", "Status do pagamento", "Status do pedido", "Consentimento em", "Versão da política", "Criado em"];
-    const result = await runtime.DB.prepare(`SELECT protocol, full_name, phone, edition, size, quantity, payment_method,
-      payment_status, order_status, consent_at, privacy_version, created_at FROM shirt_orders ORDER BY created_at DESC LIMIT 5000`).all<Record<string, unknown>>();
-    rows = result.results;
+    const result = await db.from("shirt_orders").select("protocol, full_name, phone, edition, size, quantity, payment_method, payment_status, order_status, consent_at, privacy_version, created_at").order("created_at", { ascending: false }).limit(5000);
+    if (result.error) return Response.json({ error: "Não foi possível exportar os dados." }, { status: 500 });
+    rows = result.data as Record<string, unknown>[];
   }
 
   const keys = kind === "registration"
@@ -43,8 +40,7 @@ export async function GET(request: Request) {
   }
 
   const now = Math.floor(Date.now() / 1000);
-  await runtime.DB.prepare("INSERT INTO admin_audit_logs (actor_email, action, entity_type, entity_id, details, created_at) VALUES (?, ?, ?, NULL, ?, ?)")
-    .bind(admin.email, "csv_export", kind, JSON.stringify({ rows: rows.length }), now).run();
+  await db.from("admin_audit_logs").insert({ actor_email: admin.email, action: "csv_export", entity_type: kind, entity_id: null, details: { rows: rows.length }, created_at: now });
   const filename = `${kind === "registration" ? "inscricoes-acampa-2027" : "pedidos-camisetas"}-${new Date().toISOString().slice(0, 10)}.csv`;
   return new Response(`\uFEFF${lines.join("\r\n")}`, {
     headers: {
