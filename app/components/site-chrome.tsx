@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Camera, Menu, MessageCircle, X } from "lucide-react";
+import { Camera, Menu, MessageCircle, ShieldCheck, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navigation = [
@@ -35,7 +35,14 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
 
-          <Link href="/inscricao" className="header-cta">Inscrição <span>Acampa</span></Link>
+          <div className="header-actions">
+            <Link href="/inscricao" className="header-cta">Inscrição <span>Acampa</span></Link>
+            {pathname === "/inscricao" && (
+              <Link href="/admin" className="header-admin-link" aria-label="Abrir área administrativa">
+                <ShieldCheck /> <span>Admin</span>
+              </Link>
+            )}
+          </div>
           <button className="menu-button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-label={open ? "Fechar menu" : "Abrir menu"}>
             {open ? <X /> : <Menu />}
           </button>
@@ -47,6 +54,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
               <Link key={item.href} href={item.href} className={pathname === item.href ? "active" : ""}>{item.label}</Link>
             ))}
             <Link href="/inscricao" className="mobile-cta">Inscrição Acampa</Link>
+            {pathname === "/inscricao" && <Link href="/admin" className="mobile-admin-link"><ShieldCheck /> Área administrativa</Link>}
           </nav>
         )}
       </header>
@@ -60,6 +68,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
             <div><strong>Coletivo Rise</strong><span>Uma geração que se levanta.</span></div>
           </div>
           <div className="footer-social">
+            <Link href="/privacidade">Privacidade</Link>
             <a href="https://www.instagram.com/coletivo_rise/" target="_blank" rel="noreferrer"><Camera /> @coletivo_rise</a>
             <a href="https://wa.me/5511968778688" target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a>
           </div>

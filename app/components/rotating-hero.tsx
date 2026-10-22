@@ -12,8 +12,8 @@ const slides = [
     href: "/#quem-somos",
     action: "Conheça o coletivo",
     icon: Sparkles,
-    image: "/assets/encontro-rise-04.jpeg",
-    alt: "Jovens reunidos em um encontro do Coletivo Rise",
+    image: "/assets/inicio-rise-hero.jpeg",
+    alt: "Grande grupo de jovens reunido em um encontro do Coletivo Rise",
   },
   {
     label: "Acampamento Rise • 2027",

@@ -1,0 +1,85 @@
+"use client";
+
+import { useState } from "react";
+import { Check, LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast, Toaster } from "sonner";
+
+type Props = {
+  id: number;
+  kind: "registration" | "shirt";
+  status: string;
+  paymentStatus: string;
+  demo?: boolean;
+};
+
+const registrationStatuses = [
+  ["pending", "Pendente"],
+  ["confirmed", "Confirmada"],
+  ["waitlist", "Lista de espera"],
+  ["cancelled", "Cancelada"],
+] as const;
+
+const orderStatuses = [
+  ["pending", "Novo"],
+  ["separated", "Separado"],
+  ["delivered", "Entregue"],
+  ["cancelled", "Cancelado"],
+] as const;
+
+const paymentStatuses = [
+  ["pending", "Pendente"],
+  ["partial", "Parcial"],
+  ["paid", "Pago"],
+  ["refunded", "Estornado"],
+] as const;
+
+export function AdminActions({ id, kind, status, paymentStatus, demo = false }: Props) {
+  const router = useRouter();
+  const [nextStatus, setNextStatus] = useState(status);
+  const [nextPayment, setNextPayment] = useState(paymentStatus);
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    setSaving(true);
+    try {
+      const response = await fetch("/api/admin/records", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind, id, status: nextStatus, paymentStatus: nextPayment }),
+      });
+      const result = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(result.error ?? "Não foi possível atualizar.");
+      toast.success("Registro atualizado.");
+      router.refresh();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível atualizar.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const statuses = kind === "registration" ? registrationStatuses : orderStatuses;
+  const changed = nextStatus !== status || nextPayment !== paymentStatus;
+
+  return (
+    <div className="admin-actions">
+      <Toaster richColors position="top-center" />
+      <label>
+        <span>Status</span>
+        <select value={nextStatus} onChange={(event) => setNextStatus(event.target.value)} disabled={demo}>
+          {statuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Pagamento</span>
+        <select value={nextPayment} onChange={(event) => setNextPayment(event.target.value)} disabled={demo}>
+          {paymentStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </select>
+      </label>
+      <button type="button" onClick={save} disabled={demo || !changed || saving} aria-label={demo ? "Alterações desativadas na demonstração" : "Salvar alterações"}>
+        {saving ? <LoaderCircle className="spinner" /> : <Check />}
+      </button>
+    </div>
+  );
+}

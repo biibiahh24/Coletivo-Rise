@@ -1,43 +1,78 @@
 "use client";
 
-import { useState } from "react";
-import { MessageCircle, Send } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
+import { LoaderCircle, MessageCircle, Send } from "lucide-react";
+import { toast, Toaster } from "sonner";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { TurnstileWidget } from "./turnstile-widget";
 
 export function ShirtOrder() {
-  const [edition, setEdition] = useState("");
+  const edition = "Camiseta Rise — Edição 01";
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState("1");
+  const [pagamento, setPagamento] = useState("");
+  const [sending, setSending] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [resetSignal, setResetSignal] = useState(0);
+  const idempotencyKey = useRef<string | null>(null);
+  const handleToken = useCallback((token: string) => setTurnstileToken(token), []);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!edition || !size) return;
+    if (!edition || !size || !pagamento || !turnstileToken || !confirmed) return;
     const data = new FormData(event.currentTarget);
-    const message = [
-      "Olá, equipe Rise! Quero fazer um pedido de camiseta.",
-      `Nome: ${String(data.get("nome") ?? "")}`,
-      `Modelo: ${edition}`,
-      `Tamanho: ${size}`,
-      `Quantidade: ${quantity}`,
-      "Podem me confirmar a disponibilidade e o pagamento?"
-    ].join("\n");
-    window.open(`https://wa.me/5511968778688?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    setSending(true);
+    try {
+      const response = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          kind: "shirt",
+          idempotencyKey: idempotencyKey.current ?? (idempotencyKey.current = crypto.randomUUID()),
+          turnstileToken,
+          website: data.get("website"),
+          consent: confirmed,
+          privacyVersion: "2026-10",
+          nome: data.get("nome"),
+          telefone: data.get("telefone"),
+          edition,
+          size,
+          quantity,
+          pagamento,
+        }),
+      });
+      const result = await response.json() as { protocol?: string; error?: string };
+      if (!response.ok || !result.protocol) throw new Error(result.error ?? "O pedido não foi registrado.");
+      idempotencyKey.current = null;
+      const message = [
+        "Olá, equipe Rise! Meu pedido de camiseta foi registrado no site.",
+        `Protocolo: ${result.protocol}`,
+        `Nome: ${String(data.get("nome") ?? "")}`,
+        `Modelo: ${edition}`,
+        `Tamanho: ${size}`,
+        `Quantidade: ${quantity}`,
+        `Pagamento: ${pagamento}`,
+        "Podem me confirmar a disponibilidade e o pagamento?"
+      ].join("\n");
+      window.open(`https://wa.me/5511968778688?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não conseguimos registrar o pedido agora.");
+      setResetSignal((value) => value + 1);
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
     <form className="shirt-order" onSubmit={handleSubmit}>
+      <Toaster richColors position="top-center" />
+      <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
       <label className="field"><span>Seu nome *</span><Input name="nome" required placeholder="Como podemos te chamar?" /></label>
-      <label className="field"><span>Modelo *</span>
-        <Select value={edition} onValueChange={setEdition} required>
-          <SelectTrigger className="form-select"><SelectValue placeholder="Escolha uma edição" /></SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Camiseta Rise — Edição 01">Edição 01</SelectItem>
-            <SelectItem value="Camiseta Rise — Edição 02">Edição 02</SelectItem>
-            <SelectItem value="Camiseta Rise — Edição 03">Edição 03</SelectItem>
-          </SelectContent>
-        </Select>
-      </label>
+      <label className="field"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" autoComplete="tel" required placeholder="(11) 99999-9999" /></label>
+      <label className="field"><span>Camiseta</span><Input value={edition} readOnly aria-readonly="true" /></label>
       <label className="field"><span>Tamanho *</span>
         <Select value={size} onValueChange={setSize} required>
           <SelectTrigger className="form-select"><SelectValue placeholder="Escolha o tamanho" /></SelectTrigger>
@@ -50,8 +85,21 @@ export function ShirtOrder() {
           <SelectContent>{["1", "2", "3", "4", "5"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent>
         </Select>
       </label>
+      <label className="field"><span>Forma de pagamento *</span>
+        <Select value={pagamento} onValueChange={setPagamento} required>
+          <SelectTrigger className="form-select"><SelectValue placeholder="Escolha uma forma" /></SelectTrigger>
+          <SelectContent>{["PIX", "Cartão", "Dinheiro"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent>
+        </Select>
+      </label>
+      <TurnstileWidget action="shirt_order" onToken={handleToken} resetSignal={resetSignal} />
+      <div className="form-confirm">
+        <Checkbox id="pedido-confirmacao" checked={confirmed} onCheckedChange={(value) => setConfirmed(Boolean(value))} />
+        <label htmlFor="pedido-confirmacao">Autorizo o contato da equipe sobre este pedido e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>.</label>
+      </div>
       <div className="order-note"><MessageCircle /><span>O WhatsApp abrirá com o pedido organizado. Você confere e toca em enviar.</span></div>
-      <button className="button button-orange" type="submit" disabled={!edition || !size}>Enviar pedido <Send size={18} /></button>
+      <button className="button button-orange" type="submit" disabled={!size || !pagamento || !turnstileToken || !confirmed || sending}>
+        {sending ? <><LoaderCircle className="spinner" /> Salvando...</> : <>Registrar e abrir WhatsApp <Send size={18} /></>}
+      </button>
     </form>
   );
 }
