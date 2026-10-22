@@ -26,13 +26,18 @@ export async function POST(request: Request) {
   if (!parsed.success) return reply({ error: "Informe um e-mail válido e uma senha com ao menos 10 caracteres." }, 400);
   const { email, password, next } = parsed.data;
   const admin = createSupabaseAdminClient();
-  const { data: listed } = await admin.from("admin_users").select("email").eq("email", email).maybeSingle();
+  const { data: listed, error: allowlistLookupError } = await admin.from("admin_users").select("email").eq("email", email).maybeSingle();
+  if (allowlistLookupError) {
+    console.error("Admin allowlist lookup failed", allowlistLookupError.code);
+    return reply({ error: "A configuração administrativa do servidor está indisponível. Atualize a chave do Supabase na Vercel." }, 503);
+  }
   if (!listed && !isConfiguredAdminEmail(email)) return reply({ error: "E-mail ou senha inválidos." }, 401);
 
   const supabase = await createSupabaseServerClient();
   let login = await supabase.auth.signInWithPassword({ email, password });
   if (login.error) {
     const created = await admin.auth.admin.createUser({ email, password, email_confirm: true });
+    if (created.error) console.error("Admin user provisioning failed", created.error.code);
     if (!created.error) login = await supabase.auth.signInWithPassword({ email, password });
   }
   if (login.error || !login.data.user) return reply({ error: "E-mail ou senha inválidos." }, 401);
@@ -44,4 +49,3 @@ export async function POST(request: Request) {
   }
   return reply({ ok: true, next: safeNext(next) });
 }
-
