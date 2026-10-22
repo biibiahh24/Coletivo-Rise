@@ -1,5 +1,7 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/runtime-env";
 import { submissionSchema, type Submission } from "@/lib/submission-schema";
+import { isSupabaseAdminConfigured } from "@/lib/supabase/admin";
+import { persistSupabaseSubmission } from "@/lib/supabase-submissions";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +94,36 @@ async function syncOperationalSheet(runtime: RuntimeEnv, submission: Submission,
 }
 
 export async function POST(request: Request) {
+  if (isSupabaseAdminConfigured()) {
+    if (!process.env.RATE_LIMIT_SALT) return reply({ error: "O envio seguro ainda não foi configurado pela equipe." }, 503);
+    const origin = request.headers.get("origin");
+    if (origin && origin !== new URL(request.url).origin) return reply({ error: "Origem não autorizada." }, 403);
+    let raw: unknown;
+    try { raw = await request.json(); } catch { return reply({ error: "Dados inválidos." }, 400); }
+    const parsed = submissionSchema.safeParse(raw);
+    if (!parsed.success || parsed.data.website) return reply({ error: "Confira os campos enviados." }, 400);
+    if (process.env.TURNSTILE_SECRET_KEY) try {
+      const verification = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ secret: process.env.TURNSTILE_SECRET_KEY, response: parsed.data.turnstileToken, remoteip: request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() }),
+        signal: AbortSignal.timeout(5_000),
+      });
+      const challenge = await verification.json() as { success?: boolean; action?: string; hostname?: string };
+      const expectedAction = parsed.data.kind === "registration" ? "registration" : "shirt_order";
+      const expectedHostname = new URL(request.url).hostname;
+      if (!verification.ok || !challenge.success || challenge.action !== expectedAction || (challenge.hostname && challenge.hostname !== expectedHostname)) return reply({ error: "A verificação de segurança expirou. Atualize e tente novamente." }, 403);
+    } catch { return reply({ error: "A verificação de segurança está indisponível. Tente novamente." }, 503); }
+    try {
+      const result = await persistSupabaseSubmission(parsed.data, request);
+      return reply({ ok: true, ...result });
+    } catch (error) {
+      const code = error instanceof Error ? error.message : "";
+      if (code === "rate_limited") return reply({ error: "Muitas tentativas. Aguarde alguns minutos e tente novamente." }, 429);
+      if (code === "receipt_too_large") return reply({ error: "O comprovante deve ter no máximo 5 MB." }, 400);
+      if (code === "invalid_receipt") return reply({ error: "O arquivo enviado não é um comprovante válido." }, 400);
+      return reply({ error: "Não foi possível salvar o envio. Tente novamente." }, 500);
+    }
+  }
   const runtime = env as unknown as RuntimeEnv;
   if (!runtime.DB || !runtime.TURNSTILE_SECRET_KEY || !runtime.RATE_LIMIT_SALT) {
     return reply({ error: "O envio seguro ainda não foi configurado pela equipe." }, 503);
@@ -122,33 +154,39 @@ export async function POST(request: Request) {
   if (previous?.protocol) return reply({ ok: true, protocol: previous.protocol, duplicate: true });
 
   const ip = request.headers.get("cf-connecting-ip") ?? "unknown";
-  const userAgent = request.headers.get("user-agent") ?? "unknown";
-  const fingerprint = await hashFingerprint(`${runtime.RATE_LIMIT_SALT}:${ip}:${userAgent.slice(0, 180)}`);
-  const now = Math.floor(Date.now() / 1000);
-  const windowStart = now - 15 * 60;
-  await runtime.DB.prepare("DELETE FROM submission_attempts WHERE created_at < ?").bind(now - 24 * 60 * 60).run();
-  const count = await runtime.DB.prepare("SELECT COUNT(*) AS total FROM submission_attempts WHERE fingerprint_hash = ? AND created_at >= ?")
-    .bind(fingerprint, windowStart).first<{ total: number }>();
-  if (Number(count?.total ?? 0) >= 5) return reply({ error: "Muitas tentativas. Aguarde alguns minutos e tente novamente." }, 429);
-  await runtime.DB.prepare("INSERT INTO submission_attempts (fingerprint_hash, kind, created_at) VALUES (?, ?, ?)")
-    .bind(fingerprint, submission.kind, now).run();
-
-  const turnstileResponse = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      secret: runtime.TURNSTILE_SECRET_KEY,
-      response: submission.turnstileToken,
-      remoteip: ip === "unknown" ? undefined : ip,
-      idempotency_key: crypto.randomUUID(),
-    }),
-  });
-  const challenge = await turnstileResponse.json() as { success?: boolean; action?: string; hostname?: string };
+  let challenge: { success?: boolean; action?: string; hostname?: string };
+  try {
+    const turnstileResponse = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secret: runtime.TURNSTILE_SECRET_KEY,
+        response: submission.turnstileToken,
+        remoteip: ip === "unknown" ? undefined : ip,
+        idempotency_key: crypto.randomUUID(),
+      }),
+      signal: AbortSignal.timeout(5_000),
+    });
+    if (!turnstileResponse.ok) throw new Error("turnstile_unavailable");
+    challenge = await turnstileResponse.json() as typeof challenge;
+  } catch {
+    return reply({ error: "A verificação de segurança está indisponível. Tente novamente em alguns instantes." }, 503);
+  }
   const expectedAction = submission.kind === "registration" ? "registration" : "shirt_order";
   const expectedHostname = new URL(request.url).hostname;
   if (!challenge.success || challenge.action !== expectedAction || challenge.hostname !== expectedHostname) {
     return reply({ error: "A verificação de segurança expirou. Atualize e tente novamente." }, 403);
   }
+
+  const fingerprint = await hashFingerprint(`${runtime.RATE_LIMIT_SALT}:${ip}`);
+  const now = Math.floor(Date.now() / 1000);
+  const windowStart = now - 15 * 60;
+  await runtime.DB.prepare("DELETE FROM submission_attempts WHERE created_at < ?").bind(now - 24 * 60 * 60).run();
+  const rateLimit = await runtime.DB.prepare(`INSERT INTO submission_attempts (fingerprint_hash, kind, created_at)
+    SELECT ?, ?, ?
+    WHERE (SELECT COUNT(*) FROM submission_attempts WHERE fingerprint_hash = ? AND created_at >= ?) < 5`)
+    .bind(fingerprint, submission.kind, now, fingerprint, windowStart).run();
+  if (!rateLimit.meta.changes) return reply({ error: "Muitas tentativas. Aguarde alguns minutos e tente novamente." }, 429);
 
   const protocol = createProtocol(submission.kind);
   let receiptBytes: Uint8Array | null = null;

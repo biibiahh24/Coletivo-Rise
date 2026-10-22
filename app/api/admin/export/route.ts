@@ -1,5 +1,5 @@
-import { env } from "cloudflare:workers";
-import { getAdminFromHeaders } from "@/lib/admin-auth";
+import { env } from "@/lib/runtime-env";
+import { getAdminAuthConfigurationError, getAdminForRequest, getAdminFromHeaders } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +10,8 @@ function csvCell(value: unknown) {
 }
 
 export async function GET(request: Request) {
-  const admin = getAdminFromHeaders(request.headers);
+  if (getAdminAuthConfigurationError()) return Response.json({ error: "Autenticação administrativa não configurada." }, { status: 503, headers: { "Cache-Control": "no-store" } });
+  const admin = await getAdminForRequest(request.headers) ?? getAdminFromHeaders(request.headers);
   if (!admin) return Response.json({ error: "Acesso não autorizado." }, { status: 403, headers: { "Cache-Control": "no-store" } });
   const runtime = env as unknown as { DB?: D1Database };
   if (!runtime.DB) return Response.json({ error: "Banco indisponível." }, { status: 503 });

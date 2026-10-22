@@ -1,6 +1,6 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/runtime-env";
 import { z } from "zod";
-import { getAdminFromHeaders, sameOrigin } from "@/lib/admin-auth";
+import { getAdminAuthConfigurationError, getAdminForRequest, sameOrigin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +22,8 @@ const updateSchema = z.discriminatedUnion("kind", [
 const reply = (body: Record<string, unknown>, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 
 export async function PATCH(request: Request) {
-  const admin = getAdminFromHeaders(request.headers);
+  if (getAdminAuthConfigurationError()) return reply({ error: "Autenticação administrativa não configurada." }, 503);
+  const admin = await getAdminForRequest(request.headers);
   if (!admin) return reply({ error: "Acesso não autorizado." }, 403);
   if (!sameOrigin(request)) return reply({ error: "Origem não autorizada." }, 403);
   if (!request.headers.get("content-type")?.includes("application/json")) return reply({ error: "Formato inválido." }, 415);

@@ -6,7 +6,9 @@ const phone = requiredText(24).regex(/^[0-9()+\-\s]{8,24}$/, "Telefone inválido
 const idempotencyKey = z.string().uuid();
 const securityFields = {
   idempotencyKey,
-  turnstileToken: requiredText(2048),
+  // Optional until a Turnstile site/secret pair is configured. The API
+  // performs verification whenever TURNSTILE_SECRET_KEY is present.
+  turnstileToken: cleanText(2048).default(""),
   website: cleanText(0).optional().default(""),
   consent: z.literal(true),
   privacyVersion: z.literal("2026-10"),

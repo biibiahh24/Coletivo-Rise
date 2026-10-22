@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/runtime-env";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { Download, FileCheck2, LogOut, Search, ShieldCheck, Shirt, UsersRound } from "lucide-react";
@@ -47,66 +47,10 @@ type ShirtOrder = {
   created_at: number;
 };
 
-const demoRegistrations: Registration[] = [
-  {
-    id: 1,
-    protocol: "RISE-2027-0001",
-    full_name: "Mariana Oliveira",
-    age: 18,
-    guardian_name: null,
-    phone: "(11) 99999-0001",
-    church: "Igreja da Família",
-    location: "São Paulo — SP",
-    allergies: "Nenhuma informada",
-    medication: null,
-    dietary_restrictions: "Sem lactose",
-    attended_before: "Sim",
-    shirt_size: "M",
-    payment_method: "Pix",
-    payment_status: "paid",
-    registration_status: "confirmed",
-    notes: "Exemplo de inscrição para visualizar o painel local.",
-    receipt_key: null,
-    created_at: 1792375200,
-  },
-  {
-    id: 2,
-    protocol: "RISE-2027-0002",
-    full_name: "Lucas Santos",
-    age: 16,
-    guardian_name: "Ana Santos",
-    phone: "(11) 99999-0002",
-    church: "Comunidade da Graça",
-    location: "Guarulhos — SP",
-    allergies: null,
-    medication: null,
-    dietary_restrictions: null,
-    attended_before: "Não",
-    shirt_size: "G",
-    payment_method: "Pix",
-    payment_status: "pending",
-    registration_status: "pending",
-    notes: null,
-    receipt_key: null,
-    created_at: 1792461600,
-  },
-];
-
-const demoShirts: ShirtOrder[] = [
-  {
-    id: 1,
-    protocol: "LOJA-2026-0001",
-    full_name: "Beatriz Ramos",
-    phone: "(11) 99999-0003",
-    edition: "Brasil pertence a Jesus",
-    size: "M",
-    quantity: 1,
-    payment_method: "Pix",
-    payment_status: "paid",
-    order_status: "separated",
-    created_at: 1792378800,
-  },
-];
+// Keep production free of personal/demo records. Data is loaded from Supabase;
+// empty fallbacks also make the admin panel safe in local development.
+const demoRegistrations: Registration[] = [];
+const demoShirts: ShirtOrder[] = [];
 
 function isLocalDevelopment(requestHeaders: Headers) {
   const host = (requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "")
