@@ -1075,6 +1075,8 @@ body { background: var(--cream-soft); }
     var(--cream-soft);
 }
 .hero-copy h1 { color: var(--purple-dark); }
+.hero-rotator .button-ghost { color: var(--purple); background: var(--lilac-soft); border-color: var(--orange); }
+.hero-rotator .button-ghost:hover { color: var(--purple); background: var(--lilac); }
 .hero-copy h1 em { color: var(--orange-deep); }
 .hero-copy > p { color: var(--purple); }
 .hero-kicker { color: var(--orange-deep); border-color: var(--orange); background: transparent; }
