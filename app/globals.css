@@ -437,10 +437,22 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .worship-card h3 { margin: 18px 0 5px; font-size: 1.65rem; }
 .worship-card p { margin: 0; color: #725b4c; font-size: .9rem; }
 
-.final-cta { margin-top: 110px; margin-bottom: 110px; padding: clamp(38px, 6vw, 70px); border-radius: 36px; display: flex; justify-content: space-between; align-items: center; gap: 40px; color: white; background: var(--orange); position: relative; overflow: hidden; }
+.final-cta { margin-top: 110px; margin-bottom: 110px; padding: clamp(38px, 6vw, 70px); border-radius: 36px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(250px, .8fr) auto; align-items: center; gap: clamp(26px, 4vw, 58px); color: white; background: var(--orange); position: relative; overflow: hidden; }
 .final-cta::after { content: ""; width: 270px; height: 270px; position: absolute; right: -80px; top: -130px; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; }
-.final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 5vw, 4.8rem); }
+.final-cta-copy { position: relative; z-index: 2; }
+.final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 5vw, 4.8rem); line-height: .97; }
+.final-cta h2 em { color: var(--purple-dark); font-style: normal; }
+.final-cta-lead { max-width: 610px; margin: 24px 0 0; color: rgba(255,255,255,.82); font-size: 1rem; text-transform: uppercase; letter-spacing: .13em; font-weight: 800; }
 .final-cta .button { flex: none; position: relative; z-index: 2; }
+.final-cta .button-light { color: var(--cream-soft); background: var(--purple-dark); box-shadow: 0 15px 28px rgba(46,27,55,.2); }
+.final-cta .button-light:hover { color: var(--purple-dark); background: var(--cream-soft); }
+.final-cta-art { min-height: 330px; position: relative; z-index: 1; }
+.final-cta-art img { position: absolute; width: 230px; height: 300px; object-fit: cover; border: 8px solid rgba(255,255,255,.82); box-shadow: 0 20px 35px rgba(104,40,12,.22); }
+.final-cta-art-back { right: 0; top: 4px; transform: rotate(8deg); object-position: center; }
+.final-cta-art-front { right: 105px; bottom: 0; transform: rotate(-7deg); object-position: center; }
+.final-cta-art-kit { position: absolute; right: 15px; bottom: 22px; display: grid; gap: 2px; padding: 14px 16px; color: var(--purple-dark); background: var(--cream-soft); border-radius: 8px; transform: rotate(4deg); box-shadow: 0 14px 24px rgba(63,31,9,.2); text-transform: uppercase; letter-spacing: .08em; }
+.final-cta-art-kit span { font-size: .65rem; font-weight: 900; }
+.final-cta-art-kit strong { font-size: 1.1rem; }
 
 .inner-hero { min-height: 530px; display: grid; place-items: center; position: relative; color: white; background: var(--ink); overflow: hidden; }
 .inner-hero::before { content: "RISE"; position: absolute; right: -25px; bottom: -160px; color: rgba(255,255,255,.035); font: 900 clamp(12rem, 28vw, 29rem)/1 "Arial Black", sans-serif; letter-spacing: -.09em; }
@@ -827,7 +839,11 @@ h1, h2, h3 { overflow-wrap: break-word; }
   .about-section { padding-bottom: 85px; }
   .about-visual, .about-visual > img { min-height: 510px; height: 510px; }
   .about-stamp { width: 155px; height: 155px; right: 10px; bottom: 20px; }
-  .final-cta { margin-block: 75px; flex-direction: column; align-items: flex-start; }
+  .final-cta { margin-block: 75px; grid-template-columns: 1fr; align-items: flex-start; }
+  .final-cta-art { width: min(100%, 390px); min-height: 290px; align-self: center; }
+  .final-cta-art img { width: 190px; height: 255px; }
+  .final-cta-art-front { right: 105px; }
+  .final-cta .button { width: 100%; justify-content: center; }
   .inner-hero { min-height: 490px; }
   .inner-hero h1 { font-size: clamp(3.1rem, 14vw, 5.3rem); }
   .schedule-card:nth-child(2) { transform: none; }
