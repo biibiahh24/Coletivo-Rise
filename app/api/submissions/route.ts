@@ -63,6 +63,7 @@ async function syncOperationalSheet(runtime: RuntimeEnv, submission: Submission,
         participou: submission.participou,
         camiseta: submission.camiseta,
         pagamento: submission.pagamento,
+        presskit: submission.presskit,
         hasReceipt: Boolean(submission.comprovanteBase64),
         consent: submission.consent,
         privacyVersion: submission.privacyVersion,
@@ -216,7 +217,7 @@ export async function POST(request: Request) {
           protocol, submission.idempotencyKey, submission.nome, submission.idade, submission.responsavel || null,
           submission.telefone, submission.igreja, submission.endereco, submission.alergias || null,
           submission.medicacao || null, submission.restricao || null, submission.participou, submission.camiseta,
-          submission.pagamento, submission.obs || null, receiptKey, submission.comprovanteNome || null,
+          submission.pagamento, `${submission.presskit === "Sim" ? "Presskit: Sim — R$ 60,00. " : "Presskit: Não. "}${submission.obs || ""}`, receiptKey, submission.comprovanteNome || null,
           submission.comprovanteTipo || null, now, submission.privacyVersion, now, now,
         ),
         runtime.DB.prepare("INSERT INTO submission_receipts (idempotency_key, protocol, kind, created_at) VALUES (?, ?, ?, ?)")
@@ -259,3 +260,4 @@ export async function POST(request: Request) {
   await syncOperationalSheet(runtime, submission, protocol);
   return reply({ ok: true, protocol, receiptWarning });
 }
+
