@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowUpRight, Clock3, HeartHandshake, Home, MapPin, MessageCircle, Sparkles, UsersRound } from "lucide-react";
 import { SectionHero } from "../components/section-hero";
+import { cellImages } from "./cell-images";
 
 export const metadata: Metadata = {
   title: "Células Rise",
@@ -42,8 +43,8 @@ export default function CelulasPage() {
         <div className="cell-directory-heading"><span className="eyebrow"><Clock3 size={16} /> Encontros durante a semana</span><h2 id="directory-title">Encontre sua célula.</h2><p>Escolha uma comunidade e fale com o líder para saber os próximos encontros.</p></div>
         <div className="cell-cards">
           {[
-            { name: "Ekballo", image: "https://raw.githubusercontent.com/biibiahh24/Coletivo-Rise/main/public/assets/celula-ekballo.jpg" },
-            { name: "Rede ao Mar", image: "https://raw.githubusercontent.com/biibiahh24/Coletivo-Rise/main/public/assets/celula-rede-ao-mar.jpg" },
+            { name: "Ekballo", image: cellImages.ekballo },
+            { name: "Rede ao Mar", image: cellImages.redeAoMar },
             { name: "Cachoeirinha", image: "/assets/encontro-rise-03.jpeg" },
           ].map(({ name, image }) => (
             <article className="cell-card" key={name}>
