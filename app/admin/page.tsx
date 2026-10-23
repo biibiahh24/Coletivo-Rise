@@ -178,8 +178,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
             <Link className={view === "shirts" ? "active" : ""} href="/admin?view=shirts">Camisetas</Link>
           </nav>
           {localDemo
-            ? <a className="admin-export" href={`/api/admin/demo-export?kind=${view === "registrations" ? "registration" : "shirt"}`} download><Download /> Exportar CSV</a>
-            : <a className="admin-export" href={`/api/admin/export?kind=${view === "registrations" ? "registration" : "shirt"}`}><Download /> Exportar CSV</a>}
+            ? <a className="admin-export" href={`/api/admin/demo-export?kind=${view === "shirts" ? "shirt" : "registration"}`} download><Download /> Exportar CSV</a>
+            : <a className="admin-export" href={`/api/admin/export?kind=${view === "shirts" ? "shirt" : "registration"}`}><Download /> Exportar CSV</a>}
         </div>
 
         <form className="admin-filters" method="get">
@@ -195,7 +195,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
           <button type="submit">Filtrar</button>
         </form>
 
-        {view === "registrations" ? (
+        {view === "registrations" || view === "registrations_presskit" ? (
           <div className="admin-records">
             {registrations.length === 0 && <p className="admin-empty">Nenhuma inscrição encontrada.</p>}
             {registrations.map((item) => (
