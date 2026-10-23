@@ -43,7 +43,7 @@ export default function CelulasPage() {
         <div className="cell-cards">
           {[
             { name: "Ekballo", image: "/assets/celula-ekballo.jpg" },
-            { name: "Rede ao Mar", image: "/assets/celula-rede-ao-mar.png" },
+            { name: "Rede ao Mar", image: "/assets/celula-rede-ao-mar.jpg" },
             { name: "Cachoeirinha", image: "/assets/encontro-rise-03.jpeg" },
           ].map(({ name, image }) => (
             <article className="cell-card" key={name}>
