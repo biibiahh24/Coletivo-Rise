@@ -41,13 +41,13 @@ export default function LojaPage() {
 
       <section className="section-shell drop-teaser" aria-labelledby="drop-title">
         <div className="drop-media">
-          <img src="/assets/nova-colecao-brasil-jesus.jpeg" alt="Prévia da nova camiseta Rise Brasil pertence a Jesus" />
+          <img src="/assets/nova-colecao-levanta-te.png" alt="Nova coleção Rise Levanta-te e Resplandece" />
           <span>Nova coleção</span>
         </div>
         <div className="drop-copy">
-          <span className="eyebrow light"><Sparkles size={16} /> Próximo lançamento</span>
-          <h2 id="drop-title">O Brasil pertence a Jesus.</h2>
-          <p>A próxima coleção do Coletivo Rise carrega uma declaração de fé inspirada em Salmos 33:12. Acompanhe o Instagram para conhecer a data e os detalhes do lançamento.</p>
+          <span className="eyebrow light"><Sparkles size={16} /> Nova coleção</span>
+          <h2 id="drop-title">Levanta-te e resplandece.</h2>
+          <p>Uma coleção que celebra identidade, propósito e uma geração que escolhe se levantar e resplandecer.</p>
           <a href="https://www.instagram.com/coletivo_rise/" target="_blank" rel="noreferrer" className="button button-light">Acompanhar lançamento <ArrowUpRight /></a>
         </div>
         <div className="drop-seal"><Shirt /><span>Em breve</span></div>
@@ -84,3 +84,4 @@ export default function LojaPage() {
     </main>
   );
 }
+
