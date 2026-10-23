@@ -446,13 +446,8 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta .button { flex: none; position: relative; z-index: 2; }
 .final-cta .button-light { color: var(--cream-soft); background: var(--purple-dark); box-shadow: 0 15px 28px rgba(46,27,55,.2); }
 .final-cta .button-light:hover { color: var(--purple-dark); background: var(--cream-soft); }
-.final-cta-art { min-height: 330px; position: relative; z-index: 1; }
-.final-cta-art img { position: absolute; width: 230px; height: 300px; object-fit: cover; border: 8px solid rgba(255,255,255,.82); box-shadow: 0 20px 35px rgba(104,40,12,.22); }
-.final-cta-art-back { right: 0; top: 4px; transform: rotate(8deg); object-position: center; }
-.final-cta-art-front { right: 105px; bottom: 0; transform: rotate(-7deg); object-position: center; }
-.final-cta-art-kit { position: absolute; right: 15px; bottom: 22px; display: grid; gap: 2px; padding: 14px 16px; color: var(--purple-dark); background: var(--cream-soft); border-radius: 8px; transform: rotate(4deg); box-shadow: 0 14px 24px rgba(63,31,9,.2); text-transform: uppercase; letter-spacing: .08em; }
-.final-cta-art-kit span { font-size: .65rem; font-weight: 900; }
-.final-cta-art-kit strong { font-size: 1.1rem; }
+.final-cta-art { min-height: 360px; position: relative; z-index: 1; display: grid; place-items: center; }
+.final-cta-art-presskit { width: min(100%, 520px); height: auto; object-fit: contain; filter: drop-shadow(0 24px 25px rgba(104,40,12,.22)); transform: translateY(8px); }
 
 .inner-hero { min-height: 530px; display: grid; place-items: center; position: relative; color: white; background: var(--ink); overflow: hidden; }
 .inner-hero::before { content: "RISE"; position: absolute; right: -25px; bottom: -160px; color: rgba(255,255,255,.035); font: 900 clamp(12rem, 28vw, 29rem)/1 "Arial Black", sans-serif; letter-spacing: -.09em; }
@@ -840,9 +835,8 @@ h1, h2, h3 { overflow-wrap: break-word; }
   .about-visual, .about-visual > img { min-height: 510px; height: 510px; }
   .about-stamp { width: 155px; height: 155px; right: 10px; bottom: 20px; }
   .final-cta { margin-block: 75px; grid-template-columns: 1fr; align-items: flex-start; }
-  .final-cta-art { width: min(100%, 390px); min-height: 290px; align-self: center; }
-  .final-cta-art img { width: 190px; height: 255px; }
-  .final-cta-art-front { right: 105px; }
+  .final-cta-art { width: min(100%, 390px); min-height: 250px; align-self: center; }
+  .final-cta-art-presskit { width: 100%; }
   .final-cta .button { width: 100%; justify-content: center; }
   .inner-hero { min-height: 490px; }
   .inner-hero h1 { font-size: clamp(3.1rem, 14vw, 5.3rem); }
