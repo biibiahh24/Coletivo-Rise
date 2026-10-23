@@ -41,9 +41,13 @@ export default function CelulasPage() {
       <section className="section-shell cell-directory cell-directory-grid" aria-labelledby="directory-title">
         <div className="cell-directory-heading"><span className="eyebrow"><Clock3 size={16} /> Encontros durante a semana</span><h2 id="directory-title">Encontre sua célula.</h2><p>Escolha uma comunidade e fale com o líder para saber os próximos encontros.</p></div>
         <div className="cell-cards">
-          {["Ekballo", "Rede ao Mar", "Cachoeirinha"].map((name, index) => (
+          {[
+            { name: "Ekballo", image: "/assets/celula-ekballo.jpg" },
+            { name: "Rede ao Mar", image: "/assets/celula-rede-ao-mar.png" },
+            { name: "Cachoeirinha", image: "/assets/encontro-rise-03.jpeg" },
+          ].map(({ name, image }) => (
             <article className="cell-card" key={name}>
-              <div className="cell-card-photo"><img src={`/assets/encontro-rise-0${index + 1}.jpeg`} alt={`Encontro da célula ${name}`} /></div>
+              <div className="cell-card-photo"><img src={image} alt={`Encontro da célula ${name}`} /></div>
               <h3>{name}</h3>
               <a href={`https://wa.me/5511968778688?text=${encodeURIComponent(`Olá! Quero falar com o líder da célula ${name}.`)}`} target="_blank" rel="noreferrer" className="button button-orange"><MessageCircle size={16} /> Falar com o líder</a>
             </article>
