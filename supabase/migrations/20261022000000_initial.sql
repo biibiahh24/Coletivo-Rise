@@ -82,6 +82,13 @@ alter table public.admin_audit_logs enable row level security;
 alter table public.submission_attempts enable row level security;
 alter table public.submission_receipts enable row level security;
 
+-- The server-side secret key uses the service_role database role. Keep these
+-- grants explicit because newer Supabase projects do not grant Data API table
+-- privileges to service_role automatically for SQL-created tables.
+grant select, insert, update, delete on table public.admin_users, public.camp_registrations, public.shirt_orders, public.admin_audit_logs, public.submission_attempts, public.submission_receipts to service_role;
+grant usage, select, update on all sequences in schema public to service_role;
+grant execute on function public.consume_submission_attempt(text, text, bigint, bigint) to service_role;
+
 create policy "admins read registrations" on public.camp_registrations for select to authenticated using (public.is_admin());
 create policy "admins update registrations" on public.camp_registrations for update to authenticated using (public.is_admin()) with check (public.is_admin());
 create policy "admins read shirt orders" on public.shirt_orders for select to authenticated using (public.is_admin());
@@ -89,3 +96,4 @@ create policy "admins update shirt orders" on public.shirt_orders for update to 
 create policy "admins read audit" on public.admin_audit_logs for select to authenticated using (public.is_admin());
 create policy "admins write audit" on public.admin_audit_logs for insert to authenticated with check (public.is_admin());
 create policy "admins download receipts" on storage.objects for select to authenticated using (bucket_id = 'receipts' and public.is_admin());
+
