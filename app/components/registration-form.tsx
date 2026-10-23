@@ -22,6 +22,7 @@ export function RegistrationForm() {
   const [participou, setParticipou] = useState("");
   const [camiseta, setCamiseta] = useState("");
   const [pagamento, setPagamento] = useState("");
+  const [presskit, setPresskit] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [sending, setSending] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -31,7 +32,7 @@ export function RegistrationForm() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!participou || !camiseta || !pagamento || !confirmed || !turnstileToken) {
+    if (!participou || !camiseta || !pagamento || !presskit || !confirmed || !turnstileToken) {
       toast.error("Preencha as seleções e confirme as informações para continuar.");
       return;
     }
@@ -66,6 +67,7 @@ export function RegistrationForm() {
         participou,
         camiseta,
         pagamento,
+        presskit,
         comprovanteBase64,
         comprovanteTipo: file instanceof File ? file.type : "",
         comprovanteNome: file instanceof File ? file.name : "",
@@ -88,6 +90,7 @@ export function RegistrationForm() {
         `Igreja: ${String(data.igreja ?? "")}`,
         `Camiseta: ${camiseta}`,
         `Pagamento: ${pagamento}`,
+        `Presskit: ${presskit}`,
         result.receiptWarning ? "O comprovante não foi anexado; vou enviá-lo por aqui." : "Gostaria de confirmar os próximos passos."
       ].join("\n");
       window.location.assign(`https://wa.me/5511968778688?text=${encodeURIComponent(whatsappMessage)}`);
@@ -147,6 +150,12 @@ export function RegistrationForm() {
                 <SelectContent>{["PIX", "Cartão", "Dinheiro", "Entrada + Parcelamento"].map((method) => <SelectItem value={method} key={method}>{method}</SelectItem>)}</SelectContent>
               </Select>
             </label>
+            <label className="field"><span>Adicionar presskit? (+ R$ 60,00) *</span>
+              <Select value={presskit} onValueChange={setPresskit} required>
+                <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
+                <SelectContent><SelectItem value="Sim">Sim — adicionar presskit</SelectItem><SelectItem value="Não">Não, somente a inscrição</SelectItem></SelectContent>
+              </Select>
+            </label>
             <label className="field"><span>Comprovante, caso já tenha pago</span><Input name="comprovante" type="file" accept="image/*,application/pdf" /></label>
             <label className="field field-wide"><span>Observações adicionais</span><Textarea name="obs" rows={4} placeholder="Algo importante que a equipe precisa saber?" /></label>
           </div>
@@ -169,3 +178,4 @@ export function RegistrationForm() {
     </>
   );
 }
+
