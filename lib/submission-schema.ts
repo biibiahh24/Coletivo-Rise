@@ -31,7 +31,9 @@ export const registrationSubmission = z.object({
   pagamento: z.enum(["PIX", "Cartão", "Dinheiro", "Entrada + Parcelamento"]),
   presskit: z.enum(["Sim", "Não"]),
   comprovanteBase64: z.string().max(7_100_000).default(""),
-  comprovanteTipo: z.enum(["", "image/jpeg", "image/png", "image/webp", "application/pdf"]).default(""),
+  // Browsers may report an empty or vendor-specific MIME type when no file is selected.
+  // The upload validator below still rejects unsupported types when bytes are present.
+  comprovanteTipo: z.string().max(120).default(""),
   comprovanteNome: cleanText(180).default(""),
   obs: cleanText(1000),
 });
