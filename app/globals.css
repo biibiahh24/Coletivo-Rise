@@ -437,16 +437,16 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .worship-card h3 { margin: 18px 0 5px; font-size: 1.65rem; }
 .worship-card p { margin: 0; color: #725b4c; font-size: .9rem; }
 
-.final-cta { margin-top: 110px; margin-bottom: 110px; min-height: 650px; padding: clamp(44px, 5vw, 70px); border-radius: 36px; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(460px, .88fr); align-items: stretch; gap: clamp(22px, 3vw, 44px); color: white; background: var(--orange); position: relative; overflow: visible; }
+.final-cta { margin-top: 110px; margin-bottom: 110px; aspect-ratio: 2 / 1; min-height: 0; padding: 0; border-radius: 0; display: block; color: white; background: var(--cream-soft) url('/assets/acampamento-layout-reference.png') center / cover no-repeat; position: relative; overflow: hidden; }
 .final-cta::after { content: ""; width: 270px; height: 270px; position: absolute; right: -80px; top: -130px; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; }
-.final-cta-copy { position: relative; z-index: 3; }
+.final-cta-copy, .final-cta-art { display: none; }
 .final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 4.6vw, 5.1rem); line-height: .97; overflow-wrap: normal; word-break: normal; }
 .final-cta h2 span, .final-cta h2 em { display: block; }
 .final-cta h2 strong { color: var(--purple-dark); font-weight: inherit; }
 .final-cta h2 em { color: var(--purple-dark); font-style: normal; }
 .final-cta-lead { max-width: 610px; margin: 24px 0 0; color: rgba(255,255,255,.82); font-size: 1rem; text-transform: uppercase; letter-spacing: .13em; font-weight: 800; }
 .final-cta-visual { display: contents; }
-.final-cta .button { flex: none; position: absolute; z-index: 4; right: clamp(32px, 5vw, 70px); bottom: clamp(32px, 5vw, 70px); }
+.final-cta .button { flex: none; position: absolute; z-index: 4; right: 3.5%; bottom: 7%; width: 20%; height: 12%; padding: 0; opacity: 0; }
 .final-cta .button-light { color: var(--cream-soft); background: var(--purple-dark); box-shadow: 0 15px 28px rgba(46,27,55,.2); }
 .final-cta .button-light:hover { color: var(--purple-dark); background: var(--cream-soft); }
 .final-cta-art { position: absolute; z-index: 1; top: -18%; right: -6%; width: 72%; height: 122%; display: grid; place-items: center; pointer-events: none; }
@@ -837,11 +837,11 @@ h1, h2, h3 { overflow-wrap: break-word; }
   .about-section { padding-bottom: 85px; }
   .about-visual, .about-visual > img { min-height: 510px; height: 510px; }
   .about-stamp { width: 155px; height: 155px; right: 10px; bottom: 20px; }
-  .final-cta { margin-block: 75px; min-height: 0; grid-template-columns: 1fr; align-items: flex-start; overflow: hidden; }
+  .final-cta { margin-block: 75px; aspect-ratio: 2 / 1; min-height: 0; overflow: hidden; }
   .final-cta-visual { display: flex; width: 100%; align-items: center; }
   .final-cta-art { position: relative; top: auto; right: auto; width: min(100%, 390px); height: auto; min-height: 250px; align-self: center; order: 0; }
   .final-cta-art-presskit { width: 100%; transform: none; }
-  .final-cta .button { position: static; width: 100%; justify-content: center; order: 1; }
+  .final-cta .button { position: absolute; right: 3.5%; bottom: 7%; width: 20%; height: 12%; }
   .inner-hero { min-height: 490px; }
   .inner-hero h1 { font-size: clamp(3.1rem, 14vw, 5.3rem); }
   .schedule-card:nth-child(2) { transform: none; }
