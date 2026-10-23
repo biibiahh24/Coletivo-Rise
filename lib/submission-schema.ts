@@ -29,6 +29,7 @@ export const registrationSubmission = z.object({
   participou: z.enum(["Sim", "Não"]),
   camiseta: z.enum(["PP", "P", "M", "G", "GG", "XG"]),
   pagamento: z.enum(["PIX", "Cartão", "Dinheiro", "Entrada + Parcelamento"]),
+  presskit: z.enum(["Sim", "Não"]),
   comprovanteBase64: z.string().max(7_100_000),
   comprovanteTipo: z.enum(["", "image/jpeg", "image/png", "image/webp", "application/pdf"]),
   comprovanteNome: cleanText(180),
@@ -64,3 +65,4 @@ export const submissionSchema = z.discriminatedUnion("kind", [registrationSubmis
   }
 });
 export type Submission = z.infer<typeof submissionSchema>;
+
