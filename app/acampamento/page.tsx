@@ -83,10 +83,16 @@ export default function AcampamentoPage() {
       <section className="section-shell final-cta">
         <div>
           <span className="eyebrow light"><Flame size={16} /> Acampamento 2027</span>
-          <h2>Sua próxima história pode começar em 2027.</h2>
+          <h2>Garanta sua vaga no Acampamento Rise.</h2>
+          <div className="final-cta-pricing" aria-label="Valores da inscrição">
+            <p><strong>10 primeiras vagas</strong><span>R$ 400,00</span></p>
+            <p><strong>Próximas vagas</strong><span>R$ 450,00</span></p>
+            <p><strong>Presskit opcional</strong><span>+ R$ 60,00</span></p>
+          </div>
         </div>
         <Link href="/inscricao" className="button button-light">Fazer minha inscrição <ArrowUpRight size={18} /></Link>
       </section>
     </main>
   );
 }
+
