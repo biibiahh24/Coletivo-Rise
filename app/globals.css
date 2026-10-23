@@ -941,6 +941,12 @@ h1, h2, h3 { overflow-wrap: break-word; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 
+.final-cta-pricing { display: grid; grid-template-columns: repeat(3, minmax(130px, 1fr)); gap: 10px; margin-top: 22px; }
+.final-cta-pricing p { display: grid; gap: 3px; margin: 0; padding: 12px 14px; border: 1px solid rgba(255,255,255,.28); border-radius: 14px; background: rgba(255,255,255,.1); }
+.final-cta-pricing strong { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.final-cta-pricing span { font-size: 1.25rem; font-weight: 900; }
+@media (max-width: 760px) { .final-cta-pricing { grid-template-columns: 1fr; width: 100%; } }
+
 /* Rise palette: warm editorial canvas with solar orange and lilac details. */
 .site-header { background: rgba(52, 35, 63, .96); border-bottom-color: rgba(184, 154, 242, .24); }
 .brand strong { color: var(--lilac); }
