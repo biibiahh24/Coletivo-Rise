@@ -83,7 +83,7 @@ export default function AcampamentoPage() {
       <section className="section-shell final-cta camp-offer">
         <div className="final-cta-copy">
           <span className="eyebrow light"><Flame size={16} /> Acampamento 2027</span>
-          <h2><span>Garanta sua vaga</span><span>no <strong>Acampamento</strong></span><em>Rise.</em></h2>
+          <h2><span>Garanta sua<br />vaga</span><span>no<br /><strong>Acampamento</strong></span><em>Rise.</em></h2>
           <p className="final-cta-lead">Viva propósito. Construa amizades. Experiências que marcam para sempre.</p>
           <div className="final-cta-pricing" aria-label="Valores da inscrição">
             <p><strong>10 primeiras vagas</strong><span>R$ 400,00</span></p>
