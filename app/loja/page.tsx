@@ -41,9 +41,9 @@ export default function LojaPage() {
 
       <section className="section-shell collection-drop" aria-labelledby="drop-title">
         <div className="collection-drop-hero">
-          <div className="collection-drop-poster">
-            <img src="/assets/nova-colecao-levanta-te.png" alt="Apresentação da coleção Levanta-te e Resplandece" />
-            <span>Nova coleção</span>
+          <div className="collection-drop-art" aria-hidden="true">
+            <img className="collection-drop-shirt" src="/assets/camiseta-rise-hero.png" alt="" />
+            <img className="collection-drop-presskit" src="/assets/presskit-rise.png" alt="" />
           </div>
           <div className="collection-drop-copy">
             <span className="eyebrow light"><Sparkles size={16} /> Nova coleção</span>
