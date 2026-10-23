@@ -80,15 +80,21 @@ export default function AcampamentoPage() {
         <CampMemoryGallery />
       </section>
 
-      <section className="section-shell final-cta">
-        <div>
+      <section className="section-shell final-cta camp-offer">
+        <div className="final-cta-copy">
           <span className="eyebrow light"><Flame size={16} /> Acampamento 2027</span>
-          <h2>Garanta sua vaga no Acampamento Rise.</h2>
+          <h2>Garanta sua vaga no Acampamento <em>Rise.</em></h2>
+          <p className="final-cta-lead">Viva propósito. Construa amizades. Experiências que marcam para sempre.</p>
           <div className="final-cta-pricing" aria-label="Valores da inscrição">
             <p><strong>10 primeiras vagas</strong><span>R$ 400,00</span></p>
             <p><strong>Próximas vagas</strong><span>R$ 450,00</span></p>
             <p><strong>Presskit opcional</strong><span>+ R$ 60,00</span></p>
           </div>
+        </div>
+        <div className="final-cta-art" aria-label="Camisetas da coleção Rise e presskit do acampamento">
+          <img className="final-cta-art-back" src="/assets/camiseta-rise-02.jpeg" alt="Pessoas usando as camisetas do Coletivo Rise" />
+          <img className="final-cta-art-front" src="/assets/camiseta-rise-01.jpeg" alt="Camiseta Rise em destaque" />
+          <div className="final-cta-art-kit" aria-hidden="true"><span>RISE +</span><strong>Presskit</strong></div>
         </div>
         <Link href="/inscricao" className="button button-light">Fazer minha inscrição <ArrowUpRight size={18} /></Link>
       </section>
