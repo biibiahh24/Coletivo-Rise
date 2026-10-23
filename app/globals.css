@@ -965,6 +965,17 @@ h1, h2, h3 { overflow-wrap: break-word; }
   border-radius: 8px;
 }
 .admin-actions .admin-delete-button svg { width: 15px; height: 15px; }
+.admin-confirm-overlay { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: rgba(52,35,63,.58); backdrop-filter: blur(5px); }
+.admin-confirm-dialog { width: min(430px, 100%); padding: 30px; text-align: center; border: 1px solid var(--border); border-radius: 24px; background: var(--surface); box-shadow: 0 25px 80px rgba(52,35,63,.3); }
+.admin-confirm-icon { width: 56px; height: 56px; display: grid; place-items: center; margin: 0 auto 14px; color: #b42318; background: #f9d8da; border-radius: 50%; }
+.admin-confirm-icon svg { width: 27px; height: 27px; }
+.admin-confirm-dialog h2 { margin: 0 0 8px; color: var(--purple); font-size: 1.55rem; }
+.admin-confirm-dialog p { margin: 0; color: var(--muted-foreground); font-size: .92rem; }
+.admin-confirm-actions { display: flex; justify-content: center; gap: 10px; margin-top: 24px; }
+.admin-confirm-actions button { min-width: 118px; min-height: 42px; padding: 10px 18px; border-radius: 999px; font-weight: 850; cursor: pointer; }
+.admin-confirm-cancel { color: var(--purple); border: 1px solid var(--border); background: transparent; }
+.admin-confirm-delete { color: white; border: 1px solid #b42318; background: #b42318; }
+.admin-confirm-delete:hover { background: #8a1c24; }
 
 /* Rise palette: warm editorial canvas with solar orange and lilac details. */
 .site-header { background: rgba(52, 35, 63, .96); border-bottom-color: rgba(184, 154, 242, .24); }
