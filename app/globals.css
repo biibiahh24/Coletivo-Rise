@@ -967,3 +967,36 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .button-secondary:hover { background: var(--lilac-soft); border-color: var(--lilac); }
 .site-footer a:hover { color: var(--lilac); }
 
+/* Uniform surface pass: every non-media panel now uses the same token scale. */
+.experience-card:not(.card-1):not(.card-3), .schedule-card, .challenge-card,
+.shirt-order, .registration-form fieldset, .privacy-content section, .success-card,
+.admin-stats article, .admin-toolbar nav, .admin-filters label, .admin-filters select,
+.admin-filters button, .admin-actions select, .admin-record, .admin-access-card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+.experience-card.card-1, .moments-section, .inner-hero, .cell-preview,
+.site-footer, .admin-heading, .edition-carousel, .edition-carousel-media,
+.store-intro-visual { background-color: var(--purple-dark); }
+.experience-card.card-2, .manifesto-band, .form-confirm, .admin-demo-notice,
+.security-unavailable, .admin-details dl div { background: var(--lilac-soft); }
+.form-page, .admin-page, .collection-page, .privacy-page, .success-page { background: var(--cream-soft); }
+.split-heading > p, .about-copy > p, .value-list > div, .instagram-copy > p,
+.gallery-copy > p, .worship-card p, .camp-memory-heading > p, .challenge-card p,
+.collection-copy > p, .order-intro p, .shirt-order .order-note, .cells-instagram p,
+.form-intro p, .fieldset-note, .form-submit-row > div, .privacy-lead,
+.privacy-content p, .privacy-update, .success-card > p, .admin-record-main > p,
+.admin-toolbar nav a, .admin-login-back { color: var(--muted-foreground); }
+.admin-stats span, .admin-filters label svg, .admin-actions label, .admin-details dt,
+.admin-empty, .admin-login-form > label { color: var(--muted-foreground); }
+.store-intro-points span, .admin-record-meta span { background: var(--lilac-soft); color: var(--purple); }
+.product-gallery-frame, .camp-memory-card { background: var(--cream); }
+.button-light, .drop-media, .drop-seal { background: var(--surface); }
+.button-dark, .button-outline-dark:hover, .admin-toolbar nav a.active, .receipt-link { background: var(--purple-dark); }
+.button-orange, .admin-export, .success-icon, .cell-core, .worship-heading blockquote { background: var(--orange); }
+.eyebrow, .text-link, .admin-details summary, .instagram-handle, .edition-order-link { color: var(--orange-deep); }
+.edition-kicker, .edition-price strong, .size-title .eyebrow, .size-table > div:first-child { color: var(--lilac); }
+.form-confirm, .admin-demo-notice, .security-unavailable { color: var(--purple); border-color: var(--lilac); }
+.admin-login-form > label > div { background: var(--surface); border-color: var(--border); }
+.admin-login-error { color: #8a1c24 !important; background: #f9d8da; border-color: #e8a8ad; }
+
