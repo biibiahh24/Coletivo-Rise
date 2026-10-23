@@ -48,22 +48,23 @@ export function RegistrationForm() {
     setSending(true);
     try {
       const comprovanteBase64 = file instanceof File && file.size ? await fileToBase64(file) : "";
+      const text = (name: string) => String(formData.get(name) ?? "");
       const data = {
         kind: "registration",
         idempotencyKey: idempotencyKey.current ?? (idempotencyKey.current = crypto.randomUUID()),
         turnstileToken,
-        website: formData.get("website"),
+        website: text("website"),
         consent: confirmed,
         privacyVersion: "2026-10",
-        nome: formData.get("nome"),
-        idade: formData.get("idade"),
-        responsavel: formData.get("responsavel"),
-        telefone: formData.get("telefone"),
-        igreja: formData.get("igreja"),
-        endereco: formData.get("endereco"),
-        alergias: formData.get("alergias"),
-        medicacao: formData.get("medicacao"),
-        restricao: formData.get("restricao"),
+        nome: text("nome"),
+        idade: text("idade"),
+        responsavel: text("responsavel"),
+        telefone: text("telefone"),
+        igreja: text("igreja"),
+        endereco: text("endereco"),
+        alergias: text("alergias"),
+        medicacao: text("medicacao"),
+        restricao: text("restricao"),
         participou,
         camiseta,
         pagamento,
@@ -71,7 +72,7 @@ export function RegistrationForm() {
         comprovanteBase64,
         comprovanteTipo: file instanceof File ? file.type : "",
         comprovanteNome: file instanceof File ? file.name : "",
-        obs: formData.get("obs"),
+        obs: text("obs"),
       };
 
       const response = await fetch("/api/submissions", {
