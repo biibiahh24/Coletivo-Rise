@@ -454,7 +454,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta .button-light:hover { color: var(--purple-dark); background: var(--cream-soft); }
 .final-cta-art { position: absolute; z-index: 1; top: 2%; right: 6%; width: 42%; height: 70%; pointer-events: none; }
 .final-cta-art img { position: absolute; display: block; object-fit: contain; }
-.final-cta-art-shirt { width: 100%; height: 100%; right: 0; top: 0; z-index: 1; }
+.final-cta-art-shirt { width: 100%; height: 100%; right: 0; top: -22%; z-index: 1; }
 .final-cta-art-presskit { width: 65%; height: 72%; right: 4%; bottom: -6%; z-index: 2; filter: drop-shadow(0 24px 25px rgba(104,40,12,.22)); }
 
 .inner-hero { min-height: 530px; display: grid; place-items: center; position: relative; color: white; background: var(--ink); overflow: hidden; }
