@@ -26,7 +26,6 @@ type Registration = {
   attended_before: string;
   shirt_size: string;
   payment_method: string;
-  presskit: string | null;
   payment_status: string;
   registration_status: string;
   notes: string | null;
@@ -70,6 +69,10 @@ function statusLabel(value: string) {
   return ({ pending: "Pendente", confirmed: "Confirmada", waitlist: "Lista de espera", cancelled: "Cancelada", separated: "Separado", delivered: "Entregue", partial: "Parcial", paid: "Pago", refunded: "Estornado" } as Record<string, string>)[value] ?? value;
 }
 
+function hasPresskit(item: Registration) {
+  return (item.notes ?? "").toLocaleLowerCase("pt-BR").includes("presskit: sim");
+}
+
 export default async function AdminPage({ searchParams }: { searchParams: SearchParams }) {
   const requestHeaders = await headers();
   const localDemo = isLocalDevelopment(requestHeaders);
@@ -108,19 +111,19 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
     if (localDemo) {
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
         registrations = demoRegistrations.filter((item) =>
-        (view !== "registrations_presskit" || item.presskit === "Sim") &&
+        (view !== "registrations_presskit" || hasPresskit(item)) &&
         (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))) &&
         (!filterStatus || item.registration_status === filterStatus),
       );
     } else {
       let request = db!.from("camp_registrations").select("*").order("created_at", { ascending: false }).limit(500);
-      if (view === "registrations_presskit") request = request.eq("presskit", "Sim");
       if (filterStatus) request = request.eq("registration_status", filterStatus);
       const result = await request;
       if (result.error) throw result.error;
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
-      registrations = (result.data as Registration[]).filter((item) => !normalizedQuery
-        || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery)));
+      registrations = (result.data as Registration[]).filter((item) =>
+        (view !== "registrations_presskit" || hasPresskit(item)) &&
+        (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))));
     }
   } else {
     if (localDemo) {
@@ -201,7 +204,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
                   <div><span className={`status-badge status-${item.registration_status}`}>{statusLabel(item.registration_status)}</span><small>{item.protocol}</small></div>
                   <h2>{item.full_name}</h2>
                   <p>{item.age} anos · {item.church} · {item.location}</p>
-                  <div className="admin-record-meta"><span>{item.phone}</span><span>Camiseta {item.shirt_size}</span><span>{item.payment_method} · {statusLabel(item.payment_status)}</span>{item.presskit === "Sim" && <span>Presskit + R$ 60,00</span>}<span>{formatDate(item.created_at)}</span></div>
+                  <div className="admin-record-meta"><span>{item.phone}</span><span>Camiseta {item.shirt_size}</span><span>{item.payment_method} · {statusLabel(item.payment_status)}</span>{hasPresskit(item) && <span>Presskit + R$ 60,00</span>}<span>{formatDate(item.created_at)}</span></div>
                 </div>
                 <AdminActions id={item.id} kind="registration" status={item.registration_status} paymentStatus={item.payment_status} demo={localDemo} />
                 <details className="admin-details">
