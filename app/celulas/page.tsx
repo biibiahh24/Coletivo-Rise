@@ -38,14 +38,17 @@ export default function CelulasPage() {
         </div>
       </section>
 
-      <section className="section-shell cell-directory" aria-labelledby="directory-title">
-        <div className="directory-mark"><MapPin /></div>
-        <div>
-          <span className="eyebrow light"><Clock3 size={16} /> Encontros durante a semana</span>
-          <h2 id="directory-title">A lista completa de células está sendo atualizada.</h2>
-          <p>Enquanto reunimos nomes, líderes, dias, horários e endereços, a equipe pode indicar pelo WhatsApp qual encontro fica mais perto de você.</p>
+      <section className="section-shell cell-directory-grid" aria-labelledby="directory-title">
+        <div className="cell-directory-heading"><span className="eyebrow"><Clock3 size={16} /> Encontros durante a semana</span><h2 id="directory-title">Encontre sua célula.</h2><p>Escolha uma comunidade e fale com o líder para saber os próximos encontros.</p></div>
+        <div className="cell-cards">
+          {["Ekballo", "Rede ao Mar", "Cachoeirinha"].map((name, index) => (
+            <article className="cell-card" key={name}>
+              <div className="cell-card-photo"><img src={`/assets/encontro-rise-0${index + 1}.jpeg`} alt={`Encontro da célula ${name}`} /></div>
+              <h3>{name}</h3>
+              <a href={`https://wa.me/5511968778688?text=${encodeURIComponent(`Olá! Quero falar com o líder da célula ${name}.`)}`} target="_blank" rel="noreferrer" className="button button-orange"><MessageCircle size={16} /> Falar com o líder</a>
+            </article>
+          ))}
         </div>
-        <a href="https://wa.me/5511968778688?text=Olá!%20Quero%20saber%20os%20dias%20e%20endereços%20das%20células%20Rise." target="_blank" rel="noreferrer" className="button button-light"><MessageCircle /> Consultar células <ArrowUpRight /></a>
       </section>
 
       <section className="section-shell cells-instagram">
@@ -55,3 +58,4 @@ export default function CelulasPage() {
     </main>
   );
 }
+
