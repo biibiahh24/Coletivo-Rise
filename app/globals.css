@@ -437,10 +437,10 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .worship-card h3 { margin: 18px 0 5px; font-size: 1.65rem; }
 .worship-card p { margin: 0; color: #725b4c; font-size: .9rem; }
 
-.final-cta { margin-top: 110px; margin-bottom: 110px; padding: clamp(38px, 5vw, 70px); border-radius: 36px; display: grid; grid-template-columns: minmax(0, .95fr) minmax(430px, 1.05fr); align-items: stretch; gap: clamp(25px, 4vw, 60px); color: white; background: var(--orange); position: relative; overflow: hidden; }
+.final-cta { margin-top: 110px; margin-bottom: 110px; padding: clamp(38px, 5vw, 70px); border-radius: 36px; display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(430px, .82fr); align-items: stretch; gap: clamp(22px, 3vw, 44px); color: white; background: var(--orange); position: relative; overflow: hidden; }
 .final-cta::after { content: ""; width: 270px; height: 270px; position: absolute; right: -80px; top: -130px; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; }
 .final-cta-copy { position: relative; z-index: 2; }
-.final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 5vw, 4.8rem); line-height: .97; }
+.final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 4.35vw, 4.65rem); line-height: .97; overflow-wrap: normal; word-break: normal; text-wrap: balance; }
 .final-cta h2 em { color: var(--purple-dark); font-style: normal; }
 .final-cta-lead { max-width: 610px; margin: 24px 0 0; color: rgba(255,255,255,.82); font-size: 1rem; text-transform: uppercase; letter-spacing: .13em; font-weight: 800; }
 .final-cta-visual { min-width: 0; position: relative; z-index: 2; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
@@ -448,7 +448,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta .button-light { color: var(--cream-soft); background: var(--purple-dark); box-shadow: 0 15px 28px rgba(46,27,55,.2); }
 .final-cta .button-light:hover { color: var(--purple-dark); background: var(--cream-soft); }
 .final-cta-art { min-height: 390px; width: 100%; position: relative; z-index: 1; display: grid; place-items: center; }
-.final-cta-art-presskit { width: min(100%, 660px); height: auto; object-fit: contain; filter: drop-shadow(0 24px 25px rgba(104,40,12,.22)); transform: translate(4%, -2%); }
+.final-cta-art-presskit { width: min(132%, 790px); height: auto; object-fit: contain; filter: drop-shadow(0 24px 25px rgba(104,40,12,.22)); transform: translate(8%, -4%); }
 
 .inner-hero { min-height: 530px; display: grid; place-items: center; position: relative; color: white; background: var(--ink); overflow: hidden; }
 .inner-hero::before { content: "RISE"; position: absolute; right: -25px; bottom: -160px; color: rgba(255,255,255,.035); font: 900 clamp(12rem, 28vw, 29rem)/1 "Arial Black", sans-serif; letter-spacing: -.09em; }
