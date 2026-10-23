@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Check, PackageCheck, Ruler, Shirt, Sparkles } from "lucide-react";
+import { ArrowUpRight, Check, CreditCard, Heart, PackageCheck, Ruler, Shirt, ShoppingBag, Sparkles, Truck } from "lucide-react";
 import { EditionCarousel } from "../components/edition-carousel";
 import { ShirtOrder } from "../components/shirt-order";
 import { SectionHero } from "../components/section-hero";
@@ -39,18 +39,55 @@ export default function LojaPage() {
         </div>
       </section>
 
-      <section className="section-shell drop-teaser" aria-labelledby="drop-title">
-        <div className="drop-media">
-          <img src="/assets/nova-colecao-levanta-te.png" alt="Nova coleção Rise Levanta-te e Resplandece" />
-          <span>Nova coleção</span>
+      <section className="section-shell collection-drop" aria-labelledby="drop-title">
+        <div className="collection-drop-hero">
+          <div className="collection-drop-poster">
+            <img src="/assets/nova-colecao-levanta-te.png" alt="Apresentação da coleção Levanta-te e Resplandece" />
+            <span>Nova coleção</span>
+          </div>
+          <div className="collection-drop-copy">
+            <span className="eyebrow light"><Sparkles size={16} /> Nova coleção</span>
+            <h2 id="drop-title">Levanta-te e resplandece.</h2>
+            <p>Mais que merch: identidade, propósito e uma geração que escolhe se levantar e resplandecer.</p>
+            <a href="#collection-products" className="button button-light">Conhecer a coleção <ArrowUpRight /></a>
+          </div>
+          <div className="collection-drop-seal"><Shirt /><span>Disponível em breve</span></div>
         </div>
-        <div className="drop-copy">
-          <span className="eyebrow light"><Sparkles size={16} /> Nova coleção</span>
-          <h2 id="drop-title">Levanta-te e resplandece.</h2>
-          <p>Uma coleção que celebra identidade, propósito e uma geração que escolhe se levantar e resplandecer.</p>
-          <a href="https://www.instagram.com/coletivo_rise/" target="_blank" rel="noreferrer" className="button button-light">Acompanhar lançamento <ArrowUpRight /></a>
+
+        <div className="collection-products" id="collection-products">
+          <article className="collection-product-card">
+            <div className="collection-product-art collection-shirt-art">
+              <img src="/assets/nova-colecao-levanta-te.png" alt="Camiseta Rise Eu sou a porta" />
+            </div>
+            <div className="collection-product-content">
+              <span className="collection-product-kicker">Somente camiseta</span>
+              <h3>Camiseta Rise</h3>
+              <strong>R$ 79,90</strong>
+              <p>Modelagem confortável com a identidade “Eu sou a porta” na frente e a arte Porta no verso.</p>
+              <a className="button button-orange" href="#pedido-camiseta">Comprar camiseta <ShoppingBag size={17} /></a>
+            </div>
+          </article>
+
+          <article className="collection-product-card">
+            <div className="collection-product-art collection-presskit-art">
+              <img src="/assets/presskit-rise.png" alt="Presskit Rise com camiseta e acessórios" />
+            </div>
+            <div className="collection-product-content">
+              <span className="collection-product-kicker">Presskit Rise</span>
+              <h3>A caixa completa</h3>
+              <strong>R$ 119,90</strong>
+              <p>A camiseta Levanta-te e Resplandece acompanhada de itens exclusivos para carregar a mensagem.</p>
+              <div className="collection-kit-list">
+                <span><Shirt size={15} /> Camiseta</span><span><Sparkles size={15} /> Adesivos</span><span><PackageCheck size={15} /> Cordão, pulseira e chaveiro</span>
+              </div>
+              <a className="button button-orange" href="#pedido-camiseta">Comprar presskit <ShoppingBag size={17} /></a>
+            </div>
+          </article>
         </div>
-        <div className="drop-seal"><Shirt /><span>Em breve</span></div>
+
+        <div className="collection-trust" aria-label="Benefícios da compra">
+          <span><Truck size={20} /> Envio seguro</span><span><CreditCard size={20} /> Pagamento seguro</span><span><PackageCheck size={20} /> Embalagem exclusiva</span><span><Heart size={20} /> Apoia o ministério Rise</span>
+        </div>
       </section>
 
       <section className="section-shell product-section" aria-labelledby="products-title">
