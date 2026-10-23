@@ -947,6 +947,11 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta-pricing span { font-size: 1.25rem; font-weight: 900; }
 @media (max-width: 760px) { .final-cta-pricing { grid-template-columns: 1fr; width: 100%; } }
 
+/* Admin record controls are intentionally stacked for easier scanning and touch use. */
+.admin-actions { grid-template-columns: 1fr; align-items: stretch; }
+.admin-actions label, .admin-actions select { width: 100%; }
+.admin-actions button { width: 100%; min-height: 42px; }
+
 /* Rise palette: warm editorial canvas with solar orange and lilac details. */
 .site-header { background: rgba(52, 35, 63, .96); border-bottom-color: rgba(184, 154, 242, .24); }
 .brand strong { color: var(--lilac); }
