@@ -26,6 +26,7 @@ type Registration = {
   attended_before: string;
   shirt_size: string;
   payment_method: string;
+  presskit: string | null;
   payment_status: string;
   registration_status: string;
   notes: string | null;
@@ -79,7 +80,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
 
   const db = localDemo ? null : createSupabaseAdminClient();
   const params = await searchParams;
-  const view = params.view === "shirts" ? "shirts" : "registrations";
+  const view = params.view === "shirts" ? "shirts" : params.view === "registrations_presskit" ? "registrations_presskit" : "registrations";
   const query = (params.q ?? "").trim().slice(0, 120);
   const filterStatus = (params.status ?? "").trim();
   const counts = localDemo
@@ -103,15 +104,17 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
 
   let registrations: Registration[] = [];
   let shirts: ShirtOrder[] = [];
-  if (view === "registrations") {
+  if (view === "registrations" || view === "registrations_presskit") {
     if (localDemo) {
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
-      registrations = demoRegistrations.filter((item) =>
+        registrations = demoRegistrations.filter((item) =>
+        (view !== "registrations_presskit" || item.presskit === "Sim") &&
         (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))) &&
         (!filterStatus || item.registration_status === filterStatus),
       );
     } else {
       let request = db!.from("camp_registrations").select("*").order("created_at", { ascending: false }).limit(500);
+      if (view === "registrations_presskit") request = request.eq("presskit", "Sim");
       if (filterStatus) request = request.eq("registration_status", filterStatus);
       const result = await request;
       if (result.error) throw result.error;
@@ -168,6 +171,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         <div className="admin-toolbar">
           <nav aria-label="Tipos de registro">
             <Link className={view === "registrations" ? "active" : ""} href="/admin?view=registrations">Acampamento</Link>
+            <Link className={view === "registrations_presskit" ? "active" : ""} href="/admin?view=registrations_presskit">Acampamento + Presskit</Link>
             <Link className={view === "shirts" ? "active" : ""} href="/admin?view=shirts">Camisetas</Link>
           </nav>
           {localDemo
@@ -180,7 +184,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
           <label><Search /><input name="q" defaultValue={query} placeholder="Buscar nome, protocolo ou telefone" /></label>
           <select name="status" defaultValue={filterStatus} aria-label="Filtrar por status">
             <option value="">Todos os status</option>
-            {(view === "registrations"
+            {(view === "registrations" || view === "registrations_presskit"
               ? [["pending", "Pendente"], ["confirmed", "Confirmada"], ["waitlist", "Lista de espera"], ["cancelled", "Cancelada"]]
               : [["pending", "Novo"], ["separated", "Separado"], ["delivered", "Entregue"], ["cancelled", "Cancelado"]]
             ).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
@@ -197,7 +201,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
                   <div><span className={`status-badge status-${item.registration_status}`}>{statusLabel(item.registration_status)}</span><small>{item.protocol}</small></div>
                   <h2>{item.full_name}</h2>
                   <p>{item.age} anos · {item.church} · {item.location}</p>
-                  <div className="admin-record-meta"><span>{item.phone}</span><span>Camiseta {item.shirt_size}</span><span>{item.payment_method} · {statusLabel(item.payment_status)}</span><span>{formatDate(item.created_at)}</span></div>
+                  <div className="admin-record-meta"><span>{item.phone}</span><span>Camiseta {item.shirt_size}</span><span>{item.payment_method} · {statusLabel(item.payment_status)}</span>{item.presskit === "Sim" && <span>Presskit + R$ 60,00</span>}<span>{formatDate(item.created_at)}</span></div>
                 </div>
                 <AdminActions id={item.id} kind="registration" status={item.registration_status} paymentStatus={item.payment_status} demo={localDemo} />
                 <details className="admin-details">
@@ -235,3 +239,4 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
     </main>
   );
 }
+
