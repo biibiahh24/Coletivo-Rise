@@ -5,7 +5,7 @@
     "surface": { "$type": "color", "$value": "#FFFDF8" },
     "orange": { "$type": "color", "$value": "#FF5A1F" },
     "orangeDeep": { "$type": "color", "$value": "#D94915" },
-    "lilac": { "$type": "color", "$value": "#B59AE8" },
+    "lilac": { "$type": "color", "$value": "#B89AF2" },
     "lilacSoft": { "$type": "color", "$value": "#E5D9FA" },
     "purple": { "$type": "color", "$value": "#4C2A68" },
     "purpleDark": { "$type": "color", "$value": "#34233F" },
