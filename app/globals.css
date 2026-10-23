@@ -1000,3 +1000,49 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .admin-login-form > label > div { background: var(--surface); border-color: var(--border); }
 .admin-login-error { color: #8a1c24 !important; background: #f9d8da; border-color: #e8a8ad; }
 
+/* Reference-led homepage treatment: light navigation, editorial hero, lilac controls. */
+body { background: var(--cream-soft); }
+.site-header {
+  background: rgba(255, 248, 238, .96);
+  border-bottom: 1px solid rgba(255, 90, 31, .35);
+  box-shadow: 0 8px 26px rgba(76, 42, 104, .06);
+}
+.brand { color: var(--purple-dark); }
+.brand strong { color: var(--orange-deep); }
+.desktop-nav a { color: var(--purple-dark); }
+.desktop-nav a:hover, .desktop-nav a.active { color: var(--purple-dark); background: var(--lilac-soft); }
+.header-admin-link { color: var(--purple); border-color: var(--border); }
+.header-admin-link:hover { color: var(--purple-dark); border-color: var(--lilac); background: var(--lilac-soft); }
+.menu-button { color: var(--purple-dark); }
+.mobile-nav { background: var(--cream-soft); border-top: 1px solid var(--border); }
+.mobile-nav a { color: var(--purple-dark); }
+.mobile-nav a.active { color: var(--purple-dark); background: var(--lilac-soft); }
+.mobile-nav .mobile-admin-link { color: var(--muted-foreground); }
+.hero-rotator { background: var(--cream-soft); color: var(--purple-dark); }
+.hero-rotator::before {
+  background:
+    radial-gradient(circle at 7% 80%, rgba(184, 154, 242, .16), transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(255, 90, 31, .12), transparent 30%),
+    var(--cream-soft);
+}
+.hero-copy h1 { color: var(--purple-dark); }
+.hero-copy h1 em { color: var(--orange-deep); }
+.hero-copy > p { color: var(--purple); }
+.hero-kicker { color: var(--orange-deep); border-color: var(--orange); background: transparent; }
+.hero-kicker svg { color: var(--lilac); }
+.hero-image-wrap { border: 9px solid var(--orange); box-shadow: 0 24px 60px rgba(76, 42, 104, .16); transform: rotate(-1deg); }
+.hero-image-wrap::after { background: linear-gradient(180deg, transparent 48%, rgba(52, 35, 63, .72)); }
+.hero-controls > button { color: var(--lilac); border-color: var(--lilac); background: transparent; }
+.hero-dots span { background: var(--lilac); }
+.hero-dots button.active span { background: var(--orange); }
+.hero-controls > button:hover { color: var(--orange); border-color: var(--orange); }
+.button-light { color: var(--purple-dark); background: var(--orange); }
+.button-ghost { color: var(--purple-dark); border-color: var(--orange); background: transparent; }
+.button-ghost:hover { background: var(--lilac-soft); }
+.section-heading h2, .about-copy h2, .instagram-copy h2, .worship-heading h2 { color: var(--purple-dark); }
+.eyebrow { color: var(--orange-deep); }
+.experience-card.card-1, .moments-section, .inner-hero, .cell-preview { background: var(--purple-dark); }
+.experience-card.card-3, .worship-heading blockquote, .final-cta { background: var(--orange); }
+.experience-card.card-2 { background: var(--lilac-soft); }
+.site-footer { background: var(--purple-dark); }
+
