@@ -956,8 +956,8 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .admin-record { position: relative; }
 .admin-actions .admin-delete-button {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 6px;
+  right: 6px;
   width: 30px !important;
   min-height: 30px;
   height: 30px;
