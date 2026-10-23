@@ -608,7 +608,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .collection-drop-hero { min-height: 560px; position: relative; z-index: 1; }
 .collection-drop-art { position: absolute; inset: 0 -35px -55px 38%; z-index: 2; pointer-events: none; }
 .collection-drop-art img { position: absolute; display: block; object-fit: contain; }
-.collection-drop-shirt { width: 92%; right: -8%; top: -9%; z-index: 1; transform: translateX(10%); }
+.collection-drop-shirt { width: 96%; right: 0; top: -4%; z-index: 1; transform: none; }
 .collection-drop-presskit { width: 58%; right: 0; bottom: -5%; z-index: 2; }
 .collection-drop-copy { width: 60%; position: relative; z-index: 4; padding-top: 52px; }
 .collection-drop-copy h2 { max-width: 760px; margin: 15px 0 20px; font-size: clamp(3.3rem, 5.5vw, 6.4rem); line-height: .92; letter-spacing: -.065em; }
@@ -647,7 +647,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 @media (max-width: 980px) {
   .collection-drop-copy { width: 68%; }
   .collection-drop-art { left: 32%; right: -70px; }
-  .collection-drop-shirt { width: 96%; right: -5%; top: -7%; transform: translateX(8%); }
+  .collection-drop-shirt { width: 100%; right: -1%; top: -4%; transform: none; }
   .collection-drop-presskit { width: 62%; right: 0; }
   .collection-drop-seal { width: 120px; height: 120px; right: 0; }
   .collection-product-art { min-height: 260px; }
