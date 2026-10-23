@@ -439,9 +439,11 @@ h1, h2, h3 { overflow-wrap: break-word; }
 
 .final-cta { margin-top: 110px; margin-bottom: 110px; min-height: 650px; padding: clamp(44px, 5vw, 70px); border-radius: 36px; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(460px, .88fr); align-items: stretch; gap: clamp(22px, 3vw, 44px); color: white; background: var(--orange); position: relative; overflow: visible; }
 .final-cta::after { content: ""; width: 270px; height: 270px; position: absolute; right: -80px; top: -130px; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; }
-.final-cta-copy { position: relative; z-index: 3; }
-.final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 4.6vw, 5.1rem); line-height: .97; overflow-wrap: normal; word-break: normal; }
+.final-cta-copy { position: relative; z-index: 3; transform: translateY(-18px); }
+.final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 4.2vw, 4.8rem); line-height: .93; overflow-wrap: normal; word-break: normal; }
 .final-cta h2 span, .final-cta h2 em { display: block; }
+.final-cta h2 span:first-child { white-space: nowrap; }
+.final-cta h2 b { font-weight: inherit; }
 .final-cta h2 strong { color: var(--purple-dark); font-weight: inherit; }
 .final-cta h2 em { color: var(--purple-dark); font-style: normal; }
 .final-cta-lead { max-width: 610px; margin: 24px 0 0; color: rgba(255,255,255,.82); font-size: 1rem; text-transform: uppercase; letter-spacing: .13em; font-weight: 800; }
@@ -839,6 +841,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
   .about-stamp { width: 155px; height: 155px; right: 10px; bottom: 20px; }
   .final-cta { margin-block: 75px; min-height: 0; grid-template-columns: 1fr; align-items: flex-start; overflow: hidden; }
   .final-cta-visual { display: flex; width: 100%; align-items: center; }
+  .final-cta-copy { transform: none; }
   .final-cta-art { position: relative; top: auto; right: auto; width: min(100%, 390px); height: auto; min-height: 250px; align-self: center; order: 0; }
   .final-cta-art-presskit { width: 100%; transform: none; }
   .final-cta .button { position: static; width: 100%; justify-content: center; order: 1; }
