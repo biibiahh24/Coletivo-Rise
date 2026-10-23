@@ -157,7 +157,7 @@ export function RegistrationForm() {
                 <SelectContent><SelectItem value="Sim">Sim — adicionar presskit</SelectItem><SelectItem value="Não">Não, somente a inscrição</SelectItem></SelectContent>
               </Select>
             </label>
-            <label className="field"><span>Comprovante, caso já tenha pago</span><Input name="comprovante" type="file" accept="image/*,application/pdf" /></label>
+            <label className="field"><span>Comprovante (opcional, caso já tenha pago)</span><Input name="comprovante" type="file" accept="image/*,application/pdf" /></label>
             <label className="field field-wide"><span>Observações adicionais</span><Textarea name="obs" rows={4} placeholder="Algo importante que a equipe precisa saber?" /></label>
           </div>
         </fieldset>
