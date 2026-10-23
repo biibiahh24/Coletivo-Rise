@@ -53,11 +53,18 @@ export default function LojaPage() {
           </div>
           <div className="collection-drop-seal"><Shirt /><span>Disponível em breve</span></div>
         </div>
+      </section>
 
-        <div className="collection-products" id="collection-products">
+      <section className="section-shell collection-detail" id="collection-products" aria-labelledby="collection-detail-title">
+        <div className="collection-detail-heading">
+          <span className="eyebrow"><Sparkles size={16} /> Levanta-te e resplandece</span>
+          <h2 id="collection-detail-title">Mais que merch. <em>Identidade e propósito.</em></h2>
+          <p>Escolha a peça que acompanha sua caminhada ou leve a caixa completa com os símbolos da nova coleção.</p>
+        </div>
+        <div className="collection-products">
           <article className="collection-product-card">
             <div className="collection-product-art collection-shirt-art">
-              <img src="/assets/nova-colecao-levanta-te.png" alt="Camiseta Rise Eu sou a porta" />
+              <img src="/assets/camiseta-rise-nova-colecao.png" alt="Camiseta Rise Eu sou a porta com frente, verso e detalhes" />
             </div>
             <div className="collection-product-content">
               <span className="collection-product-kicker">Somente camiseta</span>
