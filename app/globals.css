@@ -442,7 +442,8 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta-copy { position: relative; z-index: 3; transform: translateY(-18px); }
 .final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 4.2vw, 4.8rem); line-height: .93; overflow-wrap: normal; word-break: normal; }
 .final-cta h2 span, .final-cta h2 em { display: block; }
-.final-cta h2 span:first-child { white-space: nowrap; }
+.final-cta h2 span:first-child,
+.final-cta h2 span:nth-child(2) { white-space: nowrap; }
 .final-cta h2 b { font-weight: inherit; }
 .final-cta h2 strong { color: var(--purple-dark); font-weight: inherit; }
 .final-cta h2 em { color: var(--purple-dark); font-style: normal; }
