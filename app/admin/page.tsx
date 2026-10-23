@@ -111,7 +111,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
     if (localDemo) {
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
         registrations = demoRegistrations.filter((item) =>
-        (view !== "registrations_presskit" || hasPresskit(item)) &&
+        (view === "registrations_presskit" ? hasPresskit(item) : !hasPresskit(item)) &&
         (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))) &&
         (!filterStatus || item.registration_status === filterStatus),
       );
@@ -122,7 +122,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
       if (result.error) throw result.error;
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
       registrations = (result.data as Registration[]).filter((item) =>
-        (view !== "registrations_presskit" || hasPresskit(item)) &&
+        (view === "registrations_presskit" ? hasPresskit(item) : !hasPresskit(item)) &&
         (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))));
     }
   } else {
