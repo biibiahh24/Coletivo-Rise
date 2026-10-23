@@ -42,8 +42,8 @@ export default function CelulasPage() {
         <div className="cell-directory-heading"><span className="eyebrow"><Clock3 size={16} /> Encontros durante a semana</span><h2 id="directory-title">Encontre sua célula.</h2><p>Escolha uma comunidade e fale com o líder para saber os próximos encontros.</p></div>
         <div className="cell-cards">
           {[
-            { name: "Ekballo", image: "/assets/celula-ekballo.jpg" },
-            { name: "Rede ao Mar", image: "/assets/celula-rede-ao-mar.jpg" },
+            { name: "Ekballo", image: "https://raw.githubusercontent.com/biibiahh24/Coletivo-Rise/main/public/assets/celula-ekballo.jpg" },
+            { name: "Rede ao Mar", image: "https://raw.githubusercontent.com/biibiahh24/Coletivo-Rise/main/public/assets/celula-rede-ao-mar.jpg" },
             { name: "Cachoeirinha", image: "/assets/encontro-rise-03.jpeg" },
           ].map(({ name, image }) => (
             <article className="cell-card" key={name}>
