@@ -38,7 +38,7 @@ export default function CelulasPage() {
         </div>
       </section>
 
-      <section className="section-shell cell-directory-grid" aria-labelledby="directory-title">
+      <section className="section-shell cell-directory cell-directory-grid" aria-labelledby="directory-title">
         <div className="cell-directory-heading"><span className="eyebrow"><Clock3 size={16} /> Encontros durante a semana</span><h2 id="directory-title">Encontre sua célula.</h2><p>Escolha uma comunidade e fale com o líder para saber os próximos encontros.</p></div>
         <div className="cell-cards">
           {["Ekballo", "Rede ao Mar", "Cachoeirinha"].map((name, index) => (
