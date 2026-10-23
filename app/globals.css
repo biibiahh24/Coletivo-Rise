@@ -947,9 +947,10 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta-pricing span { font-size: 1.25rem; font-weight: 900; }
 @media (max-width: 760px) { .final-cta-pricing { grid-template-columns: 1fr; width: 100%; } }
 .cell-directory-grid { margin-bottom: 90px; }
+.cell-directory-grid.cell-directory { display: block; min-height: 0; padding: clamp(32px, 5vw, 58px); }
 .cell-directory-heading { margin-bottom: 30px; }
-.cell-directory-heading h2 { margin: 14px 0 12px; }
-.cell-directory-heading p { color: var(--muted-foreground); }
+.cell-directory-heading h2 { margin: 14px 0 12px; color: white; }
+.cell-directory-heading p { max-width: 650px; color: rgba(255,255,255,.8); }
 .cell-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .cell-card { padding: 16px; border: 1px solid var(--border); border-radius: 24px; background: var(--surface); box-shadow: var(--shadow); }
 .cell-card-photo { height: 220px; overflow: hidden; border-radius: 16px; background: var(--lilac-soft); }
