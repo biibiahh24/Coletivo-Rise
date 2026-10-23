@@ -102,7 +102,11 @@ export async function POST(request: Request) {
     let raw: unknown;
     try { raw = await request.json(); } catch { return reply({ error: "Dados inválidos." }, 400); }
     const parsed = submissionSchema.safeParse(raw);
-    if (!parsed.success || parsed.data.website) return reply({ error: "Confira os campos enviados." }, 400);
+    if (!parsed.success) {
+      const issue = parsed.error.issues[0];
+      return reply({ error: `Confira o campo ${issue?.path.join(".") || "enviado"}.`, field: issue?.path ?? [] }, 400);
+    }
+    if (parsed.data.website) return reply({ error: "Confira os campos enviados." }, 400);
     if (process.env.TURNSTILE_SECRET_KEY) try {
       const verification = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
         method: "POST", headers: { "Content-Type": "application/json" },
