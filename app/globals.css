@@ -452,7 +452,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta .button { flex: none; position: absolute; z-index: 4; right: clamp(32px, 5vw, 70px); bottom: clamp(32px, 5vw, 70px); }
 .final-cta .button-light { color: var(--cream-soft); background: var(--purple-dark); box-shadow: 0 15px 28px rgba(46,27,55,.2); }
 .final-cta .button-light:hover { color: var(--purple-dark); background: var(--cream-soft); }
-.final-cta-art { position: absolute; z-index: 1; top: -18%; right: 8%; width: 58%; height: 120%; pointer-events: none; }
+.final-cta-art { position: absolute; z-index: 1; top: -18%; right: 8%; width: 62%; height: 120%; pointer-events: none; }
 .final-cta-art img { position: absolute; display: block; object-fit: contain; }
 .final-cta-art-shirt { width: 90%; height: 100%; right: 4%; top: -16%; z-index: 1; }
 .final-cta-art-presskit { width: 65%; height: 72%; right: 12%; bottom: 0; z-index: 2; filter: drop-shadow(0 24px 25px rgba(104,40,12,.22)); }
