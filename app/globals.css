@@ -946,6 +946,17 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta-pricing strong { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
 .final-cta-pricing span { font-size: 1.25rem; font-weight: 900; }
 @media (max-width: 760px) { .final-cta-pricing { grid-template-columns: 1fr; width: 100%; } }
+.cell-directory-grid { margin-bottom: 90px; }
+.cell-directory-heading { margin-bottom: 30px; }
+.cell-directory-heading h2 { margin: 14px 0 12px; }
+.cell-directory-heading p { color: var(--muted-foreground); }
+.cell-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.cell-card { padding: 16px; border: 1px solid var(--border); border-radius: 24px; background: var(--surface); box-shadow: var(--shadow); }
+.cell-card-photo { height: 220px; overflow: hidden; border-radius: 16px; background: var(--lilac-soft); }
+.cell-card-photo img { width: 100%; height: 100%; object-fit: cover; }
+.cell-card h3 { margin: 18px 0 14px; color: var(--purple); font-size: 1.65rem; }
+.cell-card .button { width: 100%; }
+@media (max-width: 760px) { .cell-cards { grid-template-columns: 1fr; } .cell-card-photo { height: 240px; } }
 
 /* Admin record controls are intentionally stacked for easier scanning and touch use. */
 .admin-actions { grid-template-columns: 1fr; align-items: stretch; }
