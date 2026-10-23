@@ -953,6 +953,18 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .admin-actions button { width: 100%; min-height: 42px; }
 .admin-actions .admin-delete-button { background: #b42318; }
 .admin-actions .admin-delete-button:hover { background: #8a1c24; }
+.admin-record { position: relative; }
+.admin-actions .admin-delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px !important;
+  min-height: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 8px;
+}
+.admin-actions .admin-delete-button svg { width: 15px; height: 15px; }
 
 /* Rise palette: warm editorial canvas with solar orange and lilac details. */
 .site-header { background: rgba(52, 35, 63, .96); border-bottom-color: rgba(184, 154, 242, .24); }
