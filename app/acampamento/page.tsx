@@ -91,10 +91,12 @@ export default function AcampamentoPage() {
             <p><strong>Presskit opcional</strong><span>+ R$ 60,00</span></p>
           </div>
         </div>
-        <div className="final-cta-art" aria-label="Camisetas da coleção Rise e presskit do acampamento">
-          <img className="final-cta-art-presskit" src="/assets/presskit-acampamento.png" alt="Camisetas, caixa e acessórios do presskit Rise" />
+        <div className="final-cta-visual">
+          <div className="final-cta-art" aria-label="Camisetas da coleção Rise e presskit do acampamento">
+            <img className="final-cta-art-presskit" src="/assets/presskit-acampamento.png" alt="Camisetas, caixa e acessórios do presskit Rise" />
+          </div>
+          <Link href="/inscricao" className="button button-light">Fazer minha inscrição <ArrowUpRight size={18} /></Link>
         </div>
-        <Link href="/inscricao" className="button button-light">Fazer minha inscrição <ArrowUpRight size={18} /></Link>
       </section>
     </main>
   );
