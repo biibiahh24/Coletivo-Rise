@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-const cleanText = (max: number) => z.string().trim().max(max);
-const requiredText = (max: number) => cleanText(max).min(1);
-const phone = requiredText(24).regex(/^[0-9()+\-\s]{8,24}$/, "Telefone inválido");
+const cleanText = (max: number) => z.preprocess((value) => value == null ? "" : value, z.string().trim().max(max));
+const requiredText = (max: number) => z.preprocess((value) => value == null ? "" : value, z.string().trim().min(1).max(max));
+const phone = z.preprocess((value) => value == null ? "" : value, z.string().trim().min(1).max(24).regex(/^[0-9()+\-\s]{8,24}$/, "Telefone inválido"));
 const idempotencyKey = z.string().uuid();
 const securityFields = {
   idempotencyKey,
@@ -30,9 +30,9 @@ export const registrationSubmission = z.object({
   camiseta: z.enum(["PP", "P", "M", "G", "GG", "XG"]),
   pagamento: z.enum(["PIX", "Cartão", "Dinheiro", "Entrada + Parcelamento"]),
   presskit: z.enum(["Sim", "Não"]),
-  comprovanteBase64: z.string().max(7_100_000),
-  comprovanteTipo: z.enum(["", "image/jpeg", "image/png", "image/webp", "application/pdf"]),
-  comprovanteNome: cleanText(180),
+  comprovanteBase64: z.string().max(7_100_000).default(""),
+  comprovanteTipo: z.enum(["", "image/jpeg", "image/png", "image/webp", "application/pdf"]).default(""),
+  comprovanteNome: cleanText(180).default(""),
   obs: cleanText(1000),
 });
 
