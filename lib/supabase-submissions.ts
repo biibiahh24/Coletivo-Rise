@@ -52,7 +52,7 @@ export async function persistSupabaseSubmission(submission: Submission, request:
   }
   try {
     if (submission.kind === "registration") {
-      const { error } = await db.from("camp_registrations").insert({ protocol: id, idempotency_key: submission.idempotencyKey, full_name: submission.nome, age: submission.idade, guardian_name: submission.responsavel || null, phone: submission.telefone, church: submission.igreja, location: submission.endereco, allergies: submission.alergias || null, medication: submission.medicacao || null, dietary_restrictions: submission.restricao || null, attended_before: submission.participou, shirt_size: submission.camiseta, payment_method: submission.pagamento, notes: submission.obs || null, receipt_key: receiptKey, receipt_name: submission.comprovanteNome || null, receipt_type: submission.comprovanteTipo || null, consent_at: now, privacy_version: submission.privacyVersion, created_at: now, updated_at: now });
+      const { error } = await db.from("camp_registrations").insert({ protocol: id, idempotency_key: submission.idempotencyKey, full_name: submission.nome, age: submission.idade, guardian_name: submission.responsavel || null, phone: submission.telefone, church: submission.igreja, location: submission.endereco, allergies: submission.alergias || null, medication: submission.medicacao || null, dietary_restrictions: submission.restricao || null, attended_before: submission.participou, shirt_size: submission.camiseta, payment_method: submission.pagamento, notes: `${submission.presskit === "Sim" ? "Presskit: Sim — R$ 60,00. " : "Presskit: Não. "}${submission.obs || ""}`, receipt_key: receiptKey, receipt_name: submission.comprovanteNome || null, receipt_type: submission.comprovanteTipo || null, consent_at: now, privacy_version: submission.privacyVersion, created_at: now, updated_at: now });
       if (error) throw error;
     } else {
       const { error } = await db.from("shirt_orders").insert({ protocol: id, idempotency_key: submission.idempotencyKey, full_name: submission.nome, phone: submission.telefone, edition: submission.edition, size: submission.size, quantity: submission.quantity, payment_method: submission.pagamento, consent_at: now, privacy_version: submission.privacyVersion, created_at: now, updated_at: now });
@@ -68,3 +68,4 @@ export async function persistSupabaseSubmission(submission: Submission, request:
   }
   return { protocol: id, duplicate: false, receiptWarning: false };
 }
+
