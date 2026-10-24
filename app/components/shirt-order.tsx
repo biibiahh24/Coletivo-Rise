@@ -88,8 +88,8 @@ export function ShirtOrder() {
     <form className="shirt-order" onSubmit={handleSubmit}>
       <Toaster richColors position="top-center" />
       <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
-      <label className="field"><span>Seu nome *</span><Input name="nome" required placeholder="Como podemos te chamar?" /></label>
-      <label className="field"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" autoComplete="tel" required placeholder="(11) 99999-9999" /></label>
+      <label className="field field-name"><span>Seu nome *</span><Input name="nome" required placeholder="Como podemos te chamar?" /></label>
+      <label className="field field-phone"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" autoComplete="tel" required placeholder="(11) 99999-9999" /></label>
       <div className="field order-product-picker"><span>Escolha o produto *</span>
         <div className="order-product-options" role="group" aria-label="Escolha o produto">
           <button type="button" className={product === "shirt" ? "is-selected" : ""} onClick={() => setProduct("shirt")} aria-pressed={product === "shirt"}>
@@ -100,7 +100,7 @@ export function ShirtOrder() {
           </button>
         </div>
       </div>
-      <label className="field"><span>Modelo</span>
+      <label className="field field-model"><span>Modelo</span>
         {product === "presskit" ? (
           <Input value="Presskit Rise" readOnly aria-readonly="true" />
         ) : (
@@ -110,19 +110,19 @@ export function ShirtOrder() {
           </Select>
         )}
       </label>
-      <label className="field"><span>Tamanho *</span>
+      <label className="field field-size"><span>Tamanho *</span>
         <Select value={size} onValueChange={setSize} required>
           <SelectTrigger className="form-select"><SelectValue placeholder="Escolha o tamanho" /></SelectTrigger>
           <SelectContent>{["P", "M", "G", "GG"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent>
         </Select>
       </label>
-      <label className="field"><span>Quantidade *</span>
+      <label className="field field-quantity"><span>Quantidade *</span>
         <Select value={quantity} onValueChange={setQuantity} required>
           <SelectTrigger className="form-select"><SelectValue /></SelectTrigger>
           <SelectContent>{["1", "2", "3", "4", "5"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent>
         </Select>
       </label>
-      <label className="field"><span>Forma de pagamento *</span>
+      <label className="field field-payment"><span>Forma de pagamento *</span>
         <Select value={pagamento} onValueChange={setPagamento} required>
           <SelectTrigger className="form-select"><SelectValue placeholder="Escolha uma forma" /></SelectTrigger>
           <SelectContent>{["PIX", "Cartão", "Dinheiro"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent>
