@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, BookOpen, CalendarDays, Camera, Flame, Heart, MapPin, Music2, Sparkles, UsersRound } from "lucide-react";
+import { BookOpen, CalendarDays, Camera, Flame, Heart, MapPin, Music2, Sparkles, UsersRound } from "lucide-react";
 import { CampMemoryGallery } from "../components/camp-memory-gallery";
 import { SectionHero } from "../components/section-hero";
 
@@ -79,22 +79,12 @@ export default function AcampamentoPage() {
         <CampMemoryGallery />
       </section>
 
-      <section className="section-shell final-cta camp-offer">
-        <div className="final-cta-copy">
-          <span className="eyebrow light"><Flame size={16} /> Acampamento 2027</span>
-          <h2><span>Garanta sua vaga</span><span>no <strong>Acampamento</strong></span><em>Rise.</em></h2>
-          <p className="final-cta-lead">Viva propósito. Construa amizades. Experiências que marcam para sempre.</p>
-          <div className="final-cta-pricing" aria-label="Valores da inscrição">
-            <Link href="/inscricao?lote=primeiras" className="final-cta-price-option"><strong>10 primeiras vagas</strong><span>R$ 400,00</span></Link>
-            <Link href="/inscricao?lote=proximas" className="final-cta-price-option"><strong>Próximas vagas</strong><span>R$ 450,00</span></Link>
-            <Link href="/inscricao?presskit=Sim" className="final-cta-price-option"><strong>Presskit opcional</strong><span>EM BREVE</span></Link>
-          </div>
-        </div>
-        <div className="final-cta-visual">
-          <div className="final-cta-art" aria-label="Camisetas da coleção Rise e presskit do acampamento">
-            <img className="final-cta-art-composition" src="/assets/acampamento-presskit-featured.webp" alt="Camisetas, caixa e acessórios da coleção Rise" />
-          </div>
-          <Link href="/inscricao" className="button button-light">Fazer minha inscrição <ArrowUpRight size={18} /></Link>
+      <section className="section-shell camp-experience-picker" aria-label="Escolha sua experiência no Acampamento Rise 2027">
+        <img src="/assets/acampamento-experiencias.png" alt="Três experiências para o Acampamento Rise: ingresso, ingresso com camiseta e kit completo" />
+        <div className="camp-experience-links">
+          <Link href="/inscricao?kit=1" aria-label="Escolher kit 1: somente ingresso" />
+          <Link href="/inscricao?kit=2" aria-label="Escolher kit 2: ingresso com camiseta" />
+          <Link href="/inscricao?kit=3" aria-label="Escolher kit 3: ingresso com kit completo" />
         </div>
       </section>
     </main>

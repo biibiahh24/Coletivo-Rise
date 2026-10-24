@@ -1297,6 +1297,16 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .final-cta-pricing strong { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
 .final-cta-pricing span { font-size: 1.25rem; font-weight: 900; }
 @media (max-width: 760px) { .final-cta-pricing { grid-template-columns: 1fr; width: 100%; } }
+.camp-experience-picker { position: relative; width: min(1664px, calc(100% - 64px)); margin: 110px auto; overflow: hidden; border-radius: 30px; box-shadow: 0 24px 70px rgba(76,42,104,.16); }
+.camp-experience-picker > img { width: 100%; height: auto; display: block; }
+.camp-experience-links { position: absolute; inset: 29.5% 3.5% 2.5%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1%; }
+.camp-experience-links a { display: block; min-width: 0; border-radius: 24px; outline: 0 solid transparent; transition: outline .2s ease, background .2s ease; }
+.camp-experience-links a:hover, .camp-experience-links a:focus-visible { outline: 4px solid rgba(255,255,255,.9); background: rgba(255,255,255,.08); }
+@media (max-width: 760px) {
+  .camp-experience-picker { width: calc(100% - 28px); margin: 70px auto; border-radius: 18px; }
+  .camp-experience-links { inset: 29.5% 3.5% 2.5%; gap: 1.5%; }
+  .camp-experience-links a { border-radius: 12px; }
+}
 .cell-directory-grid { margin-bottom: 90px; }
 .cell-directory-grid.cell-directory { display: block; min-height: 0; padding: clamp(32px, 5vw, 58px); }
 .cell-directory-heading { margin-bottom: 30px; }
