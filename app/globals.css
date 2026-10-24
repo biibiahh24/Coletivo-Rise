@@ -532,9 +532,9 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .worship-card h3 { margin: 18px 0 5px; font-size: 1.65rem; }
 .worship-card p { margin: 0; color: #725b4c; font-size: .9rem; }
 
-.final-cta { width: min(1700px, calc(100% - 96px)); margin-top: 110px; margin-bottom: 110px; min-height: 720px; padding: clamp(54px, 5vw, 84px); border-radius: 40px; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(560px, .92fr); align-items: stretch; gap: clamp(28px, 4vw, 64px); color: white; background: var(--orange); position: relative; overflow: visible; }
+.final-cta { width: min(1700px, calc(100% - 96px)); margin-top: 110px; margin-bottom: 110px; min-height: 620px; padding: clamp(48px, 4vw, 72px); border-radius: 40px; display: grid; grid-template-columns: minmax(0, .92fr) minmax(520px, 1.08fr); align-items: center; gap: clamp(28px, 4vw, 64px); color: white; background: var(--orange); position: relative; overflow: hidden; }
 .final-cta::after { content: ""; width: 270px; height: 270px; position: absolute; right: -80px; top: -130px; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; }
-.final-cta-copy { position: relative; z-index: 3; transform: translate(-38px, -18px); }
+.final-cta-copy { position: relative; z-index: 3; align-self: center; }
 .final-cta h2 { margin: 15px 0 0; max-width: 800px; font-size: clamp(2.2rem, 4.2vw, 4.8rem); line-height: .93; overflow-wrap: normal; word-break: normal; }
 .final-cta h2 span, .final-cta h2 em { display: block; }
 .final-cta h2 span:first-child,
@@ -543,13 +543,13 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta h2 strong { color: var(--purple-dark); font-weight: inherit; }
 .final-cta h2 em { color: var(--purple-dark); font-style: normal; }
 .final-cta-lead { max-width: 610px; margin: 24px 0 0; color: rgba(255,255,255,.82); font-size: 1rem; text-transform: uppercase; letter-spacing: .13em; font-weight: 800; }
-.final-cta-visual { display: contents; }
-.final-cta .button { flex: none; position: absolute; z-index: 4; right: clamp(32px, 5vw, 70px); bottom: clamp(32px, 5vw, 70px); }
+.final-cta-visual { min-width: 0; min-height: 490px; position: relative; z-index: 2; display: grid; grid-template-rows: minmax(0, 1fr) auto; align-items: center; justify-items: center; gap: 18px; }
+.final-cta .button { flex: none; position: static; z-index: 4; justify-self: end; }
 .final-cta .button-light { color: var(--cream-soft); background: var(--purple-dark); box-shadow: 0 15px 28px rgba(46,27,55,.2); }
 .final-cta .button-light:hover { color: var(--purple-dark); background: var(--cream-soft); }
-.final-cta-art { position: absolute; z-index: 1; top: -18%; right: 4%; width: 62%; height: 120%; pointer-events: none; }
+.final-cta-art { position: relative; z-index: 1; width: 100%; height: 420px; pointer-events: none; }
 .final-cta-art img { position: absolute; display: block; object-fit: contain; }
-.final-cta-art-composition { width: 100%; height: 100%; right: 0; top: 0; z-index: 2; object-fit: contain; filter: drop-shadow(0 24px 25px rgba(104,40,12,.22)); }
+.final-cta-art-composition { width: 100%; height: 100%; inset: 0; z-index: 2; object-fit: contain; filter: drop-shadow(0 24px 25px rgba(104,40,12,.22)); }
 
 .inner-hero { min-height: 530px; display: grid; place-items: center; position: relative; color: white; background: var(--ink); overflow: hidden; }
 .inner-hero::before { content: "RISE"; position: absolute; right: -25px; bottom: -160px; color: rgba(255,255,255,.035); font: 900 clamp(12rem, 28vw, 29rem)/1 "Arial Black", sans-serif; letter-spacing: -.09em; }
@@ -1080,6 +1080,11 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .mobile-nav .mobile-cta { margin-top: 6px; text-align: center; color: white; background: var(--orange); }
   .mobile-nav .mobile-admin-link { display: flex; align-items: center; justify-content: center; gap: 7px; padding-block: 9px; color: rgba(255,255,255,.48); font-size: .76rem; }
   .mobile-admin-link svg { width: 14px; height: 14px; }
+  .final-cta { min-height: 0; grid-template-columns: 1fr; align-items: start; }
+  .final-cta h2 span:first-child,
+  .final-cta h2 span:nth-child(2) { white-space: normal; }
+  .final-cta-visual { min-height: 360px; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 1fr; align-items: end; }
+  .final-cta-art { height: 360px; }
   .hero-slides { width: min(100% - 40px, 1180px); }
   .hero-slide { grid-template-columns: minmax(0,1fr) minmax(300px,.78fr); gap: 32px; padding-top: 55px; }
   .hero-copy h1 { font-size: clamp(3.35rem, 7vw, 5.4rem); }
@@ -1134,9 +1139,9 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .about-visual, .about-visual > img { min-height: 510px; height: 510px; }
   .about-stamp { width: 155px; height: 155px; right: 10px; bottom: 20px; }
   .final-cta { width: min(100% - 28px, 1180px); margin-block: 75px; min-height: 0; grid-template-columns: 1fr; align-items: flex-start; overflow: hidden; }
-  .final-cta-visual { display: flex; width: 100%; align-items: center; }
+  .final-cta-visual { width: 100%; min-height: 0; grid-template-columns: 1fr; grid-template-rows: auto auto; align-items: center; }
   .final-cta-copy { transform: none; }
-  .final-cta-art { position: relative; top: auto; right: auto; width: min(100%, 390px); height: auto; min-height: 250px; align-self: center; order: 0; }
+  .final-cta-art { position: relative; top: auto; right: auto; width: min(100%, 390px); height: 300px; min-height: 0; align-self: center; order: 0; }
   .final-cta-art-composition { width: 100%; height: 100%; transform: none; }
   .final-cta .button { position: static; width: 100%; justify-content: center; order: 1; }
   .inner-hero { min-height: 490px; }
@@ -1215,6 +1220,9 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .hero-controls > button { width: 38px; height: 38px; }
   .hero-dots button.active span { width: 38px; }
   .about-visual, .about-visual > img { min-height: 450px; height: 450px; }
+  .final-cta { padding: 40px 28px; border-radius: 32px; }
+  .final-cta h2 { font-size: 2rem; }
+  .final-cta-lead { font-size: .84rem; }
   .gallery-mosaic { height: 540px; }
   .store-intro-visual { height: 420px; }
   .camp-memory-controls > span { max-width: 180px; font-size: .68rem; }
