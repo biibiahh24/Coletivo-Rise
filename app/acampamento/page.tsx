@@ -92,7 +92,7 @@ export default function AcampamentoPage() {
         </div>
         <div className="final-cta-visual">
           <div className="final-cta-art" aria-label="Camisetas da coleção Rise e presskit do acampamento">
-            <img className="final-cta-art-composition" src="/assets/presskit-rise-composite.png" alt="Camisetas, caixa e acessórios da coleção Rise" />
+            <img className="final-cta-art-composition" src="/assets/acampamento-presskit-featured.webp" alt="Camisetas, caixa e acessórios da coleção Rise" />
           </div>
           <Link href="/inscricao" className="button button-light">Fazer minha inscrição <ArrowUpRight size={18} /></Link>
         </div>
