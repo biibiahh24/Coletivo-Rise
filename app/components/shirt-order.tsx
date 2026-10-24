@@ -90,12 +90,16 @@ export function ShirtOrder() {
       <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
       <label className="field"><span>Seu nome *</span><Input name="nome" required placeholder="Como podemos te chamar?" /></label>
       <label className="field"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" autoComplete="tel" required placeholder="(11) 99999-9999" /></label>
-      <label className="field"><span>Produto *</span>
-        <Select value={product} onValueChange={(value) => setProduct(value as "shirt" | "presskit")} required>
-          <SelectTrigger className="form-select"><SelectValue /></SelectTrigger>
-          <SelectContent><SelectItem value="shirt">Só camiseta — EM BREVE</SelectItem><SelectItem value="presskit">Só presskit — EM BREVE</SelectItem></SelectContent>
-        </Select>
-      </label>
+      <div className="field order-product-picker"><span>Escolha o produto *</span>
+        <div className="order-product-options" role="group" aria-label="Escolha o produto">
+          <button type="button" className={product === "shirt" ? "is-selected" : ""} onClick={() => setProduct("shirt")} aria-pressed={product === "shirt"}>
+            <strong>Só camiseta</strong><span>Camiseta Rise</span><b>EM BREVE</b>
+          </button>
+          <button type="button" className={product === "presskit" ? "is-selected" : ""} onClick={() => setProduct("presskit")} aria-pressed={product === "presskit"}>
+            <strong>Só presskit</strong><span>Kit completo Rise</span><b>EM BREVE</b>
+          </button>
+        </div>
+      </div>
       <label className="field"><span>Modelo</span>
         {product === "presskit" ? (
           <Input value="Presskit Rise" readOnly aria-readonly="true" />

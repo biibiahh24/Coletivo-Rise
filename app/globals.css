@@ -917,6 +917,14 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .order-intro h2 { margin: 16px 0 20px; font-size: clamp(2.5rem,5vw,4.8rem); }
 .order-intro p { color: #725b4c; }
 .shirt-order { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: clamp(25px,4vw,42px); border: 1px solid var(--line); background: white; border-radius: 28px; box-shadow: 0 20px 60px rgba(70,31,3,.08); }
+.order-product-picker { grid-column: 1 / -1; }
+.order-product-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 8px; }
+.order-product-options button { display: grid; gap: 5px; min-height: 104px; padding: 16px; color: var(--purple-dark); border: 1px solid var(--line); border-radius: 16px; background: #fffaf4; font: inherit; text-align: left; cursor: pointer; transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+.order-product-options button:hover { transform: translateY(-2px); border-color: var(--orange); }
+.order-product-options button.is-selected { border: 2px solid var(--orange); background: #fff0e5; box-shadow: 0 8px 20px rgba(241,90,36,.12); }
+.order-product-options strong { font-size: 1rem; }
+.order-product-options span { color: #806653; font-size: .78rem; }
+.order-product-options b { color: var(--orange-deep); font-size: .72rem; letter-spacing: .08em; }
 .shirt-order .order-note { display: flex; align-items: center; gap: 10px; color: #725b4c; font-size: .87rem; }
 .shirt-order .order-note svg { flex: none; color: var(--orange); }
 .shirt-order .button { justify-self: end; }
@@ -1209,6 +1217,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .worship-grid { display: flex; overflow-x: auto; gap: 14px; padding-bottom: 12px; scroll-snap-type: x mandatory; }
   .worship-card { flex: 0 0 78%; scroll-snap-align: start; }
   .shirt-order { grid-template-columns: 1fr; }
+  .order-product-options { grid-template-columns: 1fr; }
   .shirt-order .button { width: 100%; justify-self: stretch; }
   .cell-rhythm { padding: 80px 0; }
   .cell-directory { min-height: 650px; grid-template-columns: 1fr; gap: 25px; margin-bottom: 70px; }
