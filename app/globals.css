@@ -547,7 +547,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .final-cta .button { flex: none; position: static; z-index: 4; justify-self: end; margin-right: 22px; margin-bottom: 10px; }
 .final-cta .button-light { color: var(--cream-soft); background: var(--purple-dark); box-shadow: 0 15px 28px rgba(46,27,55,.2); }
 .final-cta .button-light:hover { color: var(--purple-dark); background: var(--cream-soft); }
-.final-cta-art { position: relative; z-index: 1; width: min(980px, 135%); height: 700px; margin-top: -145px; margin-right: -92px; pointer-events: none; }
+.final-cta-art { position: relative; z-index: 1; width: min(980px, 135%); height: 700px; margin-top: -145px; margin-right: -92px; transform: translateX(-70px); pointer-events: none; }
 .final-cta-art img { position: absolute; display: block; object-fit: contain; }
 .final-cta-art-composition { width: 100%; height: 100%; inset: 0; z-index: 2; object-fit: contain; filter: drop-shadow(0 24px 25px rgba(104,40,12,.22)); }
 
@@ -1086,7 +1086,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .final-cta h2 span:first-child,
   .final-cta h2 span:nth-child(2) { white-space: normal; }
   .final-cta-visual { min-height: 360px; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 1fr; align-items: end; }
-  .final-cta-art { width: min(760px, 115%); height: 520px; margin-top: -90px; margin-right: -40px; }
+  .final-cta-art { width: min(760px, 115%); height: 520px; margin-top: -90px; margin-right: -40px; transform: translateX(-30px); }
   .hero-slides { width: min(100% - 40px, 1180px); }
   .hero-slide { grid-template-columns: minmax(0,1fr) minmax(300px,.78fr); gap: 32px; padding-top: 55px; }
   .hero-copy h1 { font-size: clamp(3.35rem, 7vw, 5.4rem); }
@@ -1143,7 +1143,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .final-cta { width: min(100% - 28px, 1180px); margin-block: 75px; min-height: 0; grid-template-columns: 1fr; align-items: flex-start; overflow: hidden; }
   .final-cta-visual { width: 100%; min-height: 0; grid-template-columns: 1fr; grid-template-rows: auto auto; align-items: center; }
   .final-cta-copy { transform: none; }
-  .final-cta-art { position: relative; top: auto; right: auto; width: min(100%, 390px); height: 300px; min-height: 0; align-self: center; order: 0; }
+  .final-cta-art { position: relative; top: auto; right: auto; width: min(100%, 390px); height: 300px; min-height: 0; align-self: center; order: 0; transform: none; }
   .final-cta-art-composition { width: 100%; height: 100%; transform: none; }
   .final-cta .button { position: static; width: 100%; justify-content: center; order: 1; }
   .inner-hero { min-height: 490px; }
