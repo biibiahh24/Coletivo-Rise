@@ -64,7 +64,6 @@ export function RotatingHero() {
                 <p>{slide.text}</p>
                 <div className="hero-actions">
                   <Link href={slide.href} className="button button-light">{slide.action} <ArrowUpRight size={18} /></Link>
-                  {index !== 1 && <Link href="/inscricao" className="button button-ghost">Inscrição Acampa</Link>}
                 </div>
               </div>
               <div className="hero-image-wrap">
