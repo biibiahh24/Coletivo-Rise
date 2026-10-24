@@ -1333,6 +1333,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .camp-price small { margin-bottom: 7px; font-size: .64rem; letter-spacing: .14em; }
 .camp-experience-button { display: flex; align-items: center; justify-content: center; min-height: 52px; margin-top: auto; padding: 0 16px; color: #fff; background: var(--purple-dark); border-radius: 999px; font-weight: 900; text-align: center; text-decoration: none; transition: background .2s ease, transform .2s ease; }
 .camp-experience-button:hover, .camp-experience-button:focus-visible { background: var(--orange-deep); transform: translateY(-2px); }
+.camp-experience-button:disabled { opacity: .82; cursor: not-allowed; transform: none; }
 @media (max-width: 760px) {
   .camp-experience-picker { width: calc(100% - 28px); margin: 70px auto; padding: 28px 16px 16px; border-radius: 22px; }
   .camp-experience-heading { margin-bottom: 26px; }
