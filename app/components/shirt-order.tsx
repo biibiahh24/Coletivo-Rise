@@ -10,8 +10,8 @@ import { TurnstileWidget } from "./turnstile-widget";
 
 export function ShirtOrder() {
   const shirtEditions = [
-    { value: "edition-01", label: "01 Camiseta — Uma geração que se levanta" },
-    { value: "edition-02", label: "02 Camiseta Rise" },
+    { value: "edition-01", label: "01 - Camiseta Rise - Coleção 1" },
+    { value: "edition-02", label: "02 - Camiseta Rise - Acampa" },
   ] as const;
   const [product, setProduct] = useState<"shirt" | "presskit">("shirt");
   const [shirtEdition, setShirtEdition] = useState<(typeof shirtEditions)[number]["value"]>(shirtEditions[0].value);
