@@ -49,7 +49,7 @@ export function ShirtOrder() {
       if (!response.ok || !result.protocol) throw new Error(result.error ?? "O pedido não foi registrado.");
       idempotencyKey.current = null;
       if ((pagamento === "PIX" || pagamento === "Cartão") && result.protocol) {
-        const checkoutResponse = await fetch("/api/asaas/checkout", {
+        const checkoutResponse = await fetch("/api/mercadopago/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ kind: "shirt", protocol: result.protocol, pagamento, product, quantity }),
@@ -114,7 +114,7 @@ export function ShirtOrder() {
         <Checkbox id="pedido-confirmacao" checked={confirmed} onCheckedChange={(value) => setConfirmed(Boolean(value))} />
         <label htmlFor="pedido-confirmacao">Autorizo o contato da equipe sobre este pedido e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>.</label>
       </div>
-      <div className="order-note"><MessageCircle /><span>PIX ou cartão abrem o checkout seguro do Asaas. Dinheiro segue para confirmação pelo WhatsApp.</span></div>
+      <div className="order-note"><MessageCircle /><span>PIX ou cartão abrem o checkout seguro do Mercado Pago. Dinheiro segue para confirmação pelo WhatsApp.</span></div>
       <button className="button button-orange" type="submit" disabled={!size || !pagamento || !turnstileToken || !confirmed || sending}>
         {sending ? <><LoaderCircle className="spinner" /> Salvando...</> : <>Registrar e abrir WhatsApp <Send size={18} /></>}
       </button>

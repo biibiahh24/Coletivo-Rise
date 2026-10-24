@@ -85,7 +85,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
       if (!response.ok || !result.protocol) throw new Error(result.error ?? "A inscrição não foi enviada.");
       idempotencyKey.current = null;
       if ((pagamento === "PIX" || pagamento === "Cartão") && result.protocol) {
-        const checkoutResponse = await fetch("/api/asaas/checkout", {
+        const checkoutResponse = await fetch("/api/mercadopago/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ kind: "registration", protocol: result.protocol, pagamento, lote: lote.startsWith("10 primeiras") ? "primeiras" : "proximas", presskit }),
@@ -189,7 +189,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         <TurnstileWidget action="registration" onToken={handleToken} resetSignal={resetSignal} />
 
         <div className="form-submit-row">
-          <div><CircleDollarSign /><span>PIX ou cartão abrem o checkout seguro do Asaas. Outras formas seguem para confirmação pelo WhatsApp.</span></div>
+          <div><CircleDollarSign /><span>PIX ou cartão abrem o checkout seguro do Mercado Pago. Outras formas seguem para confirmação pelo WhatsApp.</span></div>
           <button className="button button-orange" type="submit" disabled={sending || !turnstileToken}>
             {sending ? <><LoaderCircle className="spinner" /> Enviando...</> : <>Enviar inscrição <Send size={18} /></>}
           </button>
