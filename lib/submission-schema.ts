@@ -28,6 +28,7 @@ export const registrationSubmission = z.object({
   restricao: cleanText(300),
   participou: z.enum(["Sim", "Não"]),
   camiseta: z.enum(["PP", "P", "M", "G", "GG", "XG"]),
+  corCamiseta: z.enum(["Off-white", "Roxa"]),
   pagamento: z.enum(["PIX", "Cartão", "Dinheiro"]),
   presskit: z.enum(["Sim", "Não"]),
   comprovanteBase64: z.string().max(7_100_000).default(""),

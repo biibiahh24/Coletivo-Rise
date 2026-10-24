@@ -21,6 +21,7 @@ function fileToBase64(file: File) {
 export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { initialLote?: string; initialPresskit?: string }) {
   const [participou, setParticipou] = useState("");
   const [camiseta, setCamiseta] = useState("");
+  const [corCamiseta, setCorCamiseta] = useState("");
   const [lote, setLote] = useState(initialLote);
   const [pagamento, setPagamento] = useState("");
   const [presskit, setPresskit] = useState(initialPresskit);
@@ -33,7 +34,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!participou || !camiseta || !lote || !pagamento || !presskit || !confirmed || !turnstileToken) {
+    if (!participou || !camiseta || !corCamiseta || !lote || !pagamento || !presskit || !confirmed || !turnstileToken) {
       toast.error("Preencha as seleções e confirme as informações para continuar.");
       return;
     }
@@ -68,6 +69,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         restricao: text("restricao"),
         participou,
         camiseta,
+        corCamiseta,
         pagamento,
         presskit,
         comprovanteBase64,
@@ -102,6 +104,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         `Idade: ${String(data.idade ?? "")}`,
         `Igreja: ${String(data.igreja ?? "")}`,
         `Camiseta: ${camiseta}`,
+        `Cor da camiseta: ${corCamiseta}`,
         `Lote: ${lote}`,
         `Pagamento: ${pagamento}`,
         `Presskit: ${presskit}`,
@@ -157,6 +160,12 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
               <Select value={camiseta} onValueChange={setCamiseta} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
                 <SelectContent>{["PP", "P", "M", "G", "GG", "XG"].map((size) => <SelectItem value={size} key={size}>{size}</SelectItem>)}</SelectContent>
+              </Select>
+            </label>
+            <label className="field"><span>Cor da camiseta *</span>
+              <Select value={corCamiseta} onValueChange={setCorCamiseta} required>
+                <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
+                <SelectContent><SelectItem value="Off-white">Off-white</SelectItem><SelectItem value="Roxa">Roxa</SelectItem></SelectContent>
               </Select>
             </label>
             <label className="field"><span>Lote da inscrição *</span>
