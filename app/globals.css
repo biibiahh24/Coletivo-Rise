@@ -1321,7 +1321,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .camp-price-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .camp-shirt-choice { margin: 8px 0 14px; }
 .camp-shirt-choice-image { width: 100%; height: 180px; background: #efe1d2; border-radius: 16px; }
-.camp-shirt-choice-image img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+.camp-shirt-choice-image img { width: 100%; height: 100%; object-fit: contain; border-radius: 16px; }
 .camp-choice-note { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; color: #725b4c; font-size: .65rem; font-weight: 900; letter-spacing: .08em; }
 .camp-choice-note { margin-top: 10px; }
 .camp-choice-note .camp-choice-label { margin-right: 2px; }
