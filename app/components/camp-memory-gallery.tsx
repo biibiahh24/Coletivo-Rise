@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const campMemories = [
   { image: "/assets/camp-memory-01.jpeg", label: "Momento", alt: "Momento vivido no Acampamento Rise" },
@@ -30,6 +30,13 @@ const campMemories = [
 export function CampMemoryGallery() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [lightboxImage, setLightboxImage] = useState<(typeof campMemories)[number] | null>(null);
+
+  useEffect(() => {
+    if (!lightboxImage) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setLightboxImage(null); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [lightboxImage]);
 
   const move = (direction: number) => {
     trackRef.current?.scrollBy({ left: direction * 380, behavior: "smooth" });

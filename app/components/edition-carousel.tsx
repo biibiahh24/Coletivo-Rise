@@ -40,6 +40,13 @@ export function EditionCarousel() {
     return () => window.clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setLightboxOpen(false); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [lightboxOpen]);
+
   const goTo = (index: number) => {
     setActive((index + slides.length) % slides.length);
   };
