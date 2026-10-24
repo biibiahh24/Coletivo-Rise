@@ -193,13 +193,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section-shell final-cta">
-        <div>
-          <span className="eyebrow light"><Flame size={16} /> Seu lugar é aqui</span>
-          <h2>Quer fazer parte do que Deus está fazendo no Rise?</h2>
-        </div>
-        <Link href="/inscricao" className="button button-light">Quero viver isso <ArrowUpRight size={18} /></Link>
-      </section>
     </main>
   );
 }
