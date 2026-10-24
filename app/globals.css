@@ -1523,3 +1523,39 @@ body { background: var(--cream-soft); }
 }
 .experience-card.card-2 { background: var(--lilac-soft); }
 .site-footer { background: var(--purple-dark); }
+
+
+/* Store checkout organization: keep each decision in a predictable reading order. */
+.shirt-order {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 18px;
+  row-gap: 18px;
+  align-items: start;
+}
+.shirt-order .field-name { grid-column: 1; grid-row: 1; }
+.shirt-order .field-phone { grid-column: 2; grid-row: 1; }
+.shirt-order .order-product-picker { grid-column: 1 / -1; grid-row: 2; }
+.shirt-order .field-model { grid-column: 1; grid-row: 3; }
+.shirt-order .field-size { grid-column: 2; grid-row: 3; }
+.shirt-order .field-quantity { grid-column: 1; grid-row: 4; }
+.shirt-order .field-payment { grid-column: 2; grid-row: 4; }
+.shirt-order > .turnstile-shell { grid-column: 1; grid-row: 5; align-self: stretch; }
+.shirt-order .form-confirm { grid-column: 2; grid-row: 5; min-height: 65px; }
+.shirt-order .order-note { grid-column: 1; grid-row: 6; align-self: center; }
+.shirt-order > .button { grid-column: 2; grid-row: 6; width: 100%; justify-self: stretch; }
+.shirt-order .order-product-options button { min-height: 96px; }
+@media (max-width: 760px) {
+  .shirt-order { grid-template-columns: 1fr; }
+  .shirt-order .field-name,
+  .shirt-order .field-phone,
+  .shirt-order .order-product-picker,
+  .shirt-order .field-model,
+  .shirt-order .field-size,
+  .shirt-order .field-quantity,
+  .shirt-order .field-payment,
+  .shirt-order > .turnstile-shell,
+  .shirt-order .form-confirm,
+  .shirt-order .order-note,
+  .shirt-order > .button { grid-column: 1; grid-row: auto; }
+  .shirt-order .order-product-options { grid-template-columns: 1fr 1fr; }
+}
