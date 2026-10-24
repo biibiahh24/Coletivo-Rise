@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, Camera, Menu, MessageCircle, ShieldCheck, X } from "lucide-react";
+import { Camera, Menu, MessageCircle, ShieldCheck, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navigation = [
@@ -36,7 +36,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="header-actions">
-            <Link href="/inscricao" className="header-cta"><span>Inscrição Acampa</span><ArrowUpRight size={16} /></Link>
             {pathname === "/inscricao" && (
               <Link href="/admin" className="header-admin-link" aria-label="Abrir área administrativa">
                 <ShieldCheck /> <span>Admin</span>
