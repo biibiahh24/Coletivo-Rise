@@ -87,6 +87,7 @@ export default function AcampamentoPage() {
           <div className="final-cta-pricing" aria-label="Valores da inscrição">
             <Link href="/inscricao?lote=primeiras" className="final-cta-price-option"><strong>10 primeiras vagas</strong><span>R$ 400,00</span></Link>
             <Link href="/inscricao?lote=proximas" className="final-cta-price-option"><strong>Próximas vagas</strong><span>R$ 450,00</span></Link>
+            <Link href="/inscricao?presskit=Sim" className="final-cta-price-option"><strong>Presskit opcional</strong><span>EM BREVE</span></Link>
           </div>
         </div>
         <div className="final-cta-visual">
