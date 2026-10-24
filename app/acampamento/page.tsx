@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BookOpen, CalendarDays, Camera, Flame, Heart, MapPin, Music2, Sparkles, UsersRound } from "lucide-react";
 import { CampMemoryGallery } from "../components/camp-memory-gallery";
 import { ProductImageLightbox } from "../components/product-image-lightbox";
+import { ShirtColorChoice } from "../components/shirt-color-choice";
 import { SectionHero } from "../components/section-hero";
 
 export const metadata: Metadata = {
@@ -101,11 +102,7 @@ export default function AcampamentoPage() {
             <div className="camp-experience-card-top"><span>02</span><strong>COM CAMISETA</strong></div>
             <h3>Ingresso + <em>camiseta Rise</em></h3>
             <p>Ingresso para o acampamento e camiseta oversized.</p>
-            <div className="camp-shirt-pair">
-              <ProductImageLightbox className="camp-shirt-lightbox" src="/assets/product-camiseta-branca.jpg" alt="Camiseta Rise off-white" />
-              <ProductImageLightbox className="camp-shirt-lightbox" src="/assets/product-camiseta-roxa.jpg" alt="Camiseta Rise roxa" />
-            </div>
-            <div className="camp-choice-note">ESCOLHA A COR <span>Off-white</span><span>Roxa</span></div>
+            <ShirtColorChoice />
             <strong className="camp-price"><small>PREÇO</small>EM BREVE</strong>
             <Link className="camp-experience-button" href="/inscricao?kit=2">Quero ingresso + camiseta</Link>
           </article>
