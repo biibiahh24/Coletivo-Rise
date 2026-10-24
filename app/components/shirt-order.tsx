@@ -91,7 +91,7 @@ export function ShirtOrder() {
           <SelectContent><SelectItem value="shirt">Camiseta Rise — R$ 79,90</SelectItem><SelectItem value="presskit">Presskit Rise — R$ 119,90</SelectItem></SelectContent>
         </Select>
       </label>
-      <label className="field"><span>Camiseta</span><Input value={product === "presskit" ? "Presskit Rise" : edition} readOnly aria-readonly="true" /></label>
+      <label className="field"><span>Modelo</span><Input value={product === "presskit" ? "Presskit Rise" : edition} readOnly aria-readonly="true" /></label>
       <label className="field"><span>Tamanho *</span>
         <Select value={size} onValueChange={setSize} required>
           <SelectTrigger className="form-select"><SelectValue placeholder="Escolha o tamanho" /></SelectTrigger>
