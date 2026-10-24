@@ -851,7 +851,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
 }
 
 @media (max-width: 760px) {
-  .collection-drop { margin-bottom: 80px; padding: 28px 22px; border-radius: 28px; }
+  .collection-drop { min-height: 0; margin-bottom: 48px; padding: 28px 22px; border-radius: 28px; }
   .collection-drop-hero { min-height: 720px; display: flex; flex-direction: column; justify-content: flex-end; }
   .collection-drop-art { inset: 0 -24px auto 18%; height: 400px; }
   .collection-drop-shirt { width: 92%; right: 0; top: -4%; }
