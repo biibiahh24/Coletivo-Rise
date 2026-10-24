@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getAdminForRequest } from "@/lib/admin-auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { AdminActions } from "./admin-actions";
+import { AdminSectionTabs } from "./admin-section-tabs";
 import { AdminSignOut } from "./admin-sign-out";
 
 export const dynamic = "force-dynamic";
@@ -172,11 +173,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         </div>
 
         <div className="admin-toolbar">
-          <nav aria-label="Tipos de registro">
-            <Link className={view === "registrations" ? "active" : ""} href="/admin?view=registrations">Acampamento</Link>
-            <Link className={view === "registrations_presskit" ? "active" : ""} href="/admin?view=registrations_presskit">Acampamento + Presskit</Link>
-            <Link className={view === "shirts" ? "active" : ""} href="/admin?view=shirts">Camisetas</Link>
-          </nav>
+          <AdminSectionTabs view={view} />
           {localDemo
             ? <a className="admin-export" href={`/api/admin/demo-export?kind=${view === "shirts" ? "shirt" : "registration"}`} download><Download /> Exportar CSV</a>
             : <a className="admin-export" href={`/api/admin/export?kind=${view === "shirts" ? "shirt" : "registration"}`}><Download /> Exportar CSV</a>}
