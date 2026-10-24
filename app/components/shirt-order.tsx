@@ -17,6 +17,7 @@ export function ShirtOrder() {
   const [shirtEdition, setShirtEdition] = useState<(typeof shirtEditions)[number]["value"]>(shirtEditions[0].value);
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState("1");
+  const [color, setColor] = useState("");
   const [pagamento, setPagamento] = useState("");
   const [sending, setSending] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
@@ -27,7 +28,8 @@ export function ShirtOrder() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!shirtEdition || !size || !pagamento || !turnstileToken || !confirmed) return;
+    const colorRequired = product === "shirt" && shirtEdition === "edition-02";
+    if (!shirtEdition || !size || !pagamento || !turnstileToken || !confirmed || (colorRequired && !color)) return;
     const selectedEdition = shirtEditions.find((item) => item.value === shirtEdition)?.label ?? shirtEditions[0].label;
     const data = new FormData(event.currentTarget);
     setSending(true);
@@ -46,6 +48,7 @@ export function ShirtOrder() {
           telefone: data.get("telefone"),
           edition: product === "presskit" ? "Presskit Rise" : selectedEdition,
           size,
+          color: colorRequired ? color : null,
           quantity,
           pagamento,
         }),
@@ -122,6 +125,14 @@ export function ShirtOrder() {
           <SelectContent>{["1", "2", "3", "4", "5"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent>
         </Select>
       </label>
+      {product === "shirt" && shirtEdition === "edition-02" && (
+        <label className="field field-color"><span>Cor *</span>
+          <Select value={color} onValueChange={setColor} required>
+            <SelectTrigger className="form-select"><SelectValue placeholder="Escolha a cor" /></SelectTrigger>
+            <SelectContent>{["Off-white", "Roxa"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent>
+          </Select>
+        </label>
+      )}
       <label className="field field-payment"><span>Forma de pagamento *</span>
         <Select value={pagamento} onValueChange={setPagamento} required>
           <SelectTrigger className="form-select"><SelectValue placeholder="Escolha uma forma" /></SelectTrigger>
@@ -134,7 +145,7 @@ export function ShirtOrder() {
         <label htmlFor="pedido-confirmacao">Autorizo o contato da equipe sobre este pedido e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>.</label>
       </div>
       <div className="order-note"><MessageCircle /><span>PIX ou cartão abrem o checkout seguro do Mercado Pago. Dinheiro segue para confirmação pelo WhatsApp.</span></div>
-      <button className="button button-orange" type="submit" disabled={!size || !pagamento || !turnstileToken || !confirmed || sending}>
+      <button className="button button-orange" type="submit" disabled={!size || !pagamento || !turnstileToken || !confirmed || (product === "shirt" && shirtEdition === "edition-02" && !color) || sending}>
         {sending ? <><LoaderCircle className="spinner" /> Salvando...</> : <>Registrar e abrir WhatsApp <Send size={18} /></>}
       </button>
     </form>
