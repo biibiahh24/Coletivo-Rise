@@ -759,6 +759,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .collection-modal p { margin: 0 0 22px; color: #725b4c; line-height: 1.65; }
 .collection-modal-close { position: sticky; top: 0; z-index: 2; float: right; display: grid; width: 36px; height: 36px; place-items: center; color: var(--ink); background: rgba(245,233,219,.92); border: 0; border-radius: 50%; cursor: pointer; }
 .collection-modal-close:hover, .collection-modal-close:focus-visible { color: white; background: var(--ink); }
+body:has(.collection-modal) { overflow: hidden; }
 @keyframes collection-modal-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes collection-modal-rise { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .collection-hotspots { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
@@ -866,9 +867,11 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .interactive-hotspot-stickers { left: 38%; top: 51%; }
   .interactive-hotspot-wristband { left: 64%; top: 51%; }
   .interactive-hotspot-box { left: 58%; top: 88%; }
-  .collection-modal { padding: 22px; border-radius: 22px; }
-  .collection-modal-gallery { margin: -22px -22px 22px; border-radius: 22px 22px 0 0; }
-  .collection-modal-gallery img, .collection-modal-gallery:has(img:only-child) img { height: 210px; }
+  .collection-modal-backdrop { align-items: center; padding: 14px; }
+  .collection-modal { width: 100%; max-height: calc(100dvh - 28px); padding: 20px; border-radius: 22px; }
+  .collection-modal-gallery { margin: -20px -20px 20px; border-radius: 22px 22px 0 0; }
+  .collection-modal-gallery img, .collection-modal-gallery:has(img:only-child) img { height: 180px; }
+  .collection-modal-close { position: absolute; top: 12px; right: 12px; float: none; width: 38px; height: 38px; }
   .collection-hotspot { transform: scale(.88); }
   .collection-hotspot-card { width: 180px; }
   .collection-hotspot-shirt { left: 62%; top: 19%; }
