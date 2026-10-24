@@ -17,7 +17,7 @@ export function CollectionInteractive() {
   return (
     <div className="collection-interactive" aria-label="Presskit interativo">
       <div className="collection-interactive-stage">
-        <img className="collection-interactive-image" src="/assets/presskit-exploded.png" alt="Composição explodida do presskit Rise com camiseta, caixa, adesivos, cordão e pulseira" />
+        <img className="collection-interactive-image" src="/assets/presskit-exploded.jpg" alt="Composição explodida do presskit Rise com camiseta, caixa, adesivos, cordão e pulseira" />
         <div className="collection-interactive-hotspots" aria-label="Clique nos itens para ver detalhes">
         {items.map((item) => (
           <button key={item.id} type="button" className={`interactive-hotspot ${item.className}`} onClick={() => setSelected(item)} aria-label={`Ver detalhes: ${item.label}`}>
