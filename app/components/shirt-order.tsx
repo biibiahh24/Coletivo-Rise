@@ -9,8 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TurnstileWidget } from "./turnstile-widget";
 
 export function ShirtOrder() {
-  const edition = "Camiseta Rise — Edição 01";
+  const shirtEditions = [
+    { value: "edition-01", label: "01 Camiseta — Uma geração que se levanta" },
+    { value: "edition-02", label: "02 Camiseta Rise" },
+  ] as const;
   const [product, setProduct] = useState<"shirt" | "presskit">("shirt");
+  const [shirtEdition, setShirtEdition] = useState<(typeof shirtEditions)[number]["value"]>(shirtEditions[0].value);
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [pagamento, setPagamento] = useState("");
@@ -23,7 +27,8 @@ export function ShirtOrder() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!edition || !size || !pagamento || !turnstileToken || !confirmed) return;
+    if (!shirtEdition || !size || !pagamento || !turnstileToken || !confirmed) return;
+    const selectedEdition = shirtEditions.find((item) => item.value === shirtEdition)?.label ?? shirtEditions[0].label;
     const data = new FormData(event.currentTarget);
     setSending(true);
     try {
@@ -39,7 +44,7 @@ export function ShirtOrder() {
           privacyVersion: "2026-10",
           nome: data.get("nome"),
           telefone: data.get("telefone"),
-          edition: product === "presskit" ? "Presskit Rise" : edition,
+          edition: product === "presskit" ? "Presskit Rise" : selectedEdition,
           size,
           quantity,
           pagamento,
@@ -63,7 +68,7 @@ export function ShirtOrder() {
         "Olá, equipe Rise! Meu pedido de camiseta foi registrado no site.",
         `Protocolo: ${result.protocol}`,
         `Nome: ${String(data.get("nome") ?? "")}`,
-        `Modelo: ${product === "presskit" ? "Presskit Rise" : edition}`,
+        `Modelo: ${product === "presskit" ? "Presskit Rise" : selectedEdition}`,
         `Tamanho: ${size}`,
         `Quantidade: ${quantity}`,
         `Pagamento: ${pagamento}`,
@@ -88,10 +93,19 @@ export function ShirtOrder() {
       <label className="field"><span>Produto *</span>
         <Select value={product} onValueChange={(value) => setProduct(value as "shirt" | "presskit")} required>
           <SelectTrigger className="form-select"><SelectValue /></SelectTrigger>
-          <SelectContent><SelectItem value="shirt">Camiseta Rise — R$ 79,90</SelectItem><SelectItem value="presskit">Presskit Rise — R$ 119,90</SelectItem></SelectContent>
+          <SelectContent><SelectItem value="shirt">Camiseta Rise — EM BREVE</SelectItem><SelectItem value="presskit">Presskit Rise — EM BREVE</SelectItem></SelectContent>
         </Select>
       </label>
-      <label className="field"><span>Modelo</span><Input value={product === "presskit" ? "Presskit Rise" : edition} readOnly aria-readonly="true" /></label>
+      <label className="field"><span>Modelo</span>
+        {product === "presskit" ? (
+          <Input value="Presskit Rise" readOnly aria-readonly="true" />
+        ) : (
+          <Select value={shirtEdition} onValueChange={(value) => setShirtEdition(value as typeof shirtEdition)} required>
+            <SelectTrigger className="form-select"><SelectValue /></SelectTrigger>
+            <SelectContent>{shirtEditions.map((item) => <SelectItem value={item.value} key={item.value}>{item.label}</SelectItem>)}</SelectContent>
+          </Select>
+        )}
+      </label>
       <label className="field"><span>Tamanho *</span>
         <Select value={size} onValueChange={setSize} required>
           <SelectTrigger className="form-select"><SelectValue placeholder="Escolha o tamanho" /></SelectTrigger>
