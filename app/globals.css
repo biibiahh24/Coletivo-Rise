@@ -1306,7 +1306,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .camp-experience-picker { width: calc(100% - 28px); margin: 70px auto; border-radius: 18px; }
   .camp-experience-picker > img { display: none; }
   .camp-experience-links { position: static; display: grid; grid-template-columns: 1fr; gap: 16px; padding: 16px; background: var(--orange); }
-  .camp-experience-links a { min-height: 370px; border-radius: 16px; background-repeat: no-repeat; background-position: center; background-size: cover; background-attachment: scroll; box-shadow: 0 12px 28px rgba(43,23,65,.16); }
+  .camp-experience-links a { min-height: 370px; border-radius: 16px; background-repeat: no-repeat; background-position: center; background-size: 100% 100%; background-attachment: scroll; box-shadow: 0 12px 28px rgba(43,23,65,.16); transform: none !important; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   .camp-experience-links a:nth-child(1) { background-image: url("/assets/acampamento-kit-1.png"); }
   .camp-experience-links a:nth-child(2) { background-image: url("/assets/acampamento-kit-2.png"); }
   .camp-experience-links a:nth-child(3) { background-image: url("/assets/acampamento-kit-3.png"); }
