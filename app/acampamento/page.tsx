@@ -82,9 +82,9 @@ export default function AcampamentoPage() {
       <section className="section-shell camp-experience-picker" aria-label="Escolha sua experiência no Acampamento Rise 2027">
         <img src="/assets/acampamento-experiencias.png" alt="Três experiências para o Acampamento Rise: ingresso, ingresso com camiseta e kit completo" />
         <div className="camp-experience-links">
-          <Link href="/inscricao?kit=1" aria-label="Escolher kit 1: somente ingresso" />
-          <Link href="/inscricao?kit=2" aria-label="Escolher kit 2: ingresso com camiseta" />
-          <Link href="/inscricao?kit=3" aria-label="Escolher kit 3: ingresso com kit completo" />
+          <Link href="/inscricao?kit=1" aria-label="Escolher kit 1: somente ingresso"><img src="/assets/acampamento-kit-1.png" alt="Kit 1 — somente ingresso" /></Link>
+          <Link href="/inscricao?kit=2" aria-label="Escolher kit 2: ingresso com camiseta"><img src="/assets/acampamento-kit-2.png" alt="Kit 2 — ingresso com camiseta" /></Link>
+          <Link href="/inscricao?kit=3" aria-label="Escolher kit 3: ingresso com kit completo"><img src="/assets/acampamento-kit-3.png" alt="Kit 3 — ingresso com kit completo" /></Link>
         </div>
       </section>
     </main>
