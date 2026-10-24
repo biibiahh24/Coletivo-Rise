@@ -80,11 +80,36 @@ export default function AcampamentoPage() {
       </section>
 
       <section className="section-shell camp-experience-picker" aria-label="Escolha sua experiência no Acampamento Rise 2027">
-        <img src="/assets/acampamento-experiencias-clean.png" alt="Três experiências para o Acampamento Rise: ingresso, ingresso com camiseta e kit completo" />
-        <div className="camp-experience-links">
-          <Link href="/inscricao?kit=1" aria-label="Escolher kit 1: somente ingresso"><img src="/assets/acampamento-kit-1.png" alt="Kit 1 — somente ingresso" /></Link>
-          <Link href="/inscricao?kit=2" aria-label="Escolher kit 2: ingresso com camiseta"><img src="/assets/acampamento-kit-2.png" alt="Kit 2 — ingresso com camiseta" /></Link>
-          <Link href="/inscricao?kit=3" aria-label="Escolher kit 3: ingresso com kit completo"><img src="/assets/acampamento-kit-3.png" alt="Kit 3 — ingresso com kit completo" /></Link>
+        <div className="camp-experience-heading">
+          <h2><span>Escolha sua</span><em>experiência</em></h2>
+          <p>TRÊS FORMAS DE VIVER O VIVA O CAMP 2027</p>
+        </div>
+        <div className="camp-experience-cards">
+          <article className="camp-experience-card">
+            <div className="camp-experience-card-top"><span>01</span><strong>ESSENCIAL</strong></div>
+            <h3>Só o <em>ingresso</em></h3>
+            <p>Ingresso para o acampamento.</p>
+            <div className="camp-ticket" aria-hidden="true"><b>✦ COLETIVO<br />RISE</b><span>VIVA O<br />CAMP 2027</span></div>
+            <strong className="camp-price"><small>A PARTIR DE</small>R$ 400,00</strong>
+            <Link className="camp-experience-button" href="/inscricao?kit=1">Quero só o ingresso</Link>
+          </article>
+          <article className="camp-experience-card camp-experience-card-featured">
+            <div className="camp-experience-card-top"><span>02</span><strong>COM CAMISETA</strong></div>
+            <h3>Ingresso + <em>camiseta Rise</em></h3>
+            <p>Ingresso para o acampamento e camiseta oversized.</p>
+            <div className="camp-shirt-pair"><img src="/assets/product-camiseta-branca.jpg" alt="Camiseta Rise off-white" /><img src="/assets/product-camiseta-roxa.jpg" alt="Camiseta Rise roxa" /></div>
+            <div className="camp-choice-note">ESCOLHA A COR <span>Off-white</span><span>Roxa</span></div>
+            <strong className="camp-price"><small>A PARTIR DE</small>R$ 450,00</strong>
+            <Link className="camp-experience-button" href="/inscricao?kit=2">Quero ingresso + camiseta</Link>
+          </article>
+          <article className="camp-experience-card">
+            <div className="camp-experience-card-top"><span>03</span><strong>KIT COMPLETO</strong></div>
+            <h3>Ingresso + <em>kit completo Rise</em></h3>
+            <p>Ingresso e kit completo com camiseta, cordão, chaveiro, pulseira, adesivos e caixa personalizada.</p>
+            <img className="camp-kit-image" src="/assets/presskit-rise-featured.jpg" alt="Kit completo Rise" />
+            <strong className="camp-price"><small>A PARTIR DE</small>R$ 510,00</strong>
+            <Link className="camp-experience-button" href="/inscricao?kit=3">Quero o kit completo</Link>
+          </article>
         </div>
       </section>
     </main>
