@@ -64,7 +64,7 @@ export default function LojaPage() {
             <div className="collection-product-content">
               <span className="collection-product-kicker">Somente camiseta</span>
               <h3>Camiseta Rise</h3>
-              <strong>R$ 79,90</strong>
+              <strong>EM BREVE</strong>
               <p>Modelagem confortável com a identidade “Eu sou a porta” na frente e a arte Porta no verso.</p>
               <a className="button button-orange" href="#pedido-camiseta">Comprar camiseta <ShoppingBag size={17} /></a>
             </div>
@@ -80,7 +80,7 @@ export default function LojaPage() {
             <div className="collection-product-content">
               <span className="collection-product-kicker">Presskit Rise</span>
               <h3>A caixa completa</h3>
-              <strong>R$ 119,90</strong>
+              <strong>EM BREVE</strong>
               <p>A camiseta Levanta-te e Resplandece acompanhada de itens exclusivos para carregar a mensagem.</p>
               <div className="collection-kit-list">
                 <span><Shirt size={15} /> Camiseta</span><span><Sparkles size={15} /> Adesivos</span><span><PackageCheck size={15} /> Cordão, pulseira e chaveiro</span>
