@@ -73,7 +73,7 @@ export default function LojaPage() {
           <article className="collection-product-card">
             <div className="collection-product-art collection-presskit-art">
               <ProductImageLightbox
-                src="/assets/presskit-rise-featured.png"
+                src="/assets/presskit-rise-featured.jpg"
                 alt="Presskit Rise com camiseta e acessórios"
               />
             </div>

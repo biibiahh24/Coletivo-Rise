@@ -793,7 +793,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .collection-shirt-carousel-dots { display: flex; align-items: center; gap: 7px; padding: 8px 12px; background: rgba(255,250,244,.88); border-radius: 999px; box-shadow: 0 8px 18px rgba(43,23,65,.12); }
 .collection-shirt-carousel-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(43,23,65,.28); cursor: pointer; }
 .collection-shirt-carousel-dots button.active { background: var(--orange); transform: scale(1.25); }
-.collection-presskit-art { position: relative; height: 520px; min-height: 520px; padding: 0; overflow: hidden; background: #f2e4d4 url("/assets/presskit-rise-featured.png") center / contain no-repeat; border: 0; }
+.collection-presskit-art { position: relative; height: 520px; min-height: 520px; padding: 0; overflow: hidden; background: #f2e4d4 url("/assets/presskit-rise-featured.jpg") center / contain no-repeat; border: 0; }
 .collection-presskit-art > .collection-image-trigger { position: absolute; inset: 0; width: 100%; height: 100%; }
 .collection-presskit-art .collection-image-trigger img { width: 100%; height: 100%; object-fit: contain; object-position: center; opacity: 0; }
 .collection-image-lightbox { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 28px; background: rgba(25,14,8,.82); backdrop-filter: blur(10px); }
