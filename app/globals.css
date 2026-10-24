@@ -1594,3 +1594,39 @@ body { background: var(--cream-soft); }
     grid-row: auto !important;
   }
 }
+
+
+/* Mobile checkout: use a single flow so optional fields never overlap or jump columns. */
+@media (max-width: 760px) {
+  .shirt-order {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .shirt-order > * {
+    width: 100%;
+    min-width: 0;
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+  .shirt-order .order-product-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .shirt-order .order-product-options button {
+    min-width: 0;
+    min-height: 112px;
+    padding: 14px 12px;
+  }
+  .shirt-order .form-confirm {
+    min-height: 0;
+  }
+  .shirt-order .order-note {
+    align-items: flex-start;
+  }
+  .shirt-order > .button {
+    justify-self: stretch;
+  }
+}
