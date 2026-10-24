@@ -8,7 +8,7 @@ const items = [
   { id: "lanyard", label: "Cordão", title: "Cordão Rise", text: "Cordão estampado com mosquetão, pensado para acompanhar sua rotina com a identidade do coletivo.", className: "interactive-hotspot-lanyard", images: ["/assets/product-cordao.jpg"], imageAlt: "Mockup do cordão Rise" },
   { id: "stickers", label: "Figurinhas", title: "Cartela de figurinhas", text: "Símbolos do Rise para personalizar cadernos, garrafas e tudo o que acompanha sua caminhada.", className: "interactive-hotspot-stickers", images: ["/assets/product-figurinhas.jpg"], imageAlt: "Cartela de figurinhas Rise" },
   { id: "keychain", label: "Chaveiro", title: "Chaveiro Rise", text: "Chaveiro em formato de sol com acabamento translúcido e a assinatura Coletivo Rise.", className: "interactive-hotspot-wristband", images: ["/assets/product-chaveiro.jpg"], imageAlt: "Chaveiro Rise" },
-  { id: "box", label: "Caixa", title: "Caixa do kit", text: "Escolha a cor da caixa que combina com seu kit: laranja, off-white ou roxo Rise.", className: "interactive-hotspot-box", images: ["/assets/product-caixa.jpg"], imageAlt: "Opções de caixa do kit Rise" },
+  { id: "box", label: "Caixa", title: "Caixa do kit", text: "Escolha a cor da caixa que combina com seu kit: laranja, off-white ou roxo Rise.", className: "interactive-hotspot-box", images: ["/assets/product-caixa-detalhes.png"], imageAlt: "Opções de caixas do kit Rise" },
 ];
 
 export function CollectionInteractive() {
