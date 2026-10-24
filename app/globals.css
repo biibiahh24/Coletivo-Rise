@@ -874,6 +874,8 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .interactive-hotspot-stickers { left: 38%; top: 51%; }
   .interactive-hotspot-wristband { left: 64%; top: 51%; }
   .interactive-hotspot-box { left: 58%; top: 88%; }
+  .interactive-hotspot > span { width: 24px; height: 24px; border-width: 2px; }
+  .interactive-hotspot > span svg { width: 12px; height: 12px; }
   .collection-modal-backdrop { align-items: center; padding: 14px; }
   .collection-modal { width: 100%; max-height: calc(100dvh - 28px); padding: 20px; border-radius: 22px; }
   .collection-modal-gallery { margin: -20px -20px 20px; border-radius: 22px 22px 0 0; }
