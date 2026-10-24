@@ -1327,7 +1327,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .camp-choice-note .camp-choice-label { margin-right: 2px; }
 .camp-choice-note button { padding: 7px 10px; color: var(--purple-dark); background: #fff; border: 1px solid var(--line); border-radius: 999px; font: inherit; letter-spacing: 0; cursor: pointer; }
 .camp-choice-note button.is-selected { color: #fff; background: var(--purple-dark); border-color: var(--purple-dark); }
-.camp-kit-lightbox { width: 100%; height: 190px; margin: 8px 0 14px; background: #f2e4d4; border-radius: 16px; }
+.camp-kit-lightbox { width: 100%; height: auto; aspect-ratio: 3 / 2; margin: 8px 0 14px; background: transparent; border-radius: 16px; }
 .camp-kit-lightbox img { width: 100%; height: 100%; object-fit: contain; border-radius: 16px; }
 .camp-price { display: flex; flex-direction: column; margin: 18px 0; font-size: 2rem; line-height: 1; }
 .camp-price small { margin-bottom: 7px; font-size: .64rem; letter-spacing: .14em; }
