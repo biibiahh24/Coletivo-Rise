@@ -83,6 +83,9 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
           </div>
           <p>© 2026 Coletivo Rise. Feito para uma geração em movimento.</p>
         </div>
+        <Link className="footer-admin-mark" href="/admin" aria-label="Abrir painel administrativo">
+          <img src="/assets/logo-rise.jpg" alt="" />
+        </Link>
       </footer>
     </div>
   );
