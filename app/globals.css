@@ -1559,3 +1559,14 @@ body { background: var(--cream-soft); }
   .shirt-order > .button { grid-column: 1; grid-row: auto; }
   .shirt-order .order-product-options { grid-template-columns: 1fr 1fr; }
 }
+
+
+/* Conditional Acampa shirt color: appears only for model 02. */
+.shirt-order .field-color { grid-column: 1; grid-row: 5; }
+.shirt-order:has(.field-color) > .turnstile-shell { grid-row: 6; }
+.shirt-order:has(.field-color) .form-confirm { grid-row: 6; }
+.shirt-order:has(.field-color) .order-note { grid-row: 7; }
+.shirt-order:has(.field-color) > .button { grid-row: 7; }
+@media (max-width: 760px) {
+  .shirt-order .field-color { grid-column: 1; grid-row: auto; }
+}
