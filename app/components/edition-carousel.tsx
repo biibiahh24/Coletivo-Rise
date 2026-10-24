@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, ShoppingBag, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const slides = [
@@ -29,6 +29,7 @@ const slides = [
 
 export function EditionCarousel() {
   const [active, setActive] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   useEffect(() => {
     const timer = window.setInterval(
@@ -46,16 +47,36 @@ export function EditionCarousel() {
   return (
     <article className="edition-carousel" aria-roledescription="carrossel" aria-label="Camiseta Rise Edição 01">
       <div className="edition-carousel-media" aria-live="polite">
-        {slides.map((slide, index) => (
-          <img
-            className={`${index === active ? "active" : ""} ${slide.fit === "contain" ? "product-contain" : ""}`.trim()}
-            key={slide.src}
-            src={slide.src}
-            alt={index === active ? slide.alt : ""}
-            aria-hidden={index !== active}
-          />
-        ))}
-        <span className="edition-carousel-caption">{slides[active].caption}</span>
+        <div className="edition-main-photo" role="button" tabIndex={0} onClick={() => setLightboxOpen(true)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") setLightboxOpen(true); }} aria-label="Ampliar foto principal">
+          {slides.map((slide, index) => (
+            <img
+              className={`${index === active ? "active" : ""} ${slide.fit === "contain" ? "product-contain" : ""}`.trim()}
+              key={slide.src}
+              src={slide.src}
+              alt={index === active ? slide.alt : ""}
+              aria-hidden={index !== active}
+            />
+          ))}
+          <span className="edition-carousel-caption">{slides[active].caption}</span>
+          <div className="edition-media-controls" aria-label="Controles da galeria">
+            <button type="button" onClick={(event) => { event.stopPropagation(); goTo(active - 1); }} aria-label="Foto anterior"><ArrowLeft /></button>
+            <button type="button" onClick={(event) => { event.stopPropagation(); goTo(active + 1); }} aria-label="Próxima foto"><ArrowRight /></button>
+          </div>
+        </div>
+        <div className="edition-thumbnails" aria-label="Miniaturas da camiseta">
+          {slides.map((slide, index) => (
+            <button
+              type="button"
+              className={index === active ? "active" : ""}
+              key={`thumb-${slide.src}`}
+              onClick={() => setActive(index)}
+              aria-label={`Ver miniatura ${index + 1}`}
+              aria-current={index === active ? "true" : undefined}
+            >
+              <img src={slide.src} alt="" aria-hidden="true" />
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="edition-carousel-copy">
@@ -74,7 +95,7 @@ export function EditionCarousel() {
             <span>{String(active + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
             <button type="button" onClick={() => goTo(active + 1)} aria-label="Próxima foto"><ArrowRight /></button>
           </div>
-          <a href="#pedido-camiseta" className="edition-order-link">Quero a minha <ArrowUpRight /></a>
+          <a href="#pedido-camiseta" className="edition-order-link"><ShoppingBag size={20} /> Quero a minha <ArrowUpRight /></a>
         </div>
 
         <div className="edition-dots" aria-label="Escolher foto">
@@ -90,6 +111,12 @@ export function EditionCarousel() {
           ))}
         </div>
       </div>
+      {lightboxOpen && (
+        <div className="edition-lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" onClick={() => setLightboxOpen(false)}>
+          <button type="button" className="edition-lightbox-close" onClick={() => setLightboxOpen(false)} aria-label="Fechar foto ampliada"><X /></button>
+          <img src={slides[active].src} alt={slides[active].alt} onClick={(event) => event.stopPropagation()} />
+        </div>
+      )}
     </article>
   );
 }

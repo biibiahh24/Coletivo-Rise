@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Camera, Menu, MessageCircle, ShieldCheck, X } from "lucide-react";
+import { ArrowUpRight, Camera, Menu, MessageCircle, ShieldCheck, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const navigation = [
@@ -19,7 +19,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   useEffect(() => setOpen(false), [pathname]);
 
   return (
-    <>
+    <div className="site-frame">
       <header className="site-header">
         <div className="nav-shell">
           <Link href="/" className="brand" aria-label="Coletivo Rise — início">
@@ -36,6 +36,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="header-actions">
+            <Link href="/inscricao" className="header-cta"><span>Inscrição Acampa</span><ArrowUpRight size={16} /></Link>
             {pathname === "/inscricao" && (
               <Link href="/admin" className="header-admin-link" aria-label="Abrir área administrativa">
                 <ShieldCheck /> <span>Admin</span>
@@ -57,6 +58,17 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
+      <div className="global-decoration-layer" aria-hidden="true">
+        <span className="global-decoration global-decoration-top-left" />
+        <span className="global-decoration global-decoration-top-right" />
+        <span className="global-decoration global-decoration-star-left" />
+        <span className="global-decoration global-decoration-star-right" />
+        <span className="global-decoration global-decoration-mid-right" />
+        <span className="global-decoration global-decoration-bottom-left" />
+        <span className="global-decoration global-decoration-bottom-right" />
+        <span className="global-decoration global-decoration-bottom-arc" />
+      </div>
+
       {children}
 
       <footer className="site-footer">
@@ -73,6 +85,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
           <p>© 2026 Coletivo Rise. Feito para uma geração em movimento.</p>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

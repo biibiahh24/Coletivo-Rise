@@ -29,4 +29,3 @@ export default async function InscricaoPage({ searchParams }: { searchParams: Pr
   );
 }
 
-

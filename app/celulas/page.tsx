@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowUpRight, Clock3, HeartHandshake, Home, MapPin, MessageCircle, Sparkles, UsersRound } from "lucide-react";
 import { SectionHero } from "../components/section-hero";
+import { ProductImageLightbox } from "../components/product-image-lightbox";
 import { cellImages } from "./cell-images";
 
 export const metadata: Metadata = {
@@ -43,14 +44,14 @@ export default function CelulasPage() {
         <div className="cell-directory-heading"><span className="eyebrow"><Clock3 size={16} /> Encontros durante a semana</span><h2 id="directory-title">Encontre sua célula.</h2><p>Escolha uma comunidade e fale com o líder para saber os próximos encontros.</p></div>
         <div className="cell-cards">
           {[
-            { name: "Ekballo", image: cellImages.ekballo },
-            { name: "Rede ao Mar", image: cellImages.redeAoMar },
-            { name: "Cachoeirinha", image: "/assets/encontro-rise-03.jpeg" },
-          ].map(({ name, image }) => (
-            <article className="cell-card" key={name}>
-              <div className="cell-card-photo"><img src={image} alt={`Encontro da célula ${name}`} /></div>
+            { name: "Ekballo", phone: "5511971590456", image: cellImages.ekballo },
+            { name: "Rede ao Mar", phone: "5511966106595", image: cellImages.redeAoMar },
+            { name: "Maranata", phone: "5511968295096", image: "/assets/celula-maranata.jpg" },
+          ].map(({ name, phone, image }) => (
+            <article className={`cell-card${name === "Rede ao Mar" ? " cell-card-rede-ao-mar" : ""}`} key={name}>
+              <div className="cell-card-photo"><ProductImageLightbox src={image} alt={`Encontro da célula ${name}`} /></div>
               <h3>{name}</h3>
-              <a href={`https://wa.me/5511968778688?text=${encodeURIComponent(`Olá! Quero falar com o líder da célula ${name}.`)}`} target="_blank" rel="noreferrer" className="button button-orange"><MessageCircle size={16} /> Falar com o líder</a>
+              <a href={`https://wa.me/${phone}?text=${encodeURIComponent(`Olá! Quero falar com o líder da célula ${name}.`)}`} target="_blank" rel="noreferrer" className="button button-orange"><MessageCircle size={16} /> Falar com o líder</a>
             </article>
           ))}
         </div>

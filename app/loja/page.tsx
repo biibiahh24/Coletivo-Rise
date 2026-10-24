@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Check, CreditCard, Heart, PackageCheck, Ruler, Shirt, ShoppingBag, Sparkles, Truck } from "lucide-react";
+import { ArrowUpRight, Check, PackageCheck, Ruler, Shirt, ShoppingBag, Sparkles } from "lucide-react";
 import { EditionCarousel } from "../components/edition-carousel";
 import { ShirtOrder } from "../components/shirt-order";
 import { SectionHero } from "../components/section-hero";
+import { CollectionInteractive } from "../components/collection-interactive";
+import { ProductShirtCarousel } from "../components/product-shirt-carousel";
+import { ProductImageLightbox } from "../components/product-image-lightbox";
 
 export const metadata: Metadata = {
   title: "Loja Rise",
@@ -39,17 +42,11 @@ export default function LojaPage() {
         </div>
       </section>
 
-      <section className="section-shell collection-drop" aria-labelledby="drop-title">
+      <section className="section-shell collection-drop" aria-label="Nova coleção">
         <div className="collection-drop-hero">
-          <div className="collection-drop-art" aria-hidden="true">
-            <img className="collection-drop-shirt" src="/assets/camiseta-rise-hero.png" alt="" />
-            <img className="collection-drop-presskit" src="/assets/presskit-rise.png" alt="" />
-          </div>
+          <CollectionInteractive />
           <div className="collection-drop-copy">
             <span className="eyebrow light"><Sparkles size={16} /> Nova coleção</span>
-            <h2 id="drop-title">Levanta-te e resplandece.</h2>
-            <p>Mais que merch: identidade, propósito e uma geração que escolhe se levantar e resplandecer.</p>
-            <a href="#collection-products" className="button button-light">Conhecer a coleção <ArrowUpRight /></a>
           </div>
           <div className="collection-drop-seal"><Shirt /><span>Disponível em breve</span></div>
         </div>
@@ -63,9 +60,7 @@ export default function LojaPage() {
         </div>
         <div className="collection-products">
           <article className="collection-product-card">
-            <div className="collection-product-art collection-shirt-art">
-              <img src="/assets/camiseta-rise-nova-colecao.png" alt="Camiseta Rise Eu sou a porta com frente, verso e detalhes" />
-            </div>
+            <ProductShirtCarousel />
             <div className="collection-product-content">
               <span className="collection-product-kicker">Somente camiseta</span>
               <h3>Camiseta Rise</h3>
@@ -77,7 +72,10 @@ export default function LojaPage() {
 
           <article className="collection-product-card">
             <div className="collection-product-art collection-presskit-art">
-              <img src="/assets/presskit-rise.png" alt="Presskit Rise com camiseta e acessórios" />
+              <ProductImageLightbox
+                src="/assets/presskit-rise-featured.png"
+                alt="Presskit Rise com camiseta e acessórios"
+              />
             </div>
             <div className="collection-product-content">
               <span className="collection-product-kicker">Presskit Rise</span>
@@ -92,14 +90,11 @@ export default function LojaPage() {
           </article>
         </div>
 
-        <div className="collection-trust" aria-label="Benefícios da compra">
-          <span><Truck size={20} /> Envio seguro</span><span><CreditCard size={20} /> Pagamento seguro</span><span><PackageCheck size={20} /> Embalagem exclusiva</span><span><Heart size={20} /> Apoia o ministério Rise</span>
-        </div>
       </section>
 
       <section className="section-shell product-section" aria-labelledby="products-title">
         <div className="section-heading split-heading">
-          <div><span className="eyebrow"><Shirt size={16} /> Primeira edição</span><h2 id="products-title">Uma peça. Uma mensagem.</h2></div>
+          <div><span className="eyebrow"><Shirt size={16} /> Primeira edição</span><h2 id="products-title">Uma peça. <em>Uma mensagem.</em></h2></div>
           <p>Conheça a Edição 01 em uma apresentação única, com todos os ângulos da camiseta oficial do Rise.</p>
         </div>
         <EditionCarousel />
@@ -128,4 +123,3 @@ export default function LojaPage() {
     </main>
   );
 }
-

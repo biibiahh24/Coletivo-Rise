@@ -188,4 +188,3 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
   );
 }
 
-
