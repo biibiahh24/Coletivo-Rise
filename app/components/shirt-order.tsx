@@ -25,10 +25,10 @@ export function ShirtOrder() {
   const [resetSignal, setResetSignal] = useState(0);
   const idempotencyKey = useRef<string | null>(null);
   const handleToken = useCallback((token: string) => setTurnstileToken(token), []);
+  const colorRequired = product === "presskit" || (product === "shirt" && shirtEdition === "edition-02");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const colorRequired = product === "shirt" && shirtEdition === "edition-02";
     if (!shirtEdition || !size || !pagamento || !turnstileToken || !confirmed || (colorRequired && !color)) return;
     const selectedEdition = shirtEditions.find((item) => item.value === shirtEdition)?.label ?? shirtEditions[0].label;
     const data = new FormData(event.currentTarget);
@@ -125,7 +125,7 @@ export function ShirtOrder() {
           <SelectContent>{["1", "2", "3", "4", "5"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent>
         </Select>
       </label>
-      {product === "shirt" && shirtEdition === "edition-02" && (
+      {colorRequired && (
         <label className="field field-color"><span>Cor *</span>
           <Select value={color} onValueChange={setColor} required>
             <SelectTrigger className="form-select"><SelectValue placeholder="Escolha a cor" /></SelectTrigger>
@@ -145,7 +145,7 @@ export function ShirtOrder() {
         <label htmlFor="pedido-confirmacao">Autorizo o contato da equipe sobre este pedido e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>.</label>
       </div>
       <div className="order-note"><MessageCircle /><span>PIX ou cartão abrem o checkout seguro do Mercado Pago. Dinheiro segue para confirmação pelo WhatsApp.</span></div>
-      <button className="button button-orange" type="submit" disabled={!size || !pagamento || !turnstileToken || !confirmed || (product === "shirt" && shirtEdition === "edition-02" && !color) || sending}>
+      <button className="button button-orange" type="submit" disabled={!size || !pagamento || !turnstileToken || !confirmed || (colorRequired && !color) || sending}>
         {sending ? <><LoaderCircle className="spinner" /> Salvando...</> : <>Registrar e abrir WhatsApp <Send size={18} /></>}
       </button>
     </form>
