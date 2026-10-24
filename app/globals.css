@@ -1570,3 +1570,27 @@ body { background: var(--cream-soft); }
 @media (max-width: 760px) {
   .shirt-order .field-color { grid-column: 1; grid-row: auto; }
 }
+
+
+/* Mobile checkout: restore the natural form order and prevent desktop grid rows from jumping ahead. */
+@media (max-width: 760px) {
+  .shirt-order .field-name,
+  .shirt-order .field-phone,
+  .shirt-order .order-product-picker,
+  .shirt-order .field-model,
+  .shirt-order .field-size,
+  .shirt-order .field-quantity,
+  .shirt-order .field-color,
+  .shirt-order .field-payment,
+  .shirt-order > .turnstile-shell,
+  .shirt-order .form-confirm,
+  .shirt-order .order-note,
+  .shirt-order > .button,
+  .shirt-order:has(.field-color) > .turnstile-shell,
+  .shirt-order:has(.field-color) .form-confirm,
+  .shirt-order:has(.field-color) .order-note,
+  .shirt-order:has(.field-color) > .button {
+    grid-column: 1;
+    grid-row: auto !important;
+  }
+}
