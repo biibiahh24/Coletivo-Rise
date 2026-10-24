@@ -1304,8 +1304,12 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .camp-experience-links a:hover, .camp-experience-links a:focus-visible { outline: 4px solid rgba(255,255,255,.9); background: rgba(255,255,255,.08); }
 @media (max-width: 760px) {
   .camp-experience-picker { width: calc(100% - 28px); margin: 70px auto; border-radius: 18px; }
-  .camp-experience-links { inset: 29.5% 3.5% 2.5%; gap: 1.5%; }
-  .camp-experience-links a { border-radius: 12px; }
+  .camp-experience-picker > img { display: none; }
+  .camp-experience-links { position: static; display: grid; grid-template-columns: 1fr; gap: 16px; padding: 16px; background: var(--orange); }
+  .camp-experience-links a { min-height: 370px; border-radius: 16px; background-image: url("/assets/acampamento-experiencias.png"); background-repeat: no-repeat; background-size: 300% auto; background-position-y: bottom; box-shadow: 0 12px 28px rgba(43,23,65,.16); }
+  .camp-experience-links a:nth-child(1) { background-position-x: left; }
+  .camp-experience-links a:nth-child(2) { background-position-x: center; }
+  .camp-experience-links a:nth-child(3) { background-position-x: right; }
 }
 .cell-directory-grid { margin-bottom: 90px; }
 .cell-directory-grid.cell-directory { display: block; min-height: 0; padding: clamp(32px, 5vw, 58px); }
