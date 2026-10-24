@@ -1272,7 +1272,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .global-decoration-top-right::after { width: 92px; height: 92px; top: 166px; right: 38px; }
   .global-decoration-star-left { left: 4%; top: 57vh; transform: scale(.72); }
   .global-decoration-star-right { right: 4%; top: 34vh; transform: scale(.72); }
-  .global-decoration-mid-right { width: 260px; height: 260px; top: 330px; right: -218px; }
+  .global-decoration-mid-right { display: none; }
   .global-decoration-bottom-left { width: 220px; height: 150px; left: -130px; top: calc(100vh - 105px); }
   .global-decoration-bottom-right { width: 250px; height: 180px; right: -138px; top: calc(100vh - 150px); }
   .global-decoration-bottom-arc { width: 360px; height: 210px; right: -176px; top: calc(100vh - 110px); }
