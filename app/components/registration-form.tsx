@@ -84,6 +84,17 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
       const result = await response.json() as { protocol?: string; error?: string; receiptWarning?: boolean };
       if (!response.ok || !result.protocol) throw new Error(result.error ?? "A inscrição não foi enviada.");
       idempotencyKey.current = null;
+      if ((pagamento === "PIX" || pagamento === "Cartão") && result.protocol) {
+        const checkoutResponse = await fetch("/api/asaas/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ kind: "registration", protocol: result.protocol, pagamento, lote: lote.startsWith("10 primeiras") ? "primeiras" : "proximas", presskit }),
+        });
+        const checkout = await checkoutResponse.json() as { checkoutUrl?: string; error?: string };
+        if (!checkoutResponse.ok || !checkout.checkoutUrl) throw new Error(checkout.error ?? "A inscrição foi salva, mas não foi possível abrir o pagamento.");
+        window.location.assign(checkout.checkoutUrl);
+        return;
+      }
       const whatsappMessage = [
         "Olá, equipe Rise! Minha inscrição para o Acampamento 2027 foi registrada no site.",
         `Protocolo: ${result.protocol}`,
@@ -178,7 +189,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         <TurnstileWidget action="registration" onToken={handleToken} resetSignal={resetSignal} />
 
         <div className="form-submit-row">
-          <div><CircleDollarSign /><span>Após salvar sua inscrição com segurança, abriremos o WhatsApp com a confirmação pronta.</span></div>
+          <div><CircleDollarSign /><span>PIX ou cartão abrem o checkout seguro do Asaas. Outras formas seguem para confirmação pelo WhatsApp.</span></div>
           <button className="button button-orange" type="submit" disabled={sending || !turnstileToken}>
             {sending ? <><LoaderCircle className="spinner" /> Enviando...</> : <>Enviar inscrição <Send size={18} /></>}
           </button>

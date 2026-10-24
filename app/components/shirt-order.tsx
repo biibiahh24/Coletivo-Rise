@@ -10,6 +10,7 @@ import { TurnstileWidget } from "./turnstile-widget";
 
 export function ShirtOrder() {
   const edition = "Camiseta Rise — Edição 01";
+  const [product, setProduct] = useState<"shirt" | "presskit">("shirt");
   const [size, setSize] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [pagamento, setPagamento] = useState("");
@@ -38,7 +39,7 @@ export function ShirtOrder() {
           privacyVersion: "2026-10",
           nome: data.get("nome"),
           telefone: data.get("telefone"),
-          edition,
+          edition: product === "presskit" ? "Presskit Rise" : edition,
           size,
           quantity,
           pagamento,
@@ -47,11 +48,22 @@ export function ShirtOrder() {
       const result = await response.json() as { protocol?: string; error?: string };
       if (!response.ok || !result.protocol) throw new Error(result.error ?? "O pedido não foi registrado.");
       idempotencyKey.current = null;
+      if ((pagamento === "PIX" || pagamento === "Cartão") && result.protocol) {
+        const checkoutResponse = await fetch("/api/asaas/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ kind: "shirt", protocol: result.protocol, pagamento, product, quantity }),
+        });
+        const checkout = await checkoutResponse.json() as { checkoutUrl?: string; error?: string };
+        if (!checkoutResponse.ok || !checkout.checkoutUrl) throw new Error(checkout.error ?? "O pedido foi salvo, mas não foi possível abrir o pagamento.");
+        window.location.assign(checkout.checkoutUrl);
+        return;
+      }
       const message = [
         "Olá, equipe Rise! Meu pedido de camiseta foi registrado no site.",
         `Protocolo: ${result.protocol}`,
         `Nome: ${String(data.get("nome") ?? "")}`,
-        `Modelo: ${edition}`,
+        `Modelo: ${product === "presskit" ? "Presskit Rise" : edition}`,
         `Tamanho: ${size}`,
         `Quantidade: ${quantity}`,
         `Pagamento: ${pagamento}`,
@@ -72,7 +84,13 @@ export function ShirtOrder() {
       <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
       <label className="field"><span>Seu nome *</span><Input name="nome" required placeholder="Como podemos te chamar?" /></label>
       <label className="field"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" autoComplete="tel" required placeholder="(11) 99999-9999" /></label>
-      <label className="field"><span>Camiseta</span><Input value={edition} readOnly aria-readonly="true" /></label>
+      <label className="field"><span>Produto *</span>
+        <Select value={product} onValueChange={(value) => setProduct(value as "shirt" | "presskit")} required>
+          <SelectTrigger className="form-select"><SelectValue /></SelectTrigger>
+          <SelectContent><SelectItem value="shirt">Camiseta Rise — R$ 79,90</SelectItem><SelectItem value="presskit">Presskit Rise — R$ 119,90</SelectItem></SelectContent>
+        </Select>
+      </label>
+      <label className="field"><span>Camiseta</span><Input value={product === "presskit" ? "Presskit Rise" : edition} readOnly aria-readonly="true" /></label>
       <label className="field"><span>Tamanho *</span>
         <Select value={size} onValueChange={setSize} required>
           <SelectTrigger className="form-select"><SelectValue placeholder="Escolha o tamanho" /></SelectTrigger>
@@ -96,7 +114,7 @@ export function ShirtOrder() {
         <Checkbox id="pedido-confirmacao" checked={confirmed} onCheckedChange={(value) => setConfirmed(Boolean(value))} />
         <label htmlFor="pedido-confirmacao">Autorizo o contato da equipe sobre este pedido e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>.</label>
       </div>
-      <div className="order-note"><MessageCircle /><span>O WhatsApp abrirá com o pedido organizado. Você confere e toca em enviar.</span></div>
+      <div className="order-note"><MessageCircle /><span>PIX ou cartão abrem o checkout seguro do Asaas. Dinheiro segue para confirmação pelo WhatsApp.</span></div>
       <button className="button button-orange" type="submit" disabled={!size || !pagamento || !turnstileToken || !confirmed || sending}>
         {sending ? <><LoaderCircle className="spinner" /> Salvando...</> : <>Registrar e abrir WhatsApp <Send size={18} /></>}
       </button>
