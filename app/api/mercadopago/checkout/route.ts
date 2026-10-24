@@ -28,8 +28,8 @@ export async function POST(request: Request) {
     : [{ id: data.product === "presskit" ? "presskit-rise" : "camiseta-rise-edicao-01", title: data.product === "presskit" ? "Presskit Rise" : "Camiseta Rise — Edição 01", description: data.product === "presskit" ? "Caixa completa com camiseta e acessórios" : "Camiseta oficial da coleção Rise", quantity: data.quantity ?? 1, unit_price: data.product === "presskit" ? 119.9 : 79.9, currency_id: "BRL" }];
   const origin = new URL(request.url).origin;
   const paymentMethods = data.pagamento === "PIX"
-    ? { default_payment_method_id: "pix", excluded_payment_types: [{ id: "credit_card" }, { id: "debit_card" }, { id: "ticket" }, { id: "atm" }] }
-    : { default_payment_method_id: "credit_card", excluded_payment_types: [{ id: "bank_transfer" }, { id: "ticket" }, { id: "atm" }] };
+    ? { excluded_payment_types: [{ id: "credit_card" }, { id: "debit_card" }, { id: "ticket" }, { id: "atm" }] }
+    : { excluded_payment_types: [{ id: "bank_transfer" }, { id: "ticket" }, { id: "atm" }] };
   const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },

@@ -107,7 +107,8 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         `Presskit: ${presskit}`,
         result.receiptWarning ? "O comprovante não foi anexado; vou enviá-lo por aqui." : "Gostaria de confirmar os próximos passos."
       ].join("\n");
-      window.location.assign(`https://wa.me/5511968778688?text=${encodeURIComponent(whatsappMessage)}`);
+      const whatsappNumber = pagamento === "Dinheiro" ? "5511971590456" : "5511968778688";
+      window.location.assign(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não conseguimos enviar agora. Tente novamente ou fale com a equipe pelo WhatsApp.");
       setResetSignal((value) => value + 1);
@@ -167,7 +168,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
             <label className="field"><span>Forma de pagamento *</span>
               <Select value={pagamento} onValueChange={setPagamento} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
-                <SelectContent>{["PIX", "Cartão", "Dinheiro", "Entrada + Parcelamento"].map((method) => <SelectItem value={method} key={method}>{method}</SelectItem>)}</SelectContent>
+                <SelectContent>{["PIX", "Cartão", "Dinheiro"].map((method) => <SelectItem value={method} key={method}>{method}</SelectItem>)}</SelectContent>
               </Select>
             </label>
             <label className="field"><span>Adicionar presskit? (+ R$ 60,00) *</span>

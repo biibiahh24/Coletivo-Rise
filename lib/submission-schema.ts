@@ -28,7 +28,7 @@ export const registrationSubmission = z.object({
   restricao: cleanText(300),
   participou: z.enum(["Sim", "Não"]),
   camiseta: z.enum(["PP", "P", "M", "G", "GG", "XG"]),
-  pagamento: z.enum(["PIX", "Cartão", "Dinheiro", "Entrada + Parcelamento"]),
+  pagamento: z.enum(["PIX", "Cartão", "Dinheiro"]),
   presskit: z.enum(["Sim", "Não"]),
   comprovanteBase64: z.string().max(7_100_000).default(""),
   // Browsers may report an empty or vendor-specific MIME type when no file is selected.

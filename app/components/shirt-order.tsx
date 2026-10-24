@@ -69,7 +69,8 @@ export function ShirtOrder() {
         `Pagamento: ${pagamento}`,
         "Podem me confirmar a disponibilidade e o pagamento?"
       ].join("\n");
-      window.open(`https://wa.me/5511968778688?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+      const whatsappNumber = pagamento === "Dinheiro" ? "5511971590456" : "5511968778688";
+      window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não conseguimos registrar o pedido agora.");
       setResetSignal((value) => value + 1);
