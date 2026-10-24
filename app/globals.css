@@ -1318,10 +1318,12 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .camp-card-visual:hover, .camp-card-visual:focus-visible { outline: 3px solid var(--orange-deep); }
 .camp-price-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .camp-shirt-pair { display: flex; height: 180px; margin: 8px 0 14px; overflow: hidden; background: #efe1d2; border-radius: 16px; }
-.camp-shirt-pair img { width: 50%; min-width: 0; object-fit: cover; }
+.camp-shirt-pair .camp-shirt-lightbox { width: 50%; height: 100%; min-width: 0; }
+.camp-shirt-pair .camp-shirt-lightbox img { width: 100%; height: 100%; object-fit: cover; }
 .camp-choice-note { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; color: #725b4c; font-size: .65rem; font-weight: 900; letter-spacing: .08em; }
 .camp-choice-note span { padding: 7px 10px; color: var(--purple-dark); background: #fff; border: 1px solid var(--line); border-radius: 999px; letter-spacing: 0; }
-.camp-kit-image { width: 100%; height: 190px; margin: 8px 0 14px; object-fit: contain; background: #f2e4d4; border-radius: 16px; }
+.camp-kit-lightbox { width: 100%; height: 190px; margin: 8px 0 14px; background: #f2e4d4; border-radius: 16px; }
+.camp-kit-lightbox img { width: 100%; height: 100%; object-fit: contain; border-radius: 16px; }
 .camp-price { display: flex; flex-direction: column; margin: 18px 0; font-size: 2rem; line-height: 1; }
 .camp-price small { margin-bottom: 7px; font-size: .64rem; letter-spacing: .14em; }
 .camp-experience-button { display: flex; align-items: center; justify-content: center; min-height: 52px; margin-top: auto; padding: 0 16px; color: #fff; background: var(--purple-dark); border-radius: 999px; font-weight: 900; text-align: center; text-decoration: none; transition: background .2s ease, transform .2s ease; }

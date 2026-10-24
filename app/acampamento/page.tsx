@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BookOpen, CalendarDays, Camera, Flame, Heart, MapPin, Music2, Sparkles, UsersRound } from "lucide-react";
 import { CampMemoryGallery } from "../components/camp-memory-gallery";
+import { ProductImageLightbox } from "../components/product-image-lightbox";
 import { SectionHero } from "../components/section-hero";
 
 export const metadata: Metadata = {
@@ -89,9 +90,7 @@ export default function AcampamentoPage() {
             <div className="camp-experience-card-top"><span>01</span><strong>ESSENCIAL</strong></div>
             <h3>Só o <em>ingresso</em></h3>
             <p>Ingresso para o acampamento.</p>
-            <Link className="camp-card-visual camp-ticket-link" href="/inscricao?kit=1" aria-label="Escolher somente o ingresso">
-              <div className="camp-ticket" aria-hidden="true"><b>✦ COLETIVO<br />RISE</b><span>VIVA O<br />CAMP 2027</span></div>
-            </Link>
+            <div className="camp-ticket" aria-hidden="true"><b>✦ COLETIVO<br />RISE</b><span>VIVA O<br />CAMP 2027</span></div>
             <div className="camp-price-pair">
               <strong className="camp-price"><small>10 PRIMEIRAS VAGAS</small>R$ 400,00</strong>
               <strong className="camp-price"><small>PRÓXIMAS VAGAS</small>R$ 450,00</strong>
@@ -102,9 +101,10 @@ export default function AcampamentoPage() {
             <div className="camp-experience-card-top"><span>02</span><strong>COM CAMISETA</strong></div>
             <h3>Ingresso + <em>camiseta Rise</em></h3>
             <p>Ingresso para o acampamento e camiseta oversized.</p>
-            <Link className="camp-card-visual" href="/inscricao?kit=2" aria-label="Escolher ingresso com camiseta">
-              <div className="camp-shirt-pair"><img src="/assets/product-camiseta-branca.jpg" alt="Camiseta Rise off-white" /><img src="/assets/product-camiseta-roxa.jpg" alt="Camiseta Rise roxa" /></div>
-            </Link>
+            <div className="camp-shirt-pair">
+              <ProductImageLightbox className="camp-shirt-lightbox" src="/assets/product-camiseta-branca.jpg" alt="Camiseta Rise off-white" />
+              <ProductImageLightbox className="camp-shirt-lightbox" src="/assets/product-camiseta-roxa.jpg" alt="Camiseta Rise roxa" />
+            </div>
             <div className="camp-choice-note">ESCOLHA A COR <span>Off-white</span><span>Roxa</span></div>
             <strong className="camp-price"><small>PREÇO</small>EM BREVE</strong>
             <Link className="camp-experience-button" href="/inscricao?kit=2">Quero ingresso + camiseta</Link>
@@ -113,9 +113,7 @@ export default function AcampamentoPage() {
             <div className="camp-experience-card-top"><span>03</span><strong>KIT COMPLETO</strong></div>
             <h3>Ingresso + <em>kit completo Rise</em></h3>
             <p>Ingresso e kit completo com camiseta, cordão, chaveiro, pulseira, adesivos e caixa personalizada.</p>
-            <Link className="camp-card-visual" href="/inscricao?kit=3" aria-label="Escolher kit completo Rise">
-              <img className="camp-kit-image" src="/assets/presskit-rise-featured.jpg" alt="Kit completo Rise" />
-            </Link>
+            <ProductImageLightbox className="camp-kit-lightbox" src="/assets/presskit-rise-featured.jpg" alt="Kit completo Rise" />
             <strong className="camp-price"><small>PREÇO</small>EM BREVE</strong>
             <Link className="camp-experience-button" href="/inscricao?kit=3">Quero o kit completo</Link>
           </article>
