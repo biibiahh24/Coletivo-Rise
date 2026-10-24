@@ -764,6 +764,8 @@ body:has(.collection-modal) .site-header,
 body:has(.collection-modal) .global-decoration-layer { display: none; }
 body:has(.collection-modal) .store-intro-visual > span,
 body:has(.collection-modal) .collection-drop-copy { visibility: hidden; }
+body:has(.collection-modal) .collection-feature,
+body:has(.collection-modal) .collection-detail { visibility: hidden; }
 @keyframes collection-modal-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes collection-modal-rise { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .collection-hotspots { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
