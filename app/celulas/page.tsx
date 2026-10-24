@@ -46,7 +46,7 @@ export default function CelulasPage() {
           {[
             { name: "Ekballo", phone: "5511971590456", image: cellImages.ekballo },
             { name: "Rede ao Mar", phone: "5511966106595", image: cellImages.redeAoMar },
-            { name: "Maranata", phone: "5511968295096", image: "/assets/celula-maranata.jpg" },
+            { name: "Maranata", phone: "5511968295096", image: "/assets/celula-maranata-fixed.jpg" },
           ].map(({ name, phone, image }) => (
             <article className={`cell-card${name === "Rede ao Mar" ? " cell-card-rede-ao-mar" : ""}`} key={name}>
               <div className="cell-card-photo"><ProductImageLightbox src={image} alt={`Encontro da célula ${name}`} /></div>
