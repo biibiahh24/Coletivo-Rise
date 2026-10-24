@@ -18,11 +18,12 @@ function fileToBase64(file: File) {
   });
 }
 
-export function RegistrationForm() {
+export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { initialLote?: string; initialPresskit?: string }) {
   const [participou, setParticipou] = useState("");
   const [camiseta, setCamiseta] = useState("");
+  const [lote, setLote] = useState(initialLote);
   const [pagamento, setPagamento] = useState("");
-  const [presskit, setPresskit] = useState("");
+  const [presskit, setPresskit] = useState(initialPresskit);
   const [confirmed, setConfirmed] = useState(false);
   const [sending, setSending] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -32,7 +33,7 @@ export function RegistrationForm() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!participou || !camiseta || !pagamento || !presskit || !confirmed || !turnstileToken) {
+    if (!participou || !camiseta || !lote || !pagamento || !presskit || !confirmed || !turnstileToken) {
       toast.error("Preencha as seleções e confirme as informações para continuar.");
       return;
     }
@@ -72,7 +73,7 @@ export function RegistrationForm() {
         comprovanteBase64,
         comprovanteTipo: file instanceof File ? file.type : "",
         comprovanteNome: file instanceof File ? file.name : "",
-        obs: text("obs"),
+        obs: `${lote ? `Lote: ${lote}. ` : ""}${text("obs")}`,
       };
 
       const response = await fetch("/api/submissions", {
@@ -90,6 +91,7 @@ export function RegistrationForm() {
         `Idade: ${String(data.idade ?? "")}`,
         `Igreja: ${String(data.igreja ?? "")}`,
         `Camiseta: ${camiseta}`,
+        `Lote: ${lote}`,
         `Pagamento: ${pagamento}`,
         `Presskit: ${presskit}`,
         result.receiptWarning ? "O comprovante não foi anexado; vou enviá-lo por aqui." : "Gostaria de confirmar os próximos passos."
@@ -145,6 +147,12 @@ export function RegistrationForm() {
                 <SelectContent>{["PP", "P", "M", "G", "GG", "XG"].map((size) => <SelectItem value={size} key={size}>{size}</SelectItem>)}</SelectContent>
               </Select>
             </label>
+            <label className="field"><span>Lote da inscrição *</span>
+              <Select value={lote} onValueChange={setLote} required>
+                <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar lote" /></SelectTrigger>
+                <SelectContent><SelectItem value="10 primeiras vagas — R$ 400,00">10 primeiras vagas — R$ 400,00</SelectItem><SelectItem value="Próximas vagas — R$ 450,00">Próximas vagas — R$ 450,00</SelectItem></SelectContent>
+              </Select>
+            </label>
             <label className="field"><span>Forma de pagamento *</span>
               <Select value={pagamento} onValueChange={setPagamento} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
@@ -179,4 +187,5 @@ export function RegistrationForm() {
     </>
   );
 }
+
 

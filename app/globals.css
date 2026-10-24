@@ -1036,7 +1036,8 @@ h1, h2, h3 { overflow-wrap: break-word; }
 }
 
 .final-cta-pricing { display: grid; grid-template-columns: repeat(3, minmax(130px, 1fr)); gap: 10px; margin-top: 22px; }
-.final-cta-pricing p { display: grid; gap: 3px; margin: 0; padding: 12px 14px; border: 1px solid rgba(255,255,255,.28); border-radius: 14px; background: rgba(255,255,255,.1); }
+.final-cta-price-option { display: grid; gap: 3px; margin: 0; padding: 12px 14px; border: 1px solid rgba(255,255,255,.28); border-radius: 14px; color: inherit; background: rgba(255,255,255,.1); text-decoration: none; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+.final-cta-price-option:hover, .final-cta-price-option:focus-visible { color: inherit; background: rgba(255,255,255,.18); border-color: white; transform: translateY(-2px); }
 .final-cta-pricing strong { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
 .final-cta-pricing span { font-size: 1.25rem; font-weight: 900; }
 @media (max-width: 760px) { .final-cta-pricing { grid-template-columns: 1fr; width: 100%; } }

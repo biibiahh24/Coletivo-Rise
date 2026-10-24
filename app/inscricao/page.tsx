@@ -7,7 +7,10 @@ export const metadata: Metadata = {
   description: "Faça sua inscrição para o Acampamento Rise 2027.",
 };
 
-export default function InscricaoPage() {
+export default async function InscricaoPage({ searchParams }: { searchParams: Promise<{ lote?: string; presskit?: string }> }) {
+  const params = await searchParams;
+  const initialLote = params.lote === "proximas" ? "Próximas vagas — R$ 450,00" : params.lote === "primeiras" ? "10 primeiras vagas — R$ 400,00" : "";
+  const initialPresskit = params.presskit === "Sim" ? "Sim" : "";
   return (
     <main className="form-page">
       <section className="form-hero">
@@ -20,9 +23,10 @@ export default function InscricaoPage() {
       </section>
       <section className="section-shell form-shell">
         <div className="form-intro"><div><span className="eyebrow">Formulário</span><h2>Conte um pouco sobre você.</h2></div><p><strong>1º lote:</strong> R$ 400,00 para as 10 primeiras vagas.<br /><strong>Próximas vagas:</strong> R$ 450,00.<br /><strong>Presskit opcional:</strong> + R$ 60,00.</p></div>
-        <RegistrationForm />
+        <RegistrationForm initialLote={initialLote} initialPresskit={initialPresskit} />
       </section>
     </main>
   );
 }
+
 

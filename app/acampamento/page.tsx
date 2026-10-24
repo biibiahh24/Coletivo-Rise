@@ -85,9 +85,9 @@ export default function AcampamentoPage() {
           <h2><span>Garanta sua vaga</span><span>no <strong>Acampamento</strong></span><em>Rise.</em></h2>
           <p className="final-cta-lead">Viva propósito. Construa amizades. Experiências que marcam para sempre.</p>
           <div className="final-cta-pricing" aria-label="Valores da inscrição">
-            <p><strong>10 primeiras vagas</strong><span>R$ 400,00</span></p>
-            <p><strong>Próximas vagas</strong><span>R$ 450,00</span></p>
-            <p><strong>Presskit opcional</strong><span>+ R$ 60,00</span></p>
+            <Link href="/inscricao?lote=primeiras" className="final-cta-price-option"><strong>10 primeiras vagas</strong><span>R$ 400,00</span></Link>
+            <Link href="/inscricao?lote=proximas" className="final-cta-price-option"><strong>Próximas vagas</strong><span>R$ 450,00</span></Link>
+            <Link href="/inscricao?presskit=Sim" className="final-cta-price-option"><strong>Presskit opcional</strong><span>+ R$ 60,00</span></Link>
           </div>
         </div>
         <div className="final-cta-visual">
