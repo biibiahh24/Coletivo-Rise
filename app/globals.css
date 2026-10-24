@@ -1309,10 +1309,6 @@ body:has(.edition-lightbox) { overflow: hidden; }
   .camp-experience-links { position: static; display: grid; grid-template-columns: 1fr; gap: 16px; padding: 16px; background: var(--orange); }
   .camp-experience-links a { min-height: 0; position: relative; border-radius: 16px; background: transparent; box-shadow: 0 12px 28px rgba(43,23,65,.16); transform: none !important; touch-action: manipulation; -webkit-tap-highlight-color: transparent; overflow: hidden; }
   .camp-experience-links a img { width: 100%; height: auto; display: block; pointer-events: none; transform: none !important; }
-  .camp-experience-links a:nth-child(2)::before,
-  .camp-experience-links a:nth-child(3)::before { content: ""; position: absolute; z-index: 1; top: 0; height: 9%; background: #fffaf4; pointer-events: none; }
-  .camp-experience-links a:nth-child(2)::before { left: 28%; width: 45%; }
-  .camp-experience-links a:nth-child(3)::before { left: 20%; width: 58%; }
 }
 .cell-directory-grid { margin-bottom: 90px; }
 .cell-directory-grid.cell-directory { display: block; min-height: 0; padding: clamp(32px, 5vw, 58px); }
