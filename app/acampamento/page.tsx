@@ -90,7 +90,7 @@ export default function AcampamentoPage() {
             <div className="camp-experience-card-top"><span>01</span><strong>ESSENCIAL</strong></div>
             <h3>Só o <em>ingresso</em></h3>
             <p>Ingresso para o acampamento.</p>
-            <div className="camp-ticket" aria-hidden="true"><b>✦ COLETIVO<br />RISE</b><span>VIVA O<br />CAMP 2027</span></div>
+            <ProductImageLightbox className="camp-ticket-lightbox" src="/assets/camp-ingresso-rise.png" alt="Ingresso Coletivo Rise Camp 2027" />
             <div className="camp-price-pair">
               <strong className="camp-price"><small>10 PRIMEIRAS VAGAS</small>R$ 400,00</strong>
               <strong className="camp-price"><small>PRÓXIMAS VAGAS</small>R$ 450,00</strong>
