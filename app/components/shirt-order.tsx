@@ -93,7 +93,7 @@ export function ShirtOrder() {
       <label className="field"><span>Produto *</span>
         <Select value={product} onValueChange={(value) => setProduct(value as "shirt" | "presskit")} required>
           <SelectTrigger className="form-select"><SelectValue /></SelectTrigger>
-          <SelectContent><SelectItem value="shirt">Camiseta Rise — EM BREVE</SelectItem><SelectItem value="presskit">Presskit Rise — EM BREVE</SelectItem></SelectContent>
+          <SelectContent><SelectItem value="shirt">Só camiseta — EM BREVE</SelectItem><SelectItem value="presskit">Só presskit — EM BREVE</SelectItem></SelectContent>
         </Select>
       </label>
       <label className="field"><span>Modelo</span>
