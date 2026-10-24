@@ -1437,5 +1437,14 @@ body { background: var(--cream-soft); }
 .eyebrow { color: var(--orange-deep); }
 .experience-card.card-1, .moments-section, .inner-hero, .cell-preview { background: var(--purple-dark); }
 .experience-card.card-3, .worship-heading blockquote, .final-cta { background: var(--orange); }
+
+@media (max-width: 760px) {
+  .edition-lightbox,
+  .collection-image-lightbox { align-items: center; padding: 74px 14px 24px; }
+  .edition-lightbox img,
+  .collection-image-lightbox img { max-width: 86vw !important; max-height: 68dvh !important; border-width: 8px !important; border-radius: 18px; }
+  .edition-lightbox-close,
+  .collection-image-lightbox-close { top: 16px; right: 16px; width: 44px; height: 44px; }
+}
 .experience-card.card-2 { background: var(--lilac-soft); }
 .site-footer { background: var(--purple-dark); }
