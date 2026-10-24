@@ -24,7 +24,6 @@ export default function AcampamentoPage() {
         description="O próximo Acampamento Rise já está no horizonte: descanso, adoração, ensino e comunhão em uma imersão criada para encontros reais com Deus."
         icon={Flame}
       >
-        <Link href="/inscricao" className="button button-light">Inscrição Acampa 2027 <ArrowUpRight size={18} /></Link>
         <a href="#programacao" className="button button-ghost">Ver programação</a>
       </SectionHero>
 
