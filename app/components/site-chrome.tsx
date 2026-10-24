@@ -36,7 +36,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="header-actions">
-            <Link href="/inscricao" className="header-cta">Inscrição <span>Acampa</span></Link>
             {pathname === "/inscricao" && (
               <Link href="/admin" className="header-admin-link" aria-label="Abrir área administrativa">
                 <ShieldCheck /> <span>Admin</span>
@@ -53,7 +52,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
             {navigation.map((item) => (
               <Link key={item.href} href={item.href} className={pathname === item.href ? "active" : ""}>{item.label}</Link>
             ))}
-            <Link href="/inscricao" className="mobile-cta">Inscrição Acampa</Link>
             {pathname === "/inscricao" && <Link href="/admin" className="mobile-admin-link"><ShieldCheck /> Área administrativa</Link>}
           </nav>
         )}
