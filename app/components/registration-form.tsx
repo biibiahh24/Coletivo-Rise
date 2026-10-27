@@ -207,7 +207,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         <div className="form-submit-row">
           <div><CircleDollarSign /><span>Escolha pagar agora com PIX ou cartão, ou envie a inscrição para combinar o pagamento depois pelo WhatsApp.</span></div>
           <div className="form-submit-actions">
-            <button className="button button-outline-dark" name="submitIntent" value="pay-later" type="submit" disabled={sending || !turnstileToken}>
+            <button className="button button-outline-orange" name="submitIntent" value="pay-later" type="submit" disabled={sending || !turnstileToken}>
               {sending ? <><LoaderCircle className="spinner" /> Enviando...</> : <>Enviar inscrição e pagar depois <Send size={18} /></>}
             </button>
             <button className="button button-orange" name="submitIntent" value="pay-now" type="submit" disabled={sending || !turnstileToken}>

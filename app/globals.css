@@ -292,6 +292,8 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .button-orange { background: var(--orange); color: white; box-shadow: 0 12px 30px rgba(217,88,14,.22); }
 .button-orange:hover { background: var(--orange-deep); }
 .button-outline-dark { border-color: var(--line); color: var(--ink); background: transparent; }
+.button-outline-orange { border-color: var(--orange); color: var(--orange-deep); background: var(--surface); }
+.button-outline-orange:hover, .button-outline-orange:focus-visible { color: white; background: var(--orange); border-color: var(--orange); }
 .button:disabled { opacity: .62; pointer-events: none; }
 
 .hero-rotator {
