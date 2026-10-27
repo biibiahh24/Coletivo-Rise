@@ -34,8 +34,14 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
+    const intent = submitter?.value === "pay-now" ? "pay-now" : "pay-later";
     if (!participou || !camiseta || !corCamiseta || !lote || !pagamento || !presskit || !confirmed || !turnstileToken) {
       toast.error("Preencha as seleções e confirme as informações para continuar.");
+      return;
+    }
+    if (intent === "pay-now" && pagamento !== "PIX" && pagamento !== "Cartão") {
+      toast.error("Para pagar agora, selecione PIX ou Cartão em forma de pagamento.");
       return;
     }
 
@@ -86,7 +92,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
       const result = await response.json() as { protocol?: string; error?: string; receiptWarning?: boolean };
       if (!response.ok || !result.protocol) throw new Error(result.error ?? "A inscrição não foi enviada.");
       idempotencyKey.current = null;
-      if ((pagamento === "PIX" || pagamento === "Cartão") && result.protocol) {
+      if (intent === "pay-now" && result.protocol) {
         const checkoutResponse = await fetch("/api/mercadopago/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -98,7 +104,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         return;
       }
       const whatsappMessage = [
-        "Olá, equipe Rise! Minha inscrição para o Acampamento 2027 foi registrada no site.",
+        "Olá, equipe Rise! Minha inscrição para o Acampamento 2027 foi registrada no site e quero pagar depois.",
         `Protocolo: ${result.protocol}`,
         `Nome: ${String(data.nome ?? "")}`,
         `Idade: ${String(data.idade ?? "")}`,
@@ -108,7 +114,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         `Lote: ${lote}`,
         `Pagamento: ${pagamento}`,
         `Presskit: ${presskit}`,
-        result.receiptWarning ? "O comprovante não foi anexado; vou enviá-lo por aqui." : "Gostaria de confirmar os próximos passos."
+        result.receiptWarning ? "O comprovante não foi anexado; vou enviá-lo por aqui." : "Gostaria de confirmar os próximos passos e combinar o pagamento depois."
       ].join("\n");
       const whatsappNumber = pagamento === "Dinheiro" ? "5511971590456" : "5511968778688";
       window.location.assign(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`);
@@ -199,10 +205,15 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         <TurnstileWidget action="registration" onToken={handleToken} resetSignal={resetSignal} />
 
         <div className="form-submit-row">
-          <div><CircleDollarSign /><span>PIX ou cartão abrem o checkout seguro do Mercado Pago. Outras formas seguem para confirmação pelo WhatsApp.</span></div>
-          <button className="button button-orange" type="submit" disabled={sending || !turnstileToken}>
-            {sending ? <><LoaderCircle className="spinner" /> Enviando...</> : <>Enviar inscrição <Send size={18} /></>}
-          </button>
+          <div><CircleDollarSign /><span>Escolha pagar agora com PIX ou cartão, ou envie a inscrição para combinar o pagamento depois pelo WhatsApp.</span></div>
+          <div className="form-submit-actions">
+            <button className="button button-outline-dark" name="submitIntent" value="pay-later" type="submit" disabled={sending || !turnstileToken}>
+              {sending ? <><LoaderCircle className="spinner" /> Enviando...</> : <>Enviar inscrição e pagar depois <Send size={18} /></>}
+            </button>
+            <button className="button button-orange" name="submitIntent" value="pay-now" type="submit" disabled={sending || !turnstileToken}>
+              {sending ? <><LoaderCircle className="spinner" /> Abrindo...</> : <>Pagar agora <CircleDollarSign size={18} /></>}
+            </button>
+          </div>
         </div>
       </form>
     </>
