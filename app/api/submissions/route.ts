@@ -2,6 +2,7 @@ import { env } from "@/lib/runtime-env";
 import { submissionSchema, type Submission } from "@/lib/submission-schema";
 import { isSupabaseAdminConfigured } from "@/lib/supabase/admin";
 import { persistSupabaseSubmission } from "@/lib/supabase-submissions";
+import { notifyTelegram } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
 
@@ -121,7 +122,12 @@ export async function POST(request: Request) {
     } catch { return reply({ error: "A verificação de segurança está indisponível. Tente novamente." }, 503); }
     try {
       const result = await persistSupabaseSubmission(parsed.data, request);
-      return reply({ ok: true, ...result });
+      let telegramWarning = false;
+      if (!result.duplicate) {
+        const telegram = await notifyTelegram(parsed.data, result.protocol);
+        telegramWarning = !telegram.ok && telegram.error !== "not_configured";
+      }
+      return reply({ ok: true, ...result, telegramWarning });
     } catch (error) {
       const code = error instanceof Error ? error.message : "";
       if (code === "rate_limited") return reply({ error: "Muitas tentativas. Aguarde alguns minutos e tente novamente." }, 429);
@@ -263,6 +269,8 @@ export async function POST(request: Request) {
   }
 
   await syncOperationalSheet(runtime, submission, protocol);
-  return reply({ ok: true, protocol, receiptWarning });
+  const telegram = await notifyTelegram(submission, protocol);
+  const telegramWarning = !telegram.ok && telegram.error !== "not_configured";
+  return reply({ ok: true, protocol, receiptWarning, telegramWarning });
 }
 

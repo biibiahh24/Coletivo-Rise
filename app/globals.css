@@ -995,6 +995,10 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .form-submit-row > div svg { flex: none; color: var(--orange); }
 .form-submit-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; max-width: none !important; }
 .form-submit-actions .button { min-height: 48px; }
+.submission-success { display: flex; align-items: flex-start; gap: 12px; margin: 0 auto 18px; max-width: 760px; padding: 16px 18px; border: 1px solid #86efac; border-radius: 16px; color: #14532d; background: #f0fdf4; }
+.submission-success svg { flex: 0 0 auto; margin-top: 1px; }
+.submission-success div { display: grid; gap: 3px; }
+.submission-success span { color: #166534; }
 .privacy-page { min-height: 70vh; background: var(--cream-soft); }
 .privacy-shell { padding-top: 90px; padding-bottom: 110px; }
 .privacy-shell > h1 { max-width: 860px; margin: 18px 0; font-size: clamp(3rem, 7vw, 6.4rem); text-transform: uppercase; }

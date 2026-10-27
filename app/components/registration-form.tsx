@@ -26,6 +26,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
   const [pagamento, setPagamento] = useState("");
   const [presskit, setPresskit] = useState(initialPresskit);
   const [confirmed, setConfirmed] = useState(false);
+  const [submissionConfirmed, setSubmissionConfirmed] = useState(false);
   const [sending, setSending] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [resetSignal, setResetSignal] = useState(0);
@@ -103,21 +104,8 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         window.location.assign(checkout.checkoutUrl);
         return;
       }
-      const whatsappMessage = [
-        "Olá, equipe Rise! Minha inscrição para o Acampamento 2027 foi registrada no site e quero pagar depois.",
-        `Protocolo: ${result.protocol}`,
-        `Nome: ${String(data.nome ?? "")}`,
-        `Idade: ${String(data.idade ?? "")}`,
-        `Igreja: ${String(data.igreja ?? "")}`,
-        `Camiseta: ${camiseta}`,
-        `Cor da camiseta: ${corCamiseta}`,
-        `Lote: ${lote}`,
-        `Pagamento: ${pagamento}`,
-        `Presskit: ${presskit}`,
-        result.receiptWarning ? "O comprovante não foi anexado; vou enviá-lo por aqui." : "Gostaria de confirmar os próximos passos e combinar o pagamento depois."
-      ].join("\n");
-      const whatsappNumber = pagamento === "Dinheiro" ? "5511971590456" : "5511968778688";
-      window.location.assign(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`);
+      setSubmissionConfirmed(true);
+      toast.success(`Inscrição confirmada! Protocolo: ${result.protocol}`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não conseguimos enviar agora. Tente novamente ou fale com a equipe pelo WhatsApp.");
       setResetSignal((value) => value + 1);
@@ -129,6 +117,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
   return (
     <>
       <Toaster richColors position="top-center" />
+      {submissionConfirmed && <div className="submission-success" role="status"><CheckCircle2 size={24} /><div><strong>Inscrição confirmada</strong><span>Recebemos seus dados. A equipe Rise foi notificada no Telegram.</span></div></div>}
       <form className="registration-form" onSubmit={handleSubmit}>
         <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
         <fieldset>
@@ -205,7 +194,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         <TurnstileWidget action="registration" onToken={handleToken} resetSignal={resetSignal} />
 
         <div className="form-submit-row">
-          <div><CircleDollarSign /><span>Escolha pagar agora com PIX ou cartão, ou envie a inscrição para combinar o pagamento depois pelo WhatsApp.</span></div>
+          <div><CircleDollarSign /><span>Escolha pagar agora com PIX ou cartão, ou envie a inscrição para pagar depois.</span></div>
           <div className="form-submit-actions">
             <button className="button button-outline-orange" name="submitIntent" value="pay-later" type="submit" disabled={sending || !turnstileToken}>
               {sending ? <><LoaderCircle className="spinner" /> Enviando...</> : <>Enviar inscrição e pagar depois <Send size={18} /></>}
