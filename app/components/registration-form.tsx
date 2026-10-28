@@ -191,7 +191,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
                 <SelectContent>{["PIX", "Cartão", "Dinheiro"].map((method) => <SelectItem value={method} key={method}>{method}</SelectItem>)}</SelectContent>
               </Select>
             </label>
-            <label className="field"><span>Adicionar presskit? (+ R$ 60,00) *</span>
+            <label className="field"><span>Adicionar presskit? *</span>
               <Select value={presskit} onValueChange={setPresskit} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
                 <SelectContent><SelectItem value="Sim">Sim — adicionar presskit</SelectItem><SelectItem value="Não">Não, somente a inscrição</SelectItem></SelectContent>
