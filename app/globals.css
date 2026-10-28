@@ -974,9 +974,9 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .registration-progress li.is-active span { background: var(--orange); }
 .registration-progress li strong { font-size: .88rem; }
 .registration-verse { color: var(--orange); font: 900 1rem/1.35 "Arial Black", sans-serif; letter-spacing: .08em; text-align: center; }
-.registration-main { min-width: 0; padding: clamp(28px, 5vw, 64px); }
+.registration-main { min-width: 0; display: grid; gap: 24px; padding: clamp(28px, 5vw, 64px); }
 .registration-section.is-hidden { display: none; }
-.registration-heading { margin-bottom: 28px; }
+.registration-heading { margin-bottom: 4px; }
 .registration-heading h1 { margin: 12px 0; color: var(--purple-dark); font: 900 clamp(2.6rem, 5vw, 5rem)/.95 "Arial Black", sans-serif; letter-spacing: -.06em; }
 .registration-heading p { margin: 0; color: #806653; }
 .registration-main .registration-form { display: contents; }
