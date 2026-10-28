@@ -120,6 +120,17 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
       {submissionConfirmed && <div className="submission-success" role="status"><CheckCircle2 size={24} /><div><strong>Inscrição confirmada</strong><span>Recebemos seus dados. A equipe Rise foi notificada no Telegram.</span></div></div>}
       <form className="registration-form" onSubmit={handleSubmit}>
         <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
+        <aside className="registration-progress" aria-label="Etapas da inscrição">
+          <div className="registration-brand">COLETIVO <strong>RISE</strong><small>CAMP 2027</small></div>
+          <ol>
+            <li className="is-active"><span>01</span><strong>Dados pessoais</strong></li>
+            <li><span>02</span><strong>Saúde e cuidado</strong></li>
+            <li><span>03</span><strong>Preferências e pagamento</strong></li>
+          </ol>
+          <div className="registration-verse">LEVANTA-TE<br />E RESPLANDECE<small>ISAÍAS 60:1</small></div>
+        </aside>
+        <div className="registration-main">
+          <header className="registration-heading"><span className="eyebrow">Inscrição Rise Camp 2027</span><h1>Conte um pouco<br />sobre você.</h1><p>Faça sua inscrição no Coletivo Rise Camp 2027.</p></header>
         <fieldset>
           <legend><span>01</span><UserRound /> Dados pessoais</legend>
           <div className="form-grid">
@@ -203,6 +214,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
               {sending ? <><LoaderCircle className="spinner" /> Abrindo...</> : <>Pagar agora <CircleDollarSign size={18} /></>}
             </button>
           </div>
+        </div>
         </div>
       </form>
     </>

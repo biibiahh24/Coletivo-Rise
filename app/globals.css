@@ -958,7 +958,23 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .form-intro { display: flex; justify-content: space-between; gap: 40px; align-items: end; margin-bottom: 35px; }
 .form-intro h2 { margin: 11px 0 0; font-size: clamp(2.2rem, 4vw, 3.8rem); }
 .form-intro p { color: #806653; }
-.registration-form { display: grid; gap: 20px; }
+.registration-form { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 28px; background: #fffaf4; box-shadow: var(--shadow); }
+.registration-progress { display: flex; flex-direction: column; justify-content: space-between; min-height: 950px; padding: 38px 26px; color: white; background: linear-gradient(180deg, #24123d, #32194f); }
+.registration-brand { font-size: .82rem; letter-spacing: .16em; color: #ff6a24; }
+.registration-brand strong { display: block; color: white; font: 900 2.2rem/1 "Arial Black", sans-serif; letter-spacing: -.06em; }
+.registration-brand small, .registration-verse small { display: block; margin-top: 8px; color: rgba(255,255,255,.68); font-size: .64rem; letter-spacing: .16em; }
+.registration-progress ol { display: grid; gap: 18px; margin: 50px -26px; padding: 0; list-style: none; }
+.registration-progress li { display: flex; align-items: center; gap: 12px; padding: 14px 26px; color: rgba(255,255,255,.7); }
+.registration-progress li.is-active { color: white; background: rgba(255,91,31,.28); border-right: 3px solid var(--orange); }
+.registration-progress li span { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.14); font-weight: 900; }
+.registration-progress li.is-active span { background: var(--orange); }
+.registration-progress li strong { font-size: .88rem; }
+.registration-verse { color: var(--orange); font: 900 1rem/1.35 "Arial Black", sans-serif; letter-spacing: .08em; text-align: center; }
+.registration-main { min-width: 0; padding: clamp(28px, 5vw, 64px); }
+.registration-heading { margin-bottom: 28px; }
+.registration-heading h1 { margin: 12px 0; color: var(--purple-dark); font: 900 clamp(2.6rem, 5vw, 5rem)/.95 "Arial Black", sans-serif; letter-spacing: -.06em; }
+.registration-heading p { margin: 0; color: #806653; }
+.registration-main .registration-form { display: contents; }
 .form-honeypot { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 .turnstile-shell { width: min(100%, 420px); min-height: 65px; }
 .security-unavailable { margin: 0; padding: 16px 18px; color: #704226; border: 1px solid #e8b58e; border-radius: 14px; background: #fff4e8; font-size: .9rem; }
@@ -1158,6 +1174,19 @@ body:has(.edition-lightbox) { overflow: hidden; }
 }
 
 @media (max-width: 760px) {
+  .registration-form { display: block; border-radius: 20px; }
+  .registration-progress { min-height: auto; padding: 22px 20px; }
+  .registration-brand { display: flex; align-items: baseline; gap: 8px; }
+  .registration-brand strong { font-size: 1.45rem; }
+  .registration-brand small { margin: 0; }
+  .registration-progress ol { grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 22px 0 0; }
+  .registration-progress li, .registration-progress li.is-active { display: grid; justify-items: center; gap: 6px; padding: 8px 4px; border: 0; background: transparent; text-align: center; }
+  .registration-progress li.is-active { background: rgba(255,91,31,.28); border-radius: 12px; }
+  .registration-progress li strong { font-size: .68rem; }
+  .registration-verse { display: none; }
+  .registration-main { padding: 22px 16px 28px; }
+  .registration-heading h1 { font-size: 2.45rem; }
+  .registration-main .registration-form { display: block; }
   .section-shell, .nav-shell, .footer-shell, .hero-slides { width: min(100% - 28px, 1180px); }
   .hero-slide { grid-template-columns: 1fr; align-content: start; gap: 30px; padding: 45px 0 100px; }
   .hero-copy h1 { font-size: clamp(3.2rem, 15vw, 5.1rem); margin-top: 20px; }
