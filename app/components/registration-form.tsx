@@ -27,6 +27,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
   const [presskit, setPresskit] = useState(initialPresskit);
   const [confirmed, setConfirmed] = useState(false);
   const [submissionConfirmed, setSubmissionConfirmed] = useState(false);
+  const [activeSection, setActiveSection] = useState(1);
   const [sending, setSending] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [resetSignal, setResetSignal] = useState(0);
@@ -123,15 +124,19 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         <aside className="registration-progress" aria-label="Etapas da inscrição">
           <div className="registration-brand">COLETIVO <strong>RISE</strong><small>CAMP 2027</small></div>
           <ol>
-            <li className="is-active"><span>01</span><strong>Dados pessoais</strong></li>
-            <li><span>02</span><strong>Saúde e cuidado</strong></li>
-            <li><span>03</span><strong>Preferências e pagamento</strong></li>
+            {["Dados pessoais", "Saúde e cuidado", "Preferências e pagamento"].map((label, index) => (
+              <li key={label} className={activeSection === index + 1 ? "is-active" : ""}>
+                <button type="button" onClick={() => setActiveSection(index + 1)} aria-current={activeSection === index + 1 ? "step" : undefined}>
+                  <span>{String(index + 1).padStart(2, "0")}</span><strong>{label}</strong>
+                </button>
+              </li>
+            ))}
           </ol>
           <div className="registration-verse">LEVANTA-TE<br />E RESPLANDECE<small>ISAÍAS 60:1</small></div>
         </aside>
         <div className="registration-main">
           <header className="registration-heading"><span className="eyebrow">Inscrição Rise Camp 2027</span><h1>Conte um pouco<br />sobre você.</h1><p>Faça sua inscrição no Coletivo Rise Camp 2027.</p></header>
-        <fieldset>
+        <fieldset className={activeSection === 1 ? "registration-section" : "registration-section is-hidden"}>
           <legend><span>01</span><UserRound /> Dados pessoais</legend>
           <div className="form-grid">
             <label className="field field-wide"><span>Nome completo *</span><Input name="nome" autoComplete="name" required placeholder="Seu nome e sobrenome" /></label>
@@ -143,7 +148,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
           </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset className={activeSection === 2 ? "registration-section" : "registration-section is-hidden"}>
           <legend><span>02</span><HeartPulse /> Saúde e cuidado</legend>
           <p className="fieldset-note">Essas informações ajudam a equipe a preparar uma experiência segura.</p>
           <div className="form-grid">
@@ -153,7 +158,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
           </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset className={activeSection === 3 ? "registration-section" : "registration-section is-hidden"}>
           <legend><span>03</span><Shirt /> Preferências e pagamento</legend>
           <div className="form-grid">
             <label className="field"><span>Já participou antes? *</span>
