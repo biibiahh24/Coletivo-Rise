@@ -12,7 +12,7 @@ export function CarnetPortal({ token }: { token: string }) {
   const [custom, setCustom] = useState("");
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
-  useEffect(() => { fetch(`/api/carnes/${encodeURIComponent(token)}`).then(async (response) => { if (!response.ok) throw new Error("Carnê não encontrado."); return response.json(); }).then((data: Plan) => { setPlan(data); setAmount(Math.min(5000, data.remaining_amount_cents)); }).catch((error) => toast.error(error.message)).finally(() => setLoading(false)); }, [token]);
+  useEffect(() => { fetch(`/api/carnes/${encodeURIComponent(token)}`).then(async (response) => { if (!response.ok) throw new Error("Carnê não encontrado."); return response.json() as Promise<Plan>; }).then((data) => { setPlan(data); setAmount(Math.min(5000, data.remaining_amount_cents)); }).catch((error) => toast.error(error.message)).finally(() => setLoading(false)); }, [token]);
   const remaining = plan?.remaining_amount_cents ?? 0;
   const selectedAmount = useMemo(() => custom ? Math.round(Number(custom.replace(",", ".")) * 100) : amount, [amount, custom]);
   async function checkout() {
