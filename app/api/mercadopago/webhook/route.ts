@@ -12,8 +12,19 @@ export async function POST(request: Request) {
   if (!paymentId || (body.type && body.type !== "payment")) return Response.json({ received: true });
   const paymentResponse = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, { headers: { Authorization: `Bearer ${token}` }, signal: AbortSignal.timeout(10_000) });
   if (!paymentResponse.ok) return Response.json({ error: "Payment lookup failed" }, { status: 502 });
-  const payment = await paymentResponse.json() as { status?: string; external_reference?: string };
-  if (payment.status === "approved" && payment.external_reference && isSupabaseAdminConfigured()) {
+  const payment = await paymentResponse.json() as { id?: string; status?: string; external_reference?: string };
+  if (payment.status === "approved" && payment.external_reference?.startsWith("CARNET:") && isSupabaseAdminConfigured()) {
+    const db = createSupabaseAdminClient();
+    const now = Math.floor(Date.now() / 1000);
+    const { data: carnetPayment } = await db.from("carnet_payments").select("id, carnet_id, amount_cents, status").eq("external_reference", payment.external_reference).maybeSingle();
+    if (carnetPayment && carnetPayment.status !== "approved") {
+      await db.from("carnet_payments").update({ status: "approved", mercadopago_payment_id: payment.id ?? paymentId, approved_at: now, updated_at: now }).eq("id", carnetPayment.id).eq("status", "pending");
+      const { data: approved } = await db.from("carnet_payments").select("amount_cents").eq("carnet_id", carnetPayment.carnet_id).eq("status", "approved");
+      const { data: plan } = await db.from("carnet_plans").select("total_amount_cents").eq("id", carnetPayment.carnet_id).maybeSingle();
+      const paidAmountCents = Math.min(plan?.total_amount_cents ?? 0, (approved ?? []).reduce((sum, row) => sum + row.amount_cents, 0));
+      await db.from("carnet_plans").update({ paid_amount_cents: paidAmountCents, status: paidAmountCents >= (plan?.total_amount_cents ?? 0) ? "paid" : "pending", updated_at: now }).eq("id", carnetPayment.carnet_id);
+    }
+  } else if (payment.status === "approved" && payment.external_reference && isSupabaseAdminConfigured()) {
     const db = createSupabaseAdminClient();
     const now = Math.floor(Date.now() / 1000);
     await Promise.all([

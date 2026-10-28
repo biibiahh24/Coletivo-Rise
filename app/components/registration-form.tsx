@@ -27,6 +27,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
   const [presskit, setPresskit] = useState(initialPresskit);
   const [confirmed, setConfirmed] = useState(false);
   const [submissionConfirmed, setSubmissionConfirmed] = useState(false);
+  const [carnetUrl, setCarnetUrl] = useState("");
   const [activeSection, setActiveSection] = useState(1);
   const [sending, setSending] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -42,7 +43,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
       toast.error("Preencha as seleções e confirme as informações para continuar.");
       return;
     }
-    if (intent === "pay-now" && pagamento !== "PIX" && pagamento !== "Cartão") {
+    if (intent === "pay-now" && pagamento !== "PIX" && pagamento !== "Cartão" && pagamento !== "Carnê") {
       toast.error("Para pagar agora, selecione PIX ou Cartão em forma de pagamento.");
       return;
     }
@@ -91,10 +92,11 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       });
-      const result = await response.json() as { protocol?: string; error?: string; receiptWarning?: boolean };
+      const result = await response.json() as { protocol?: string; carnetUrl?: string; error?: string; receiptWarning?: boolean };
       if (!response.ok || !result.protocol) throw new Error(result.error ?? "A inscrição não foi enviada.");
       idempotencyKey.current = null;
-      if (intent === "pay-now" && result.protocol) {
+      if (result.carnetUrl) setCarnetUrl(result.carnetUrl);
+      if (intent === "pay-now" && result.protocol && pagamento !== "Carnê") {
         const checkoutResponse = await fetch("/api/mercadopago/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -118,7 +120,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
   return (
     <>
       <Toaster richColors position="top-center" />
-      {submissionConfirmed && <div className="submission-success" role="status"><CheckCircle2 size={24} /><div><strong>Inscrição confirmada</strong><span>Recebemos seus dados. A equipe Rise foi notificada no Telegram.</span></div></div>}
+      {submissionConfirmed && <div className="submission-success" role="status"><CheckCircle2 size={24} /><div><strong>Inscrição confirmada</strong><span>Recebemos seus dados. A equipe Rise foi notificada no Telegram.</span>{carnetUrl && <a className="button button-outline-orange" href={carnetUrl}>Acessar meu carnê</a>}</div></div>}
       <form className="registration-form" onSubmit={handleSubmit}>
         <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
         <aside className="registration-progress" aria-label="Etapas da inscrição">
@@ -188,7 +190,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
             <label className="field"><span>Forma de pagamento *</span>
               <Select value={pagamento} onValueChange={setPagamento} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
-                <SelectContent>{["PIX", "Cartão", "Dinheiro"].map((method) => <SelectItem value={method} key={method}>{method}</SelectItem>)}</SelectContent>
+                <SelectContent>{["PIX", "Cartão", "Dinheiro", "Carnê"].map((method) => <SelectItem value={method} key={method}>{method}</SelectItem>)}</SelectContent>
               </Select>
             </label>
             <label className="field"><span>Adicionar presskit? *</span>

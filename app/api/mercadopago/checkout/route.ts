@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createSupabaseAdminClient, isSupabaseAdminConfigured } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -23,8 +24,21 @@ export async function POST(request: Request) {
   const parsed = requestSchema.safeParse(raw);
   if (!parsed.success) return reply({ error: "Selecione uma opção válida antes de continuar." }, 400);
   const data = parsed.data;
+  if (data.kind === "registration" && data.presskit === "Sim") return reply({ error: "O presskit ainda está sem preço definido e não pode ser cobrado." }, 409);
+  let registrationPrice = data.lote === "primeiras" ? 400 : 450;
+  let registrationLabel = data.lote === "primeiras" ? "1º lote" : "próximas vagas";
+  if (data.kind === "registration" && isSupabaseAdminConfigured()) {
+    const db = createSupabaseAdminClient();
+    const [{ data: registration }, { count }] = await Promise.all([
+      db.from("camp_registrations").select("protocol").eq("protocol", data.protocol).maybeSingle(),
+      db.from("camp_registrations").select("protocol", { count: "exact", head: true }),
+    ]);
+    if (!registration) return reply({ error: "Inscrição não encontrada." }, 404);
+    registrationPrice = (count ?? 0) <= 10 ? 400 : 450;
+    registrationLabel = registrationPrice === 400 ? "1º lote" : "próximas vagas";
+  }
   const items = data.kind === "registration"
-    ? [{ id: "acampamento-rise-2027", title: `Inscrição Acampamento Rise — ${data.lote === "primeiras" ? "1º lote" : "próximas vagas"}`, description: "Inscrição para o Acampamento Rise 2027", quantity: 1, unit_price: data.lote === "primeiras" ? 400 : 450, currency_id: "BRL" }, ...(data.presskit === "Sim" ? [{ id: "presskit-rise", title: "Presskit Rise", description: "Presskit opcional do Acampamento Rise", quantity: 1, unit_price: 60, currency_id: "BRL" }] : [])]
+    ? [{ id: "acampamento-rise-2027", title: `Inscrição Acampamento Rise — ${registrationLabel}`, description: "Inscrição para o Acampamento Rise 2027", quantity: 1, unit_price: registrationPrice, currency_id: "BRL" }]
     : [{ id: data.product === "presskit" ? "presskit-rise" : "camiseta-rise-edicao-01", title: data.product === "presskit" ? "Presskit Rise" : "Camiseta Rise — Edição 01", description: data.product === "presskit" ? "Caixa completa com camiseta e acessórios" : "Camiseta oficial da coleção Rise", quantity: data.quantity ?? 1, unit_price: data.product === "presskit" ? 119.9 : 79.9, currency_id: "BRL" }];
   const origin = new URL(request.url).origin;
   const paymentMethods = data.pagamento === "PIX"

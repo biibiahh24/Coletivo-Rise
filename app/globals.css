@@ -1020,6 +1020,15 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .submission-success svg { flex: 0 0 auto; margin-top: 1px; }
 .submission-success div { display: grid; gap: 3px; }
 .submission-success span { color: #166534; }
+.submission-success a { margin-top: 10px; width: fit-content; text-decoration: none; }
+.carnet-shell { max-width: 760px; }
+.carnet-shell h1 { margin: 16px 0 8px; }
+.carnet-balance { display: grid; gap: 5px; margin: 28px 0; padding: 22px; border-radius: 18px; color: var(--purple); background: #eadfff; }
+.carnet-balance strong { font-size: clamp(2rem, 5vw, 3rem); }
+.carnet-options { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.carnet-options button { border: 1px solid var(--purple); border-radius: 999px; padding: 10px 16px; color: var(--purple); background: transparent; font: inherit; font-weight: 700; cursor: pointer; }
+.carnet-options button:disabled { cursor: not-allowed; opacity: .45; }
+.carnet-shell > .button { margin-top: 16px; }
 .privacy-page { min-height: 70vh; background: var(--cream-soft); }
 .privacy-shell { padding-top: 90px; padding-bottom: 110px; }
 .privacy-shell > h1 { max-width: 860px; margin: 18px 0; font-size: clamp(3rem, 7vw, 6.4rem); text-transform: uppercase; }

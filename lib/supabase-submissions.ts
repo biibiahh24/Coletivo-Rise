@@ -1,5 +1,6 @@
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { Submission } from "@/lib/submission-schema";
+import { createCarnetPlan } from "@/lib/carnet";
 
 async function fingerprint(value: string) {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${process.env.RATE_LIMIT_SALT}:${value}`));
@@ -43,6 +44,7 @@ export async function persistSupabaseSubmission(submission: Submission, request:
   const id = protocol(submission.kind);
   let receiptKey: string | null = null;
   let receiptBytes: Uint8Array | null = null;
+  let carnetAccessToken: string | null = null;
   if (submission.kind === "registration" && submission.comprovanteBase64) {
     receiptBytes = decodeReceipt(submission.comprovanteBase64, submission.comprovanteTipo);
     const extension = submission.comprovanteTipo === "application/pdf" ? "pdf" : submission.comprovanteTipo.split("/")[1];
@@ -52,8 +54,12 @@ export async function persistSupabaseSubmission(submission: Submission, request:
   }
   try {
     if (submission.kind === "registration") {
-      const { error } = await db.from("camp_registrations").insert({ protocol: id, idempotency_key: submission.idempotencyKey, full_name: submission.nome, age: submission.idade, guardian_name: submission.responsavel || null, phone: submission.telefone, church: submission.igreja, location: submission.endereco, allergies: submission.alergias || null, medication: submission.medicacao || null, dietary_restrictions: submission.restricao || null, attended_before: submission.participou, shirt_size: submission.camiseta, payment_method: submission.pagamento, notes: `${submission.presskit === "Sim" ? "Presskit: Sim — R$ 60,00. " : "Presskit: Não. "}Cor da camiseta: ${submission.corCamiseta}. ${submission.obs || ""}`, receipt_key: receiptKey, receipt_name: submission.comprovanteNome || null, receipt_type: submission.comprovanteTipo || null, consent_at: now, privacy_version: submission.privacyVersion, created_at: now, updated_at: now });
+      const { error } = await db.from("camp_registrations").insert({ protocol: id, idempotency_key: submission.idempotencyKey, full_name: submission.nome, age: submission.idade, guardian_name: submission.responsavel || null, phone: submission.telefone, church: submission.igreja, location: submission.endereco, allergies: submission.alergias || null, medication: submission.medicacao || null, dietary_restrictions: submission.restricao || null, attended_before: submission.participou, shirt_size: submission.camiseta, payment_method: submission.pagamento, notes: `${submission.presskit === "Sim" ? "Presskit: Sim (valor será definido posteriormente). " : "Presskit: Não. "}Cor da camiseta: ${submission.corCamiseta}. ${submission.obs || ""}`, receipt_key: receiptKey, receipt_name: submission.comprovanteNome || null, receipt_type: submission.comprovanteTipo || null, consent_at: now, privacy_version: submission.privacyVersion, created_at: now, updated_at: now });
       if (error) throw error;
+      if (submission.pagamento === "Carnê") {
+        const carnet = await createCarnetPlan({ protocol: id, fullName: submission.nome, phone: submission.telefone });
+        carnetAccessToken = carnet.accessToken;
+      }
     } else {
       const { error } = await db.from("shirt_orders").insert({ protocol: id, idempotency_key: submission.idempotencyKey, full_name: submission.nome, phone: submission.telefone, edition: submission.edition, size: submission.size, quantity: submission.quantity, payment_method: submission.pagamento, consent_at: now, privacy_version: submission.privacyVersion, created_at: now, updated_at: now });
       if (error) throw error;
@@ -62,10 +68,11 @@ export async function persistSupabaseSubmission(submission: Submission, request:
     if (receiptError) throw receiptError;
   } catch (error) {
     if (receiptKey) await db.storage.from("receipts").remove([receiptKey]);
+    if (submission.kind === "registration") await db.from("camp_registrations").delete().eq("protocol", id);
     const { data: retry } = await db.from("submission_receipts").select("protocol").eq("idempotency_key", submission.idempotencyKey).maybeSingle();
     if (retry?.protocol) return { protocol: retry.protocol, duplicate: true, receiptWarning: false };
     throw error;
   }
-  return { protocol: id, duplicate: false, receiptWarning: false };
+  return { protocol: id, duplicate: false, receiptWarning: false, ...(carnetAccessToken ? { carnetUrl: `/carnes?token=${encodeURIComponent(carnetAccessToken)}` } : {}) };
 }
 
