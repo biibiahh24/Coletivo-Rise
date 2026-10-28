@@ -17,20 +17,22 @@ export async function GET(request: Request) {
     return Response.json({ error: "Não encontrado." }, { status: 404 });
   }
 
-  const kind = new URL(request.url).searchParams.get("kind") === "shirt" ? "shirt" : "registration";
+  const requestedKind = new URL(request.url).searchParams.get("kind");
+  const kind = requestedKind === "shirt" ? "shirt" : requestedKind === "carnet" ? "carnet" : "registration";
   const headers = kind === "registration"
     ? ["Protocolo", "Nome", "Idade", "Telefone", "Igreja", "Localidade", "Camiseta", "Pagamento", "Situação", "Data"]
-    : ["Protocolo", "Nome", "Telefone", "Coleção", "Tamanho", "Quantidade", "Pagamento", "Situação", "Data"];
+    : kind === "shirt" ? ["Protocolo", "Nome", "Telefone", "Coleção", "Tamanho", "Quantidade", "Pagamento", "Situação", "Data"]
+    : ["Protocolo", "Nome", "Telefone", "Total", "Pago", "Saldo", "Vencimento", "Status", "Data"];
   const rows: Array<Array<string | number>> = kind === "registration"
     ? [
         ["RISE-2027-0001", "Mariana Oliveira", 18, "(11) 99999-0001", "Igreja da Família", "São Paulo — SP", "M", "Pago", "Confirmada", "18/10/2026 23:00"],
         ["RISE-2027-0002", "Lucas Santos", 16, "(11) 99999-0002", "Comunidade da Graça", "Guarulhos — SP", "G", "Pendente", "Pendente", "19/10/2026 23:00"],
       ]
-    : [
+    : kind === "shirt" ? [
         ["LOJA-2026-0001", "Beatriz Ramos", "(11) 99999-0003", "Brasil pertence a Jesus", "M", 1, "Pago", "Separado", "19/10/2026 00:00"],
-      ];
+      ] : [["CARNE-2027-0001", "Mariana Oliveira", "(11) 99999-0001", "400,00", "100,00", "300,00", "25/01/2027", "Pendente", "19/10/2026 00:00"]];
   const csv = [headers, ...rows].map((row) => row.map(csvCell).join(";")).join("\r\n");
-  const filename = kind === "registration" ? "inscricoes-rise-demonstracao.csv" : "pedidos-rise-demonstracao.csv";
+  const filename = kind === "registration" ? "inscricoes-rise-demonstracao.csv" : kind === "shirt" ? "pedidos-rise-demonstracao.csv" : "carnes-rise-demonstracao.csv";
 
   return new Response(`\uFEFF${csv}`, {
     headers: {

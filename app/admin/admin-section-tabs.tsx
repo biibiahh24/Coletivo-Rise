@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-type AdminView = "registrations" | "registrations_presskit" | "shirts";
+type AdminView = "registrations" | "registrations_presskit" | "shirts" | "carnets";
 
 export function AdminSectionTabs({ view }: { view: AdminView }) {
   const pathname = usePathname();
@@ -33,6 +33,9 @@ export function AdminSectionTabs({ view }: { view: AdminView }) {
       </Link>
       <Link className={view === "shirts" ? "active" : ""} href="/admin?view=shirts" onClick={resetScroll}>
         Camisetas
+      </Link>
+      <Link className={view === "carnets" ? "active" : ""} href="/admin?view=carnets" onClick={resetScroll}>
+        Carnês
       </Link>
     </nav>
   );

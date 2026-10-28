@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import Link from "next/link";
-import { Download, FileCheck2, LogOut, Search, ShieldCheck, Shirt, UsersRound } from "lucide-react";
+import { CreditCard, Download, FileCheck2, LogOut, Search, ShieldCheck, Shirt, UsersRound } from "lucide-react";
 import { redirect } from "next/navigation";
 import { getAdminForRequest } from "@/lib/admin-auth";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -48,10 +48,26 @@ type ShirtOrder = {
   created_at: number;
 };
 
+type CarnetPlan = {
+  id: string;
+  registration_protocol: string;
+  full_name: string;
+  phone: string;
+  total_amount_cents: number;
+  paid_amount_cents: number;
+  due_date: string;
+  status: string;
+  created_at: number;
+  updated_at: number;
+};
+
+type CarnetPayment = { carnet_id: string; amount_cents: number; status: string; created_at: number };
+
 // Keep production free of personal/demo records. Data is loaded from Supabase;
 // empty fallbacks also make the admin panel safe in local development.
 const demoRegistrations: Registration[] = [];
 const demoShirts: ShirtOrder[] = [];
+const demoCarnets: CarnetPlan[] = [];
 
 function isLocalDevelopment(requestHeaders: Headers) {
   const host = (requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "")
@@ -67,7 +83,7 @@ function formatDate(timestamp: number) {
 }
 
 function statusLabel(value: string) {
-  return ({ pending: "Pendente", confirmed: "Confirmada", waitlist: "Lista de espera", cancelled: "Cancelada", separated: "Separado", delivered: "Entregue", partial: "Parcial", paid: "Pago", refunded: "Estornado" } as Record<string, string>)[value] ?? value;
+  return ({ pending: "Pendente", confirmed: "Confirmada", waitlist: "Lista de espera", cancelled: "Cancelada", separated: "Separado", delivered: "Entregue", partial: "Parcial", paid: "Pago", overdue: "Atrasado", refunded: "Estornado" } as Record<string, string>)[value] ?? value;
 }
 
 function hasPresskit(item: Registration) {
@@ -84,7 +100,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
 
   const db = localDemo ? null : createSupabaseAdminClient();
   const params = await searchParams;
-  const view = params.view === "shirts" ? "shirts" : params.view === "registrations_presskit" ? "registrations_presskit" : "registrations";
+  const view = params.view === "shirts" ? "shirts" : params.view === "carnets" ? "carnets" : params.view === "registrations_presskit" ? "registrations_presskit" : "registrations";
   const query = (params.q ?? "").trim().slice(0, 120);
   const filterStatus = (params.status ?? "").trim();
   const counts = localDemo
@@ -93,21 +109,26 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         confirmed: demoRegistrations.filter((item) => item.registration_status === "confirmed").length,
         paid: demoRegistrations.filter((item) => item.payment_status === "paid").length,
         shirts: demoShirts.length,
+        carnets: demoCarnets.length,
       }
     : await Promise.all([
         db!.from("camp_registrations").select("*", { count: "exact", head: true }),
         db!.from("camp_registrations").select("*", { count: "exact", head: true }).eq("registration_status", "confirmed"),
         db!.from("camp_registrations").select("*", { count: "exact", head: true }).eq("payment_status", "paid"),
         db!.from("shirt_orders").select("*", { count: "exact", head: true }),
-      ]).then(([registrations, confirmed, paid, shirts]) => ({
+        db!.from("carnet_plans").select("*", { count: "exact", head: true }),
+      ]).then(([registrations, confirmed, paid, shirts, carnets]) => ({
         registrations: registrations.count ?? 0,
         confirmed: confirmed.count ?? 0,
         paid: paid.count ?? 0,
         shirts: shirts.count ?? 0,
+        carnets: carnets.count ?? 0,
       }));
 
   let registrations: Registration[] = [];
   let shirts: ShirtOrder[] = [];
+  let carnets: CarnetPlan[] = [];
+  let carnetPayments: CarnetPayment[] = [];
   if (view === "registrations" || view === "registrations_presskit") {
     if (localDemo) {
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
@@ -126,7 +147,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         (view === "registrations_presskit" ? hasPresskit(item) : !hasPresskit(item)) &&
         (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))));
     }
-  } else {
+  } else if (view === "shirts") {
     if (localDemo) {
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
       shirts = demoShirts.filter((item) =>
@@ -141,6 +162,28 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
       shirts = (result.data as ShirtOrder[]).filter((item) => !normalizedQuery
         || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery)));
+    }
+  } else {
+    if (localDemo) {
+      const normalizedQuery = query.toLocaleLowerCase("pt-BR");
+      carnets = demoCarnets.filter((item) =>
+        (!normalizedQuery || [item.full_name, item.registration_protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))) &&
+        (!filterStatus || item.status === filterStatus),
+      );
+    } else {
+      let request = db!.from("carnet_plans").select("id, registration_protocol, full_name, phone, total_amount_cents, paid_amount_cents, due_date, status, created_at, updated_at").order("created_at", { ascending: false }).limit(500);
+      if (filterStatus) request = request.eq("status", filterStatus);
+      const result = await request;
+      if (result.error) throw result.error;
+      const normalizedQuery = query.toLocaleLowerCase("pt-BR");
+      carnets = (result.data as CarnetPlan[]).filter((item) => !normalizedQuery
+        || [item.full_name, item.registration_protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery)));
+      const ids = carnets.map((item) => item.id);
+      if (ids.length) {
+        const payments = await db!.from("carnet_payments").select("carnet_id, amount_cents, status, created_at").in("carnet_id", ids).order("created_at", { ascending: false });
+        if (payments.error) throw payments.error;
+        carnetPayments = payments.data as CarnetPayment[];
+      }
     }
   }
 
@@ -170,13 +213,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
           <article><FileCheck2 /><span>Confirmadas</span><strong>{Number(counts?.confirmed ?? 0)}</strong></article>
           <article><ShieldCheck /><span>Pagas</span><strong>{Number(counts?.paid ?? 0)}</strong></article>
           <article><Shirt /><span>Pedidos</span><strong>{Number(counts?.shirts ?? 0)}</strong></article>
+          <article><CreditCard /><span>Carnês</span><strong>{Number(counts?.carnets ?? 0)}</strong></article>
         </div>
 
         <div className="admin-toolbar">
           <AdminSectionTabs view={view} />
           {localDemo
-            ? <a className="admin-export" href={`/api/admin/demo-export?kind=${view === "shirts" ? "shirt" : "registration"}`} download><Download /> Exportar CSV</a>
-            : <a className="admin-export" href={`/api/admin/export?kind=${view === "shirts" ? "shirt" : "registration"}`}><Download /> Exportar CSV</a>}
+            ? <a className="admin-export" href={`/api/admin/demo-export?kind=${view === "shirts" ? "shirt" : view === "carnets" ? "carnet" : "registration"}`} download><Download /> Exportar CSV</a>
+            : <a className="admin-export" href={`/api/admin/export?kind=${view === "shirts" ? "shirt" : view === "carnets" ? "carnet" : "registration"}`}><Download /> Exportar CSV</a>}
         </div>
 
         <form className="admin-filters" method="get">
@@ -186,7 +230,8 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
             <option value="">Todos os status</option>
             {(view === "registrations" || view === "registrations_presskit"
               ? [["pending", "Pendente"], ["confirmed", "Confirmada"], ["waitlist", "Lista de espera"], ["cancelled", "Cancelada"]]
-              : [["pending", "Novo"], ["separated", "Separado"], ["delivered", "Entregue"], ["cancelled", "Cancelado"]]
+              : view === "shirts" ? [["pending", "Novo"], ["separated", "Separado"], ["delivered", "Entregue"], ["cancelled", "Cancelado"]]
+              : [["pending", "Pendente"], ["paid", "Pago"], ["overdue", "Atrasado"]]
             ).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
           </select>
           <button type="submit">Filtrar</button>
@@ -219,7 +264,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
               </article>
             ))}
           </div>
-        ) : (
+        ) : view === "shirts" ? (
           <div className="admin-records">
             {shirts.length === 0 && <p className="admin-empty">Nenhum pedido encontrado.</p>}
             {shirts.map((item) => (
@@ -233,6 +278,24 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
                 <AdminActions id={item.id} kind="shirt" status={item.order_status} paymentStatus={item.payment_status} demo={localDemo} />
               </article>
             ))}
+          </div>
+        ) : (
+          <div className="admin-records">
+            {carnets.length === 0 && <p className="admin-empty">Nenhum carnê encontrado.</p>}
+            {carnets.map((item) => {
+              const remaining = Math.max(0, item.total_amount_cents - item.paid_amount_cents);
+              const payments = carnetPayments.filter((payment) => payment.carnet_id === item.id);
+              const status = item.status === "pending" && new Date(`${item.due_date}T23:59:59-03:00`) < new Date() && remaining > 0 ? "overdue" : item.status;
+              return <article className="admin-record" key={item.id}>
+                <div className="admin-record-main">
+                  <div><span className={`status-badge status-${status}`}>{statusLabel(status)}</span><small>{item.registration_protocol}</small></div>
+                  <h2>{item.full_name}</h2>
+                  <p>{item.phone} · Vencimento {new Intl.DateTimeFormat("pt-BR").format(new Date(`${item.due_date}T12:00:00`))}</p>
+                  <div className="carnet-admin-summary"><span>Total: R$ {(item.total_amount_cents / 100).toFixed(2).replace(".", ",")}</span><span>Pago: R$ {(item.paid_amount_cents / 100).toFixed(2).replace(".", ",")}</span><span>Saldo: R$ {(remaining / 100).toFixed(2).replace(".", ",")}</span><span>{payments.length} pagamento(s)</span><span>{formatDate(item.created_at)}</span></div>
+                </div>
+                <details className="admin-details"><summary>Ver pagamentos</summary>{payments.length ? <ul>{payments.map((payment) => <li key={`${payment.carnet_id}-${payment.created_at}`}>R$ {(payment.amount_cents / 100).toFixed(2).replace(".", ",")} · {statusLabel(payment.status)} · {formatDate(payment.created_at)}</li>)}</ul> : <p>Nenhum pagamento registrado.</p>}</details>
+              </article>;
+            })}
           </div>
         )}
       </section>
