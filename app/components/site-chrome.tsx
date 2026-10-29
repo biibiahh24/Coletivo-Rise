@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Camera, Menu, MessageCircle, ShieldCheck, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CarnetLookupModal } from "./carnet-lookup-modal";
 
 const navigation = [
@@ -17,6 +17,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [carnetLookupOpen, setCarnetLookupOpen] = useState(false);
+  const closeCarnetLookup = useCallback(() => setCarnetLookupOpen(false), []);
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -61,7 +62,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      {carnetLookupOpen && <CarnetLookupModal onClose={() => setCarnetLookupOpen(false)} />}
+      {carnetLookupOpen && <CarnetLookupModal onClose={closeCarnetLookup} />}
 
       <div className="global-decoration-layer" aria-hidden="true">
         <span className="global-decoration global-decoration-top-left" />
