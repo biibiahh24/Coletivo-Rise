@@ -22,7 +22,10 @@ export function CarnetLookupModal({ onClose }: { onClose: () => void }) {
     setLoading(true);
     try {
       const response = await fetch("/api/carnes/lookup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ phone }) });
-      const data = await response.json() as { token?: string; error?: string };
+      const raw = await response.text();
+      let data: { token?: string; error?: string } = {};
+      try { data = JSON.parse(raw) as { token?: string; error?: string }; } catch { /* API/network errors can return an empty body. */ }
+      if (!raw) throw new Error("Não foi possível consultar o carnê agora. Tente novamente.");
       if (!response.ok || !data.token) throw new Error(data.error ?? "Não encontramos um carnê para este número.");
       window.location.assign(`/carnes?token=${encodeURIComponent(data.token)}`);
     } catch (lookupError) {

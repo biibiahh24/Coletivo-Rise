@@ -7,7 +7,10 @@ export function normalizePhone(phone: string) {
 }
 
 function lookupSecret() {
-  const secret = process.env.CARNE_LOOKUP_SECRET?.trim() ?? process.env.ADMIN_GATEWAY_SECRET?.trim();
+  // Accept both spellings so existing Vercel environments remain compatible.
+  const secret = process.env.CARNE_LOOKUP_SECRET?.trim()
+    ?? process.env.CARNET_LOOKUP_SECRET?.trim()
+    ?? process.env.ADMIN_GATEWAY_SECRET?.trim();
   if (!secret) throw new Error("CARNE_LOOKUP_SECRET não configurado.");
   return secret;
 }
