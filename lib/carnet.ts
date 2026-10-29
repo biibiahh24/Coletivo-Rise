@@ -10,7 +10,10 @@ function lookupSecret() {
   // Accept both spellings so existing Vercel environments remain compatible.
   const secret = process.env.CARNE_LOOKUP_SECRET?.trim()
     ?? process.env.CARNET_LOOKUP_SECRET?.trim()
-    ?? process.env.ADMIN_GATEWAY_SECRET?.trim();
+    ?? process.env.ADMIN_GATEWAY_SECRET?.trim()
+    // Supabase's server key is already present in production and never reaches the client.
+    ?? process.env.SUPABASE_SECRET_KEY?.trim()
+    ?? process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!secret) throw new Error("CARNE_LOOKUP_SECRET não configurado.");
   return secret;
 }

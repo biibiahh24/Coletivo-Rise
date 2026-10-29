@@ -1029,8 +1029,8 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .carnet-options button { border: 1px solid var(--purple); border-radius: 999px; padding: 10px 16px; color: var(--purple); background: transparent; font: inherit; font-weight: 700; cursor: pointer; }
 .carnet-options button:disabled { cursor: not-allowed; opacity: .45; }
 .carnet-shell > .button { margin-top: 16px; }
-.carnet-nav-trigger { margin-left: 2px; padding: 6px 9px; color: var(--muted-foreground); background: transparent; border: 0; border-left: 1px solid var(--border); font: inherit; font-size: .72rem; font-weight: 750; cursor: pointer; opacity: .78; }
-.carnet-nav-trigger:hover, .carnet-nav-trigger:focus-visible { color: var(--orange-deep); opacity: 1; }
+.carnet-nav-trigger { display: inline-flex; align-items: center; gap: 6px; padding: 9px 11px; color: rgba(255,255,255,.56); background: transparent; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; font: inherit; font-size: .73rem; font-weight: 750; cursor: pointer; transition: color .2s ease, background .2s ease, border-color .2s ease; }
+.carnet-nav-trigger:hover, .carnet-nav-trigger:focus-visible { color: white; border-color: rgba(255,255,255,.24); background: rgba(255,255,255,.06); }
 .carnet-lookup { display: grid; gap: 16px; max-width: 460px; margin-top: 28px; }
 .carnet-lookup .button { justify-self: start; }
 .carnet-lookup-backdrop { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; padding: 20px; background: rgba(43,23,65,.68); backdrop-filter: blur(10px); }
@@ -1161,7 +1161,7 @@ body:has(.carnet-lookup-backdrop) { overflow: hidden; }
   .mobile-nav a.active { color: white; background: rgba(255,255,255,.07); }
   .mobile-nav .mobile-cta { margin-top: 6px; text-align: center; color: white; background: var(--orange); }
   .mobile-nav .mobile-admin-link { display: flex; align-items: center; justify-content: center; gap: 7px; padding-block: 9px; color: rgba(255,255,255,.48); font-size: .76rem; }
-  .mobile-nav .carnet-nav-trigger { margin: 4px 14px 0; padding: 8px 10px; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 999px; font-size: .72rem; }
+.mobile-nav .carnet-nav-trigger { margin: 4px 14px 0; padding: 9px 11px; color: var(--purple); border: 1px solid var(--border); font-size: .73rem; }
   .carnet-lookup-modal { padding: 26px 22px; border-radius: 20px; }
   .mobile-admin-link svg { width: 14px; height: 14px; }
   .final-cta { min-height: 0; grid-template-columns: 1fr; align-items: start; }
@@ -1550,6 +1550,8 @@ body { background: var(--cream-soft); }
 .desktop-nav a:hover:not(.active) { color: var(--purple-dark); background: var(--lilac-soft); }
 .header-admin-link { color: var(--purple); border-color: var(--border); }
 .header-admin-link:hover { color: var(--purple-dark); border-color: var(--lilac); background: var(--lilac-soft); }
+.carnet-nav-trigger { color: var(--purple); border-color: var(--border); }
+.carnet-nav-trigger:hover, .carnet-nav-trigger:focus-visible { color: var(--purple-dark); border-color: var(--lilac); background: var(--lilac-soft); }
 .menu-button { color: var(--purple-dark); }
 .mobile-nav { background: var(--cream-soft); border-top: 1px solid var(--border); }
 .mobile-nav a { color: var(--purple-dark); }
