@@ -3,7 +3,8 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getCarnetByToken } from "@/lib/carnet";
 
 export const dynamic = "force-dynamic";
-const schema = z.object({ token: z.string().min(40).max(120), amountCents: z.coerce.number().int().positive() });
+// Signed carnet tokens contain the encoded payload and HMAC signature.
+const schema = z.object({ token: z.string().min(40).max(512), amountCents: z.coerce.number().int().positive() });
 
 export async function POST(request: Request) {
   const mpToken = process.env.MERCADOPAGO_ACCESS_TOKEN?.trim();
