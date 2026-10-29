@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CheckCircle2, CircleDollarSign, HeartPulse, LoaderCircle, Send, Shirt, UserRound } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -34,6 +34,14 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
   const [resetSignal, setResetSignal] = useState(0);
   const idempotencyKey = useRef<string | null>(null);
   const handleToken = useCallback((token: string) => setTurnstileToken(token), []);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/form-config", { cache: "no-store" }).then((response) => response.json() as Promise<{ currentLote?: string }>).then((config) => {
+      if (active && config.currentLote) setLote(config.currentLote);
+    }).catch(() => { /* Keep the server-rendered fallback while the API is unavailable. */ });
+    return () => { active = false; };
+  }, []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -182,10 +190,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
               </Select>
             </label>
             <label className="field"><span>Lote da inscrição *</span>
-              <Select value={lote} onValueChange={setLote} required>
-                <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar lote" /></SelectTrigger>
-                <SelectContent><SelectItem value="10 primeiras vagas — R$ 400,00">10 primeiras vagas — R$ 400,00</SelectItem><SelectItem value="Próximas vagas — R$ 450,00">Próximas vagas — R$ 450,00</SelectItem></SelectContent>
-              </Select>
+              <div className="form-select lote-readonly" aria-live="polite">{lote || "Calculando lote atual..."}</div>
             </label>
             <label className="field"><span>Forma de pagamento *</span>
               <Select value={pagamento} onValueChange={setPagamento} required>

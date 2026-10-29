@@ -1003,6 +1003,13 @@ body:has(.edition-lightbox) { overflow: hidden; }
   box-shadow: none;
   font-size: .95rem;
 }
+.lote-readonly {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  color: var(--ink);
+  cursor: default;
+}
 .field input, .field textarea { padding-inline: 14px; }
 .field textarea { padding-block: 12px; }
 .field input[type="file"] { padding-block: 8px; }
