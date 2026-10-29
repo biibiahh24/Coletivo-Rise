@@ -1027,6 +1027,7 @@ body:has(.edition-lightbox) { overflow: hidden; }
 .carnet-balance strong { font-size: clamp(2rem, 5vw, 3rem); }
 .carnet-options { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
 .carnet-options button { border: 1px solid var(--purple); border-radius: 999px; padding: 10px 16px; color: var(--purple); background: transparent; font: inherit; font-weight: 700; cursor: pointer; }
+.carnet-options button.selected { color: white; background: var(--purple); box-shadow: 0 0 0 3px rgba(104, 61, 137, .16); }
 .carnet-options button:disabled { cursor: not-allowed; opacity: .45; }
 .carnet-shell > .button { margin-top: 16px; }
 .carnet-nav-trigger { display: inline-flex; align-items: center; gap: 6px; padding: 9px 11px; color: rgba(255,255,255,.56); background: transparent; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; font: inherit; font-size: .73rem; font-weight: 750; cursor: pointer; transition: color .2s ease, background .2s ease, border-color .2s ease; }
