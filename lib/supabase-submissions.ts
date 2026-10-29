@@ -1,6 +1,6 @@
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { Submission } from "@/lib/submission-schema";
-import { createCarnetPlan } from "@/lib/carnet";
+import { createCarnetPlan, normalizePhone } from "@/lib/carnet";
 
 async function fingerprint(value: string) {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${process.env.RATE_LIMIT_SALT}:${value}`));
@@ -54,8 +54,15 @@ export async function persistSupabaseSubmission(submission: Submission, request:
   }
   try {
     if (submission.kind === "registration") {
-      const { error } = await db.from("camp_registrations").insert({ protocol: id, idempotency_key: submission.idempotencyKey, full_name: submission.nome, age: submission.idade, guardian_name: submission.responsavel || null, phone: submission.telefone, church: submission.igreja, location: submission.endereco, allergies: submission.alergias || null, medication: submission.medicacao || null, dietary_restrictions: submission.restricao || null, attended_before: submission.participou, shirt_size: submission.camiseta, payment_method: submission.pagamento, notes: `${submission.presskit === "Sim" ? "Presskit: Sim (valor será definido posteriormente). " : "Presskit: Não. "}Cor da camiseta: ${submission.corCamiseta}. ${submission.obs || ""}`, receipt_key: receiptKey, receipt_name: submission.comprovanteNome || null, receipt_type: submission.comprovanteTipo || null, consent_at: now, privacy_version: submission.privacyVersion, created_at: now, updated_at: now });
-      if (error) throw error;
+      const phoneNormalized = normalizePhone(submission.telefone);
+      const { data: existingPhone, error: phoneLookupError } = await db.from("camp_registrations").select("protocol").eq("phone_normalized", phoneNormalized).limit(1).maybeSingle();
+      if (phoneLookupError) throw phoneLookupError;
+      if (existingPhone) throw new Error("registration_phone_exists");
+      const { error } = await db.from("camp_registrations").insert({ protocol: id, idempotency_key: submission.idempotencyKey, full_name: submission.nome, age: submission.idade, guardian_name: submission.responsavel || null, phone: submission.telefone, phone_normalized: phoneNormalized, church: submission.igreja, location: submission.endereco, allergies: submission.alergias || null, medication: submission.medicacao || null, dietary_restrictions: submission.restricao || null, attended_before: submission.participou, shirt_size: submission.camiseta, payment_method: submission.pagamento, notes: `${submission.presskit === "Sim" ? "Presskit: Sim (valor será definido posteriormente). " : "Presskit: Não. "}Cor da camiseta: ${submission.corCamiseta}. ${submission.obs || ""}`, receipt_key: receiptKey, receipt_name: submission.comprovanteNome || null, receipt_type: submission.comprovanteTipo || null, consent_at: now, privacy_version: submission.privacyVersion, created_at: now, updated_at: now });
+      if (error) {
+        if (error.code === "23505" || error.message.includes("registration_phone_exists")) throw new Error("registration_phone_exists");
+        throw error;
+      }
       if (submission.pagamento === "Carnê") {
         const carnet = await createCarnetPlan({ protocol: id, fullName: submission.nome, phone: submission.telefone });
         carnetAccessToken = carnet.accessToken;

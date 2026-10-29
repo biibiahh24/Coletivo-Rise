@@ -3,6 +3,7 @@ import { submissionSchema, type Submission } from "@/lib/submission-schema";
 import { isSupabaseAdminConfigured } from "@/lib/supabase/admin";
 import { persistSupabaseSubmission } from "@/lib/supabase-submissions";
 import { notifyTelegram } from "@/lib/telegram";
+import { normalizePhone } from "@/lib/carnet";
 
 export const dynamic = "force-dynamic";
 
@@ -133,6 +134,7 @@ export async function POST(request: Request) {
       if (code === "rate_limited") return reply({ error: "Muitas tentativas. Aguarde alguns minutos e tente novamente." }, 429);
       if (code === "receipt_too_large") return reply({ error: "O comprovante deve ter no máximo 5 MB." }, 400);
       if (code === "invalid_receipt") return reply({ error: "O arquivo enviado não é um comprovante válido." }, 400);
+      if (code === "registration_phone_exists") return reply({ error: "Este número de celular já possui uma inscrição." }, 409);
       if (code === "submission_backend_unavailable") return reply({ error: "O sistema de inscrições está temporariamente indisponível. Tente novamente em instantes." }, 503);
       return reply({ error: "Não foi possível salvar o envio. Tente novamente." }, 500);
     }
@@ -218,6 +220,10 @@ export async function POST(request: Request) {
 
   try {
     if (submission.kind === "registration") {
+      const registeredPhones = await runtime.DB.prepare("SELECT phone FROM camp_registrations").all<{ phone: string }>();
+      if (registeredPhones.results.some((row) => normalizePhone(row.phone) === normalizePhone(submission.telefone))) {
+        return reply({ error: "Este número de celular já possui uma inscrição." }, 409);
+      }
       await runtime.DB.batch([
         runtime.DB.prepare(`INSERT INTO camp_registrations (
           protocol, idempotency_key, full_name, age, guardian_name, phone, church, location,
