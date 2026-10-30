@@ -48,14 +48,14 @@ test("links the registration page to the protected admin area", async () => {
   assert.match(siteChrome, /Área administrativa/);
 });
 
-test("presents the shirt photos as one first edition", async () => {
+test("presents the Rise products in the interactive storefront", async () => {
   const storePage = await readFile(new URL("app/loja/page.tsx", root), "utf8");
   const editionCarousel = await readFile(new URL("app/components/edition-carousel.tsx", root), "utf8");
   const shirtOrder = await readFile(new URL("app/components/shirt-order.tsx", root), "utf8");
   assert.match(storePage, /Loja oficial Rise/);
   assert.match(storePage, /store-intro-visual/);
   assert.doesNotMatch(storePage, /<ProductGallery \/>/);
-  assert.match(storePage, /Uma peça\. Uma mensagem\./);
+  assert.match(storePage, /product-showcase-section/);
   assert.match(storePage, /<EditionCarousel \/>/);
   assert.doesNotMatch(storePage, /Edição 02|Edição 03/);
   assert.match(editionCarousel, /aria-roledescription="carrossel"/);
@@ -67,8 +67,11 @@ test("presents the shirt photos as one first edition", async () => {
   assert.doesNotMatch(editionCarousel, /camiseta-rise-03\.jpeg/);
   assert.doesNotMatch(editionCarousel, /camiseta-rise-editorial\.jpeg/);
   assert.doesNotMatch(editionCarousel, /Edição 02|Edição 03/);
-  assert.match(shirtOrder, /const edition = "Camiseta Rise — Edição 01"/);
-  assert.doesNotMatch(shirtOrder, /Edição 02|Edição 03|Escolha uma edição/);
+  assert.match(shirtOrder, /Produtos Rise/);
+  assert.match(shirtOrder, /EM BREVE/);
+  assert.match(shirtOrder, /aria-disabled="true"/);
+  assert.match(shirtOrder, /role="tablist"/);
+  assert.match(shirtOrder, /presskit-rise-featured\.jpg/);
 });
 
 test("shows unique memories from previous camp editions", async () => {
@@ -76,9 +79,9 @@ test("shows unique memories from previous camp editions", async () => {
   const campGallery = await readFile(new URL("app/components/camp-memory-gallery.tsx", root), "utf8");
   const images = [...campGallery.matchAll(/image: "([^"]+)"/g)].map((match) => match[1]);
   assert.match(campPage, /<CampMemoryGallery \/>/);
-  assert.equal(images.length, 18);
+  assert.equal(images.length, 21);
   assert.equal(new Set(images).size, images.length);
-  assert.match(campGallery, /campMemories\.length} momentos, nenhuma foto repetida/);
+  assert.match(campGallery, /campMemories\.length} momentos/);
 });
 
 test("uses unique photos throughout the home page", async () => {

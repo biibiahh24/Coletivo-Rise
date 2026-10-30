@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         { name: `Inscrição Acampamento Rise — ${data.lote === "primeiras" ? "1º lote" : "próximas vagas"}`, description: "Inscrição para o Acampamento Rise 2027", quantity: 1, value: data.lote === "primeiras" ? 400 : 450 },
         ...(data.presskit === "Sim" ? [{ name: "Presskit Rise", description: "Presskit opcional do Acampamento Rise", quantity: 1, value: 60 }] : []),
       ]
-    : [{ name: data.product === "presskit" ? "Presskit Rise" : "Camiseta Rise — Edição 01", description: data.product === "presskit" ? "Caixa completa com camiseta e acessórios" : "Camiseta oficial da coleção Rise", quantity: data.quantity ?? 1, value: data.product === "presskit" ? 119.9 : 79.9 }];
+    : [{ name: data.product === "presskit" ? "Presskit Rise" : "Camiseta Rise — Edição 01", description: data.product === "presskit" ? "Caixa completa com camiseta e acessórios" : "Camiseta oficial da coleção Rise", quantity: data.quantity ?? 1, value: data.product === "presskit" ? 119.9 : 149 }];
 
   const origin = new URL(request.url).origin;
   const billingType = data.pagamento === "PIX" ? "PIX" : "CREDIT_CARD";

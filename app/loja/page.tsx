@@ -65,7 +65,7 @@ export default function LojaPage() {
               <span className="collection-product-kicker">Somente camiseta</span>
               <h3>Camiseta Rise</h3>
               <strong>EM BREVE</strong>
-              <p>Modelagem confortável com a identidade “Eu sou a porta” na frente e a arte Porta no verso.</p>
+              <p>Modelagem confortável com a mensagem “Levanta-te e Resplandece” em cada detalhe.</p>
               <a className="button button-orange" href="#pedido-camiseta">Comprar camiseta <ShoppingBag size={17} /></a>
             </div>
           </article>
@@ -112,12 +112,7 @@ export default function LojaPage() {
         <div className="size-notes"><span><Check /> Pagamento via PIX</span><span><Check /> Envio combinado com a equipe</span><span><Check /> Trocas consultadas pelo WhatsApp</span></div>
       </section>
 
-      <section className="section-shell order-section" id="pedido-camiseta">
-        <div className="order-intro">
-          <span className="eyebrow"><Shirt size={16} /> Pedido rápido</span>
-          <h2>Escolha. Confira. Chame no WhatsApp.</h2>
-          <p>Monte seu pedido e envie todas as informações de uma vez para a equipe Rise.</p>
-        </div>
+      <section className="product-showcase-section" id="pedido-camiseta" aria-label="Produtos Rise">
         <ShirtOrder />
       </section>
     </main>
