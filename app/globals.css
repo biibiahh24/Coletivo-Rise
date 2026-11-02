@@ -1258,7 +1258,9 @@ body:has(.edition-lightbox) { overflow: hidden; }
 
 @media (max-width: 520px) {
   .rise-storefront-bar { grid-template-columns: 1fr; }
-  .rise-cart-wrap { justify-self: start; }
+  /* Keep the cart beside (rather than over) the mobile menu button. */
+  .rise-cart-wrap { top: 12px; right: 58px; }
+  .rise-cart-card { position: fixed; top: 68px; right: 12px; left: 12px; width: auto; max-height: calc(100dvh - 82px); overflow-y: auto; }
   .rise-product-tabs { grid-template-columns: 1fr; }
   .rise-product-tabs button { min-height: 56px; }
   .rise-storefront-heading { margin-top: 38px; }
