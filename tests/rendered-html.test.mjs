@@ -69,7 +69,8 @@ test("presents the Rise products in the interactive storefront", async () => {
   assert.doesNotMatch(editionCarousel, /Edição 02|Edição 03/);
   assert.match(shirtOrder, /Produtos Rise/);
   assert.match(shirtOrder, /EM BREVE/);
-  assert.match(shirtOrder, /aria-disabled="true"/);
+  assert.match(shirtOrder, /rise-cart-trigger/);
+  assert.match(shirtOrder, /Finalizar compra/);
   assert.match(shirtOrder, /role="tablist"/);
   assert.match(shirtOrder, /presskit-rise-featured\.jpg/);
 });

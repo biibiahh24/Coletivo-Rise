@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import {
   Box, ChevronLeft, ChevronRight, Expand, LoaderCircle, Minus,
-  Plus, Send, ShieldCheck, Shirt, Truck, WalletCards, X,
+  Plus, Send, ShoppingCart, Shirt, Trash2, X,
 } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -42,6 +43,17 @@ const variantPhotos: Record<string, string[]> = {
   ],
 };
 
+type CartItem = {
+  id: string;
+  name: string;
+  edition: string;
+  color: string;
+  size: (typeof sizes)[number];
+  quantity: number;
+  unitPriceCents: number;
+  image: string;
+};
+
 export function ShirtOrder() {
   const [product, setProduct] = useState<"shirt" | "presskit">("shirt");
   const [variantIndex, setVariantIndex] = useState(0);
@@ -56,11 +68,24 @@ export function ShirtOrder() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [imageOpen, setImageOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const portalMounted = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  );
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const idempotencyKey = useRef<string | null>(null);
   const handleToken = useCallback((token: string) => setTurnstileToken(token), []);
   const selectedVariant = shirtVariants[variantIndex];
   const isPresskit = product === "presskit";
+  const currentPhoto = isPresskit
+    ? "/assets/presskit-rise-featured.jpg"
+    : (variantPhotos[selectedVariant.id] ?? [selectedVariant.image])[photoIndex];
+  const cartItem = cartItems[0] ?? null;
+  const cartQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const cartTotalCents = cartItems.reduce((total, item) => total + item.unitPriceCents * item.quantity, 0);
 
   function selectProduct(nextProduct: "shirt" | "presskit") {
     setProduct(nextProduct);
@@ -80,9 +105,40 @@ export function ShirtOrder() {
     setPhotoIndex((current) => (current + direction + photos.length) % photos.length);
   }
 
+  function addToCart() {
+    if (isPresskit) return;
+    const nextItem: CartItem = {
+      id: `${selectedVariant.id}-${size}`,
+      name: selectedVariant.name,
+      edition: selectedVariant.edition,
+      color: selectedVariant.color,
+      size,
+      quantity,
+      unitPriceCents: 4999,
+      image: selectedVariant.image,
+    };
+    setCartItems((current) => {
+      const existing = current.find((item) => item.id === nextItem.id);
+      if (!existing) return [...current, nextItem];
+      return current.map((item) => item.id === nextItem.id
+        ? { ...item, quantity: Math.min(5, item.quantity + nextItem.quantity) }
+        : item);
+    });
+    setCartOpen(true);
+  }
+
+  function updateCartQuantity(id: string, delta: -1 | 1) {
+    setCartItems((current) => current.flatMap((item) => {
+      if (item.id !== id) return [item];
+      const nextQuantity = item.quantity + delta;
+      return nextQuantity > 0 ? [{ ...item, quantity: Math.min(5, nextQuantity) }] : [];
+    }));
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!pagamento || !turnstileToken || !confirmed) return;
+    if (!cartItem) return;
     const data = new FormData(event.currentTarget);
     setSending(true);
     try {
@@ -98,10 +154,10 @@ export function ShirtOrder() {
           privacyVersion: "2026-10",
           nome: data.get("nome"),
           telefone: data.get("telefone"),
-          edition: selectedVariant.edition,
-          size,
-          color: selectedVariant.color,
-          quantity: String(quantity),
+          edition: cartItem.edition,
+          size: cartItem.size,
+          color: cartItem.color,
+          quantity: String(cartItem.quantity),
           pagamento,
         }),
       });
@@ -112,22 +168,25 @@ export function ShirtOrder() {
         const checkoutResponse = await fetch("/api/mercadopago/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ kind: "shirt", protocol: result.protocol, pagamento, product: "shirt", quantity }),
+          body: JSON.stringify({ kind: "shirt", protocol: result.protocol, pagamento, product: "shirt", quantity: cartQuantity }),
         });
         const checkout = await checkoutResponse.json() as { checkoutUrl?: string; error?: string };
         if (!checkoutResponse.ok || !checkout.checkoutUrl) throw new Error(checkout.error ?? "O pedido foi salvo, mas não foi possível abrir o pagamento.");
         window.location.assign(checkout.checkoutUrl);
         return;
       }
+      const itemsMessage = cartItems.map((item) => `${item.name} — ${item.color}, tamanho ${item.size}, ${item.quantity} unidade${item.quantity === 1 ? "" : "s"}`).join("; ");
       const message = [
         "Olá, equipe Rise! Meu pedido foi registrado no site.", `Protocolo: ${result.protocol}`,
-        `Nome: ${String(data.get("nome") ?? "")}`, `Modelo: ${selectedVariant.name}`,
-        `Cor: ${selectedVariant.color}`, `Tamanho: ${size}`, `Quantidade: ${quantity}`,
+        `Nome: ${String(data.get("nome") ?? "")}`, `Itens: ${itemsMessage}`,
+        `Total: R$ ${(cartTotalCents / 100).toFixed(2).replace(".", ",")}`,
         `Pagamento: ${pagamento}`, "Podem me confirmar a disponibilidade e o pagamento?",
       ].join("\n");
       const whatsappNumber = pagamento === "Dinheiro" ? "5511971590456" : "5511968778688";
       window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
       setCheckoutOpen(false);
+    setCartItems([]);
+      setCartOpen(false);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não conseguimos registrar o pedido agora.");
       setResetSignal((value) => value + 1);
@@ -150,6 +209,29 @@ export function ShirtOrder() {
           </button>
         </div>
         <div className="rise-storefront-signature" aria-label="Levanta-te e resplandece"><p>LEVANTA-TE<br />E RESPLANDECE</p><i aria-hidden="true" /></div>
+        {portalMounted && createPortal(<div className={`rise-cart-wrap${imageOpen || videoOpen || checkoutOpen ? " is-dialog-open" : ""}`}>
+          <button type="button" className="rise-cart-trigger" aria-expanded={cartOpen} aria-controls="rise-cart-card" onClick={() => setCartOpen((value) => !value)}>
+            <ShoppingCart aria-hidden="true" /><span>Carrinho</span><b>{cartQuantity}</b>
+          </button>
+          {cartOpen && <div id="rise-cart-card" className="rise-cart-card" role="dialog" aria-label="Carrinho de compras">
+            <div className="rise-cart-card-heading"><div><span>Seu carrinho</span><strong>{cartItems.length ? `${cartItems.length} seleção${cartItems.length === 1 ? "" : "ões"}` : "Carrinho vazio"}</strong></div><ShoppingCart aria-hidden="true" /></div>
+            {cartItems.length ? <>
+              <div className="rise-cart-items">
+                {cartItems.map((item) => <div className="rise-cart-item" key={item.id}>
+                  <img src={item.image} alt="" />
+                  <div><strong>{item.name}</strong><span>Tamanho {item.size} · {item.quantity} un.</span><b>R$ {(item.unitPriceCents * item.quantity / 100).toFixed(2).replace(".", ",")}</b></div>
+                  <div className="rise-cart-item-actions">
+                    <button type="button" aria-label={`Diminuir quantidade de ${item.name}`} onClick={() => updateCartQuantity(item.id, -1)}>−</button>
+                    <button type="button" aria-label={`Aumentar quantidade de ${item.name}`} onClick={() => updateCartQuantity(item.id, 1)}>+</button>
+                    <button type="button" aria-label={`Remover ${item.name} do carrinho`} onClick={() => setCartItems((current) => current.filter((entry) => entry.id !== item.id))}><Trash2 aria-hidden="true" /></button>
+                  </div>
+                </div>)}
+              </div>
+              <div className="rise-cart-total"><span>Total</span><strong>R$ {(cartTotalCents / 100).toFixed(2).replace(".", ",")}</strong></div>
+              <button type="button" className="rise-cart-checkout" onClick={() => { setCartOpen(false); setCheckoutOpen(true); }}>Finalizar compra</button>
+            </> : <p className="rise-cart-empty">Escolha uma camiseta para começar.</p>}
+          </div>}
+        </div>, document.body)}
       </div>
 
       <div className="rise-storefront-heading" id="rise-products">
@@ -171,9 +253,7 @@ export function ShirtOrder() {
             <button type="button" className="rise-stage-expand" onClick={() => setImageOpen(true)} aria-label="Ampliar imagem do produto"><Expand /></button>
             {!isPresskit && <button type="button" className="rise-stage-arrow rise-stage-prev" onClick={() => movePhoto(-1)} aria-label="Foto anterior"><ChevronLeft /></button>}
             <div className="rise-stage-media">
-              {isPresskit ? (
-                <img className="rise-stage-image" src="/assets/presskit-rise-featured.jpg" alt="Presskit Rise completo" />
-              ) : <img className="rise-stage-image" src={(variantPhotos[selectedVariant.id] ?? [selectedVariant.image])[photoIndex]} alt={`${selectedVariant.name}, foto ${photoIndex + 1}`} />}
+              <img className="rise-stage-image" src={currentPhoto} alt={isPresskit ? "Presskit Rise completo" : `${selectedVariant.name}, foto ${photoIndex + 1}`} />
             </div>
             {!isPresskit && <button type="button" className="rise-stage-arrow rise-stage-next" onClick={() => movePhoto(1)} aria-label="Próxima foto"><ChevronRight /></button>}
             {!isPresskit && <div className="rise-view-switcher" role="group" aria-label="Fotos da camiseta">
@@ -193,7 +273,7 @@ export function ShirtOrder() {
               <button type="button" onClick={() => setQuantity((value) => Math.min(5, value + 1))} disabled={quantity === 5} aria-label="Aumentar quantidade"><Plus /></button>
             </div></fieldset>
           </>}
-          <button type="button" className="rise-add-cart" disabled aria-disabled="true">EM BREVE</button>
+          <button type="button" className="rise-add-cart" disabled={isPresskit} onClick={addToCart}>{isPresskit ? "EM BREVE" : "Adicionar ao carrinho"}<ShoppingCart aria-hidden="true" /></button>
           <div className="rise-purchase-message"><i aria-hidden="true" /><p>Mais que roupas,<br />uma mensagem em movimento.</p><ChevronRight aria-hidden="true" /></div>
         </aside>
       </div>
@@ -202,7 +282,7 @@ export function ShirtOrder() {
         <DialogContent className="rise-image-dialog" showCloseButton={false} aria-describedby={undefined}>
           <DialogTitle className="sr-only">Imagem ampliada do produto</DialogTitle>
           <DialogClose className="rise-dialog-close" aria-label="Fechar imagem ampliada"><X /></DialogClose>
-          <img src={isPresskit ? "/assets/presskit-rise-featured.jpg" : selectedVariant.image} alt={isPresskit ? "Presskit Rise completo" : selectedVariant.name} />
+          <img src={currentPhoto} alt={isPresskit ? "Presskit Rise completo" : `${selectedVariant.name}, foto ${photoIndex + 1}`} />
         </DialogContent>
       </Dialog>
 
@@ -217,7 +297,7 @@ export function ShirtOrder() {
       <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
         <DialogContent className="rise-checkout-dialog" showCloseButton={false}>
           <DialogClose className="rise-dialog-close" aria-label="Fechar dados do pedido"><X /></DialogClose>
-          <DialogHeader><DialogTitle>Finalize seu pedido</DialogTitle><DialogDescription>{selectedVariant.name}, tamanho {size}, {quantity} unidade{quantity === 1 ? "" : "s"}.</DialogDescription></DialogHeader>
+          <DialogHeader><DialogTitle>Finalize seu pedido</DialogTitle><DialogDescription>{cartItems.length} seleção{cartItems.length === 1 ? "" : "ões"}, {cartQuantity} unidade{cartQuantity === 1 ? "" : "s"} — R$ {(cartTotalCents / 100).toFixed(2).replace(".", ",")}.</DialogDescription></DialogHeader>
           <form className="rise-checkout-form" onSubmit={handleSubmit}>
             <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
             <label className="field"><span>Seu nome *</span><Input name="nome" required autoComplete="name" placeholder="Como podemos te chamar?" /></label>
