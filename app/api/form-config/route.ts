@@ -19,7 +19,7 @@ export async function GET() {
     ? "10 primeiras vagas — R$ 400,00"
     : "Próximas vagas — R$ 450,00";
   return Response.json(
-    { configured: Boolean(siteKey), siteKey, registrationCount, currentLote },
+    { configured: Boolean(siteKey), siteKey, currentLote },
     { headers: { "Cache-Control": "no-store" } },
   );
 }

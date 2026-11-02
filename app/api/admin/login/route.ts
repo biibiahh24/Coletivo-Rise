@@ -34,19 +34,8 @@ export async function POST(request: Request) {
   if (!listed && !isConfiguredAdminEmail(email)) return reply({ error: "E-mail ou senha inválidos." }, 401);
 
   const supabase = await createSupabaseServerClient();
-  let login = await supabase.auth.signInWithPassword({ email, password });
-  if (login.error) {
-    const created = await admin.auth.admin.createUser({ email, password, email_confirm: true });
-    if (created.error) console.error("Admin user provisioning failed", created.error.code);
-    if (!created.error) login = await supabase.auth.signInWithPassword({ email, password });
-  }
+  const login = await supabase.auth.signInWithPassword({ email, password });
   if (login.error || !login.data.user) return reply({ error: "E-mail ou senha inválidos." }, 401);
-
-  const { error: allowlistError } = await admin.from("admin_users").upsert({ email }, { onConflict: "email" });
-  if (allowlistError) {
-    await supabase.auth.signOut();
-    return reply({ error: "Não foi possível preparar o acesso administrativo." }, 500);
-  }
   return reply({ ok: true, next: safeNext(next) });
 }
 
