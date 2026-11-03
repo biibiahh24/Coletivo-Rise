@@ -55,7 +55,6 @@ Principais grupos de configuração:
 - `ADMIN_EMAILS`, `RATE_LIMIT_SALT` e chaves do Turnstile;
 - `TELEGRAM_BOT_TOKEN` e `TELEGRAM_CHAT_ID`;
 - `MERCADOPAGO_ACCESS_TOKEN` e `MERCADOPAGO_ENV`;
-- `ASAAS_API_KEY`, `ASAAS_ENV` e `ASAAS_WEBHOOK_TOKEN`;
 - integração opcional com Google Apps Script.
 
 ## Comandos úteis
