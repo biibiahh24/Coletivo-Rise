@@ -20,6 +20,7 @@ function fileToBase64(file: File) {
 
 export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { initialLote?: string; initialPresskit?: string }) {
   const [participou, setParticipou] = useState("");
+  const [idade, setIdade] = useState("");
   const [camiseta, setCamiseta] = useState("");
   const [corCamiseta, setCorCamiseta] = useState("");
   const [lote, setLote] = useState(initialLote);
@@ -58,6 +59,12 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const idadeValue = Number(formData.get("idade"));
+    const responsavelValue = String(formData.get("responsavel") ?? "").trim();
+    if (idadeValue < 18 && !responsavelValue) {
+      toast.error("Informe o responsável pelo participante menor de idade.");
+      return;
+    }
     const file = formData.get("comprovante");
     if (file instanceof File && file.size > 5 * 1024 * 1024) {
       toast.error("O comprovante deve ter no máximo 5 MB.");
@@ -150,9 +157,9 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
           <legend><span>01</span><UserRound /> Dados pessoais</legend>
           <div className="form-grid">
             <label className="field field-wide"><span>Nome completo *</span><Input name="nome" autoComplete="name" required placeholder="Seu nome e sobrenome" /></label>
-            <label className="field"><span>Idade *</span><Input name="idade" type="number" min="10" max="99" required placeholder="Ex.: 18" /></label>
-            <label className="field"><span>Responsável, se menor</span><Input name="responsavel" placeholder="Nome do responsável" /></label>
-            <label className="field"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" autoComplete="tel" required placeholder="(11) 99999-9999" /></label>
+            <label className="field"><span>Idade *</span><Input name="idade" type="number" min="10" max="99" value={idade} onChange={(event) => setIdade(event.target.value)} required placeholder="Ex.: 18" /></label>
+            <label className="field"><span>Responsável{idade && Number(idade) < 18 ? " *" : ""}</span><Input name="responsavel" required={Boolean(idade) && Number(idade) < 18} placeholder={idade && Number(idade) < 18 ? "Nome do responsável (obrigatório)" : "Nome do responsável"} /></label>
+            <label className="field"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" inputMode="numeric" maxLength={11} autoComplete="tel" required placeholder="11999999999" /></label>
             <label className="field"><span>Igreja *</span><Input name="igreja" required placeholder="Nome da igreja" /></label>
             <label className="field field-wide"><span>Cidade / Bairro *</span><Input name="endereco" required placeholder="Ex.: São Paulo — Jardim Peri" /></label>
           </div>

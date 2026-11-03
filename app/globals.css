@@ -193,7 +193,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .logo-intro__lockup { display: flex; align-items: center; gap: clamp(16px, 2.5vw, 34px); animation: logo-intro-morph 3s cubic-bezier(.76, 0, .24, 1) forwards; }
 .logo-intro__mark { width: clamp(104px, 15vw, 190px); aspect-ratio: 1; border-radius: 0; object-fit: contain; filter: drop-shadow(0 22px 34px rgba(76, 42, 104, .18)); animation: logo-intro-symbol .8s cubic-bezier(.22, 1, .36, 1) .1s both; }
 .logo-intro__type { display: grid; gap: 3px; }
-.logo-intro__word { display: flex; line-height: .86; font-family: "Arial Narrow", "Roboto Condensed", Impact, sans-serif; font-stretch: condensed; font-size: clamp(2.8rem, 8vw, 7rem); font-weight: 900; letter-spacing: -.075em; transform: scaleX(.82); transform-origin: left center; }
+.logo-intro__word { display: flex; line-height: .86; font-family: "Arial Narrow", "Roboto Condensed", Impact, sans-serif; font-stretch: condensed; font-size: clamp(2.8rem, 8vw, 7rem); font-weight: 900; letter-spacing: -.02em; transform: scaleX(.82); transform-origin: left center; }
 .logo-intro__collective { color: var(--purple-dark); }
 .logo-intro__rise { color: var(--orange); }
 .logo-intro__letter { opacity: 0; animation: logo-intro-letter-drop .5s cubic-bezier(.22, 1, .36, 1) forwards; }

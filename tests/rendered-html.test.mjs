@@ -81,6 +81,7 @@ test("presents the Rise products in the interactive storefront", async () => {
   assert.match(shirtOrder, /rise-roxa.*rise-camiseta-3d-roxa\.mov/s);
   assert.match(shirtOrder, /rise-off-white.*rise-camiseta-3d-off-white\.mp4/s);
   assert.match(shirtOrder, /geracao: "\/assets\/rise-camiseta-3d-geracao\.mov"/);
+  assert.match(await readFile(new URL("app/components/registration-form.tsx", root), "utf8"), /required=\{Boolean\(idade\) && Number\(idade\) < 18\}/);
   assert.match(logoIntro, /logo-rise-transparent\.png/);
   assert.match(logoIntro, /logo-intro__lockup/);
   assert.match(logoIntro, /logo-intro__letter/);

@@ -309,7 +309,7 @@ export function ShirtOrder() {
           <form className="rise-checkout-form" onSubmit={handleSubmit}>
             <label className="form-honeypot" aria-hidden="true">Não preencha este campo<Input name="website" tabIndex={-1} autoComplete="off" /></label>
             <label className="field"><span>Seu nome *</span><Input name="nome" required autoComplete="name" placeholder="Como podemos te chamar?" /></label>
-            <label className="field"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" autoComplete="tel" required placeholder="(11) 99999-9999" /></label>
+            <label className="field"><span>Telefone / WhatsApp *</span><Input name="telefone" type="tel" inputMode="numeric" maxLength={11} autoComplete="tel" required placeholder="11999999999" /></label>
             <label className="field"><span>Forma de pagamento *</span><Select value={pagamento} onValueChange={setPagamento} required><SelectTrigger className="form-select"><SelectValue placeholder="Escolha uma forma" /></SelectTrigger><SelectContent>{["PIX", "Cartão", "Dinheiro"].map((item) => <SelectItem value={item} key={item}>{item}</SelectItem>)}</SelectContent></Select></label>
             <TurnstileWidget action="shirt_order" onToken={handleToken} resetSignal={resetSignal} />
             <div className="form-confirm"><Checkbox id="pedido-confirmacao" checked={confirmed} onCheckedChange={(value) => setConfirmed(Boolean(value))} /><label htmlFor="pedido-confirmacao">Autorizo o contato da equipe sobre este pedido e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>.</label></div>

@@ -41,7 +41,7 @@ export function CarnetLookupModal({ onClose }: { onClose: () => void }) {
       <h2 id="carnet-lookup-title">Consulte seu carnê.</h2>
       <p>Digite o número de telefone usado na inscrição para acessar seu saldo e pagamentos.</p>
       <form className="carnet-lookup" onSubmit={findCarnet}>
-        <label className="field"><span>Seu telefone</span><input ref={inputRef} required inputMode="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="(11) 99999-9999" /></label>
+        <label className="field"><span>Seu telefone</span><input ref={inputRef} required inputMode="numeric" maxLength={11} value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="11999999999" /></label>
         {error && <p className="carnet-lookup-error" role="alert">{error}</p>}
         <button className="button button-orange" type="submit" disabled={loading}>{loading ? <LoaderCircle className="spinner" /> : "Acessar meu carnê"}</button>
       </form>
