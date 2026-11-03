@@ -12,7 +12,7 @@ Site oficial do Coletivo Rise: uma experiência para apresentar o movimento, div
 - Inscrição em etapas para o Acampamento Rise;
 - Loja Rise com carrinho, controle de quantidade e checkout;
 - Camiseta Geração disponível para compra; modelos Roxa e Off-white sinalizados como “Em breve”;
-- Checkout e notificações integrados ao Mercado Pago, Asaas e Telegram;
+- Checkout integrado ao Mercado Pago e notificações via Telegram;
 - Carnês consultáveis por telefone e pagamentos parciais;
 - Área administrativa protegida para acompanhar inscrições e registros;
 - Validação no servidor, proteção antirrobô e controle de tentativas.
@@ -22,7 +22,7 @@ Site oficial do Coletivo Rise: uma experiência para apresentar o movimento, div
 - Next.js/Vinext, React, TypeScript e Vite;
 - Supabase para banco, autenticação e armazenamento;
 - Drizzle ORM e Zod;
-- Mercado Pago e Asaas para pagamentos;
+- Mercado Pago para pagamentos;
 - Telegram para notificações;
 - CSS responsivo e componentes com Lucide React;
 - Vercel para publicação contínua a partir da branch `main`.
@@ -97,3 +97,5 @@ Não faça cobranças reais durante testes. Use os ambientes de sandbox quando d
 - Site: [coletivorise.vercel.app](https://coletivorise.vercel.app)
 
 Projeto desenvolvido por **Beatriz Ramos** e **Lucas Ojevan** para o **Coletivo Rise**.
+
+- GitHub: [LucasOjevan](https://github.com/LucasOjevan)
