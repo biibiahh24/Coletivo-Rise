@@ -1,112 +1,100 @@
-# Coletivo Rise — Site Oficial
+# Coletivo Rise
 
-Site oficial do **Coletivo Rise**, criado para apresentar o movimento, divulgar encontros e células, organizar o Acampamento Rise 2027 e receber pedidos das coleções de camisetas.
+Site oficial do Coletivo Rise: uma experiência para apresentar o movimento, divulgar encontros e células, receber inscrições e oferecer a coleção de camisetas.
 
-> **“Levanta-te, resplandece, porque já vem a tua luz.” — Isaías 60:1**
+> “Levanta-te, resplandece, porque já vem a tua luz.” — Isaías 60:1
 
-## Recursos
+## O que o projeto oferece
 
-- Página inicial responsiva com destaques rotativos;
-- Páginas de células, acampamento, loja e privacidade;
-- Fotografias e vídeos reais do coletivo;
-- Inscrição do Acampamento Rise 2027;
-- Pedidos de camisetas com confirmação pelo WhatsApp;
-- Proteção antirrobô, controle de tentativas e validação no servidor;
-- Banco de dados para inscrições e pedidos;
-- Armazenamento privado de comprovantes;
-- Painel administrativo protegido em `/admin`;
-- Busca, filtros, atualização de status e exportação CSV;
-- Registro de alterações realizadas pela equipe;
-- Sincronização opcional com Google Sheets.
+- Página inicial responsiva com hero rotativo e abertura animada da marca;
+- Páginas de acampamento, células, loja e privacidade;
+- Galerias de fotos, vídeos de adoração e carrosséis de camisetas;
+- Inscrição em etapas para o Acampamento Rise;
+- Loja Rise com carrinho, controle de quantidade e checkout;
+- Camiseta Geração disponível para compra; modelos Roxa e Off-white sinalizados como “Em breve”;
+- Checkout e notificações integrados ao Mercado Pago, Asaas e Telegram;
+- Carnês consultáveis por telefone e pagamentos parciais;
+- Área administrativa protegida para acompanhar inscrições e registros;
+- Validação no servidor, proteção antirrobô e controle de tentativas.
 
-## Tecnologias
+## Stack
 
-- **TypeScript e JavaScript**
-- **React e Next.js**
-- **Vinext e Vite**
-- **Cloudflare Workers, D1, R2 e Turnstile**
-- **Drizzle ORM e SQLite**
-- **Zod**
-- **HTML e CSS**
-- **Google Apps Script**, opcional
-- **Git e GitHub**
+- Next.js/Vinext, React, TypeScript e Vite;
+- Supabase para banco, autenticação e armazenamento;
+- Drizzle ORM e Zod;
+- Mercado Pago e Asaas para pagamentos;
+- Telegram para notificações;
+- CSS responsivo e componentes com Lucide React;
+- Vercel para publicação contínua a partir da branch `main`.
 
-## Como executar localmente
+## Executar localmente
 
-### Pré-requisitos
+### Requisitos
 
 - Node.js `22.13.0` ou superior;
 - npm;
 - Git.
 
-Clone o repositório, entre na pasta e instale as dependências:
-
 ```bash
 git clone https://github.com/biibiahh24/Coletivo-Rise.git
 cd Coletivo-Rise
 npm install
-```
-
-Inicie o ambiente local:
-
-```bash
 npm run dev
 ```
 
-Se estiver usando uma versão anterior no Windows e o comando acima apresentar erro com `WRANGLER_LOG_PATH`, utilize:
+Abra `http://localhost:5173` no navegador. O painel local fica em `http://localhost:5173/admin`.
+
+## Variáveis de ambiente
+
+Crie `.env.local` a partir de `.env.example`. Nunca publique esse arquivo nem tokens reais.
+
+Principais grupos de configuração:
+
+- `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`;
+- `SUPABASE_SECRET_KEY` ou `SUPABASE_SERVICE_ROLE_KEY` (somente servidor);
+- `ADMIN_EMAILS`, `RATE_LIMIT_SALT` e chaves do Turnstile;
+- `TELEGRAM_BOT_TOKEN` e `TELEGRAM_CHAT_ID`;
+- `MERCADOPAGO_ACCESS_TOKEN` e `MERCADOPAGO_ENV`;
+- `ASAAS_API_KEY`, `ASAAS_ENV` e `ASAAS_WEBHOOK_TOKEN`;
+- integração opcional com Google Apps Script.
+
+## Comandos úteis
 
 ```bash
-npx vite
+npm run dev             # servidor local
+npm run build           # build de produção
+npm run start           # inicia o build
+npm test                # build e testes automatizados
+npm run lint            # ESLint do projeto
+npm run security:audit  # auditoria de dependências de produção
 ```
 
-Abra o endereço apresentado no terminal, normalmente `http://localhost:5173`.
+Antes de publicar alterações de interface ou integrações, também é recomendado executar:
 
-O painel pode ser visualizado localmente em `http://localhost:5173/admin`. No ambiente local ele abre automaticamente em modo de demonstração, com dados fictícios e sem permitir alterações. A autenticação real, o banco e os recursos administrativos completos são habilitados somente no site hospedado.
-
-## Configuração segura
-
-Crie um arquivo `.env.local` somente no computador, utilizando `.env.example` como referência:
-
-```env
-TURNSTILE_SITE_KEY=
-TURNSTILE_SECRET_KEY=
-ADMIN_EMAILS=
-RATE_LIMIT_SALT=
-GOOGLE_APPS_SCRIPT_URL=
-GOOGLE_APPS_SCRIPT_SECRET=
+```bash
+npx tsc --noEmit
+node --test tests/rendered-html.test.mjs
 ```
 
-- `TURNSTILE_SITE_KEY` e `TURNSTILE_SECRET_KEY`: proteção dos formulários;
-- `ADMIN_EMAILS`: e-mails autorizados no painel, separados por vírgula;
-- `RATE_LIMIT_SALT`: valor aleatório usado no controle de tentativas;
-- chaves do Google Apps Script: opcionais, usadas somente para a cópia operacional em planilha.
+## Publicação
 
-Nunca envie `.env.local`, senhas, tokens ou chaves privadas ao GitHub.
+O fluxo oficial usa a branch `main`:
 
-## Dados e privacidade
+```bash
+git add <arquivos>
+git commit -m "mensagem da alteração"
+git push origin main
+```
 
-O banco D1 é a fonte oficial das inscrições e dos pedidos. Os comprovantes ficam no armazenamento privado R2 e são entregues apenas após autenticação e autorização no painel. A exportação CSV também exige acesso administrativo e fica registrada na auditoria.
+O push aciona o deploy automático da Vercel. O site publicado está em [coletivorise.vercel.app](https://coletivorise.vercel.app).
 
-O WhatsApp recebe somente o protocolo e o resumo necessário para a confirmação. Informações de saúde não são incluídas na mensagem.
+## Segurança e privacidade
 
-## Versões
-
-- `v1.0.0`: primeira versão oficial do projeto, correspondente à fase interna V4;
-- `v6.0.0`: fotografias reais, vídeos, coleção e Acampamento Rise 2027;
-- **V8:** melhorias de responsividade e apresentação;
-- **V9 em preparação:** banco de dados, painel administrativo, CSV e segurança dos formulários.
-
-As versões publicadas podem ser consultadas na área de **Releases** do GitHub.
+Não faça cobranças reais durante testes. Use os ambientes de sandbox quando disponíveis e mantenha chaves, tokens, dados do Supabase e comprovantes fora do Git. A autorização administrativa e o processamento de pagamentos devem ocorrer no servidor.
 
 ## Contato
 
-- Instagram: [**@coletivo_rise**](https://www.instagram.com/coletivo_rise/)
-- WhatsApp: disponível pelos botões oficiais do site.
-
-## Autoria
+- Instagram: [@coletivo_rise](https://www.instagram.com/coletivo_rise/)
+- Site: [coletivorise.vercel.app](https://coletivorise.vercel.app)
 
 Projeto desenvolvido por **Beatriz Ramos** para o **Coletivo Rise**.
-
----
-
-**Rise — uma geração em movimento.**
