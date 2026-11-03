@@ -7,7 +7,6 @@ import {
   MapPin,
   MessageCircle,
   Music2,
-  Play,
   Shirt,
   Sparkles,
   UsersRound,
@@ -162,7 +161,6 @@ export default function Home() {
                   Seu navegador não consegue reproduzir este vídeo.
                 </video>
                 <span className="video-number">0{index + 1}</span>
-                <span className="video-hint"><Play size={14} fill="currentColor" /> Assistir</span>
               </div>
               <h3>{moment.title}</h3>
               <p>{moment.text}</p>
