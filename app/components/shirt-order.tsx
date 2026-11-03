@@ -43,6 +43,12 @@ const variantPhotos: Record<string, string[]> = {
   ],
 };
 
+const variantVideos: Partial<Record<string, string>> = {
+  "rise-off-white": "/assets/rise-camiseta-3d-off-white.mp4",
+  "rise-roxa": "/assets/rise-camiseta-3d-roxa.mov",
+  geracao: "/assets/rise-camiseta-3d-geracao.mov",
+};
+
 type CartItem = {
   id: string;
   name: string;
@@ -84,6 +90,7 @@ export function ShirtOrder() {
   const currentPhoto = isPresskit
     ? "/assets/presskit-rise-featured.jpg"
     : (variantPhotos[selectedVariant.id] ?? [selectedVariant.image])[photoIndex];
+  const currentVideo = !isPresskit ? variantVideos[selectedVariant.id] : undefined;
   const cartItem = cartItems[0] ?? null;
   const cartQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
   const cartTotalCents = cartItems.reduce((total, item) => total + item.unitPriceCents * item.quantity, 0);
@@ -250,7 +257,7 @@ export function ShirtOrder() {
             ))}
           </div>
           <div className="rise-product-stage">
-            <div className="rise-stage-instruction"><strong><Box /> Produto</strong><span>Veja os detalhes da camiseta.</span><button type="button" className="rise-view-3d-button" onClick={() => setVideoOpen(true)}>Veja 3D</button></div>
+            <div className="rise-stage-instruction"><strong><Box /> Produto</strong><span>Veja os detalhes da camiseta.</span><button type="button" className="rise-view-3d-button" onClick={() => currentVideo && setVideoOpen(true)} disabled={!currentVideo}>{currentVideo ? "Veja 3D" : "3D em breve"}</button></div>
             <button type="button" className="rise-stage-expand" onClick={() => setImageOpen(true)} aria-label="Ampliar imagem do produto"><Expand /></button>
             {!isPresskit && <button type="button" className="rise-stage-arrow rise-stage-prev" onClick={() => movePhoto(-1)} aria-label="Foto anterior"><ChevronLeft /></button>}
             <div className="rise-stage-media">
@@ -291,7 +298,7 @@ export function ShirtOrder() {
         <DialogContent className="rise-video-dialog" showCloseButton={false} aria-describedby={undefined}>
           <DialogTitle className="sr-only">Vídeo 3D da camiseta</DialogTitle>
           <DialogClose className="rise-dialog-close" aria-label="Fechar vídeo 3D"><X /></DialogClose>
-          <video className="rise-3d-video" src="/assets/rise-camiseta-3d.mp4" autoPlay muted playsInline controls />
+          {currentVideo && <video className="rise-3d-video" src={currentVideo} autoPlay muted playsInline controls />}
         </DialogContent>
       </Dialog>
 

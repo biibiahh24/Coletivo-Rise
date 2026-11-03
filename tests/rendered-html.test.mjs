@@ -78,6 +78,9 @@ test("presents the Rise products in the interactive storefront", async () => {
   assert.match(shirtOrder, /Finalizar compra/);
   assert.match(shirtOrder, /role="tablist"/);
   assert.match(shirtOrder, /presskit-rise-featured\.jpg/);
+  assert.match(shirtOrder, /rise-roxa.*rise-camiseta-3d-roxa\.mov/s);
+  assert.match(shirtOrder, /rise-off-white.*rise-camiseta-3d-off-white\.mp4/s);
+  assert.match(shirtOrder, /geracao: "\/assets\/rise-camiseta-3d-geracao\.mov"/);
   assert.match(logoIntro, /logo-rise-transparent\.png/);
   assert.match(logoIntro, /logo-intro__lockup/);
   assert.match(logoIntro, /logo-intro__letter/);
