@@ -97,4 +97,4 @@ Não faça cobranças reais durante testes. Use os ambientes de sandbox quando d
 - Instagram: [@coletivo_rise](https://www.instagram.com/coletivo_rise/)
 - Site: [coletivorise.vercel.app](https://coletivorise.vercel.app)
 
-Projeto desenvolvido por **Beatriz Ramos** para o **Coletivo Rise**.
+Projeto desenvolvido por **Beatriz Ramos** e **Lucas Ojevan** para o **Coletivo Rise**.
