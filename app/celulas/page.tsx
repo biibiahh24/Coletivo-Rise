@@ -24,7 +24,7 @@ export default function CelulasPage() {
         description="As células conectam jovens durante a semana para viver Palavra, oração, amizade e propósito mais de perto."
         icon={Home}
       >
-        <a href="https://wa.me/5511968778688?text=Olá!%20Quero%20encontrar%20a%20célula%20Rise%20mais%20próxima." target="_blank" rel="noreferrer" className="button button-light">Encontrar minha célula <MapPin size={18} /></a>
+        <a href="https://wa.me/5511971590456?text=Olá!%20Quero%20encontrar%20a%20célula%20Rise%20mais%20próxima." target="_blank" rel="noreferrer" className="button button-light">Encontrar minha célula <MapPin size={18} /></a>
       </SectionHero>
 
       <section className="section-shell cell-rhythm" aria-labelledby="cell-rhythm-title">

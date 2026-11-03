@@ -1812,6 +1812,14 @@ body:has(.carnet-lookup-backdrop) { overflow: hidden; }
   .logo-intro__lockup { animation-duration: 3s !important; animation-iteration-count: 1 !important; }
 }
 
+/* A faixa de manifesto funciona como movimento de ambientação no desktop. */
+@media (min-width: 769px) {
+  .manifesto-track {
+    animation: marquee 22s linear infinite !important;
+    will-change: transform;
+  }
+}
+
 .final-cta-pricing { display: grid; grid-template-columns: repeat(3, minmax(130px, 1fr)); gap: 10px; margin-top: 22px; }
 .final-cta-price-option { display: grid; gap: 3px; margin: 0; padding: 12px 14px; border: 1px solid rgba(255,255,255,.28); border-radius: 14px; color: inherit; background: rgba(255,255,255,.1); text-decoration: none; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
 .final-cta-price-option:hover, .final-cta-price-option:focus-visible { color: inherit; background: rgba(255,255,255,.18); border-color: white; transform: translateY(-2px); }

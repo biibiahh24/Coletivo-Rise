@@ -86,7 +86,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
           <div className="footer-social">
             <Link href="/privacidade">Privacidade</Link>
             <a href="https://www.instagram.com/coletivo_rise/" target="_blank" rel="noreferrer"><Camera /> @coletivo_rise</a>
-            <a href="https://wa.me/5511968778688" target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a>
+            <a href="https://wa.me/5511971590456" target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a>
           </div>
           <p>© 2026 Coletivo Rise. Feito para uma geração em movimento.</p>
         </div>

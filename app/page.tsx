@@ -182,7 +182,7 @@ export default function Home() {
           <a href="https://www.instagram.com/coletivo_rise/" target="_blank" rel="noreferrer" className="instagram-handle">
             <span>@coletivo_rise</span><ArrowUpRight />
           </a>
-          <a href="https://wa.me/5511968778688" target="_blank" rel="noreferrer" className="instagram-whatsapp"><MessageCircle /> Falar com a equipe no WhatsApp</a>
+          <a href="https://wa.me/5511971590456" target="_blank" rel="noreferrer" className="instagram-whatsapp"><MessageCircle /> Falar com a equipe no WhatsApp</a>
         </div>
       </section>
 

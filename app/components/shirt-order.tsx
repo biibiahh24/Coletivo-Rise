@@ -190,7 +190,7 @@ export function ShirtOrder() {
         `Total: R$ ${(cartTotalCents / 100).toFixed(2).replace(".", ",")}`,
         `Pagamento: ${pagamento}`, "Podem me confirmar a disponibilidade e o pagamento?",
       ].join("\n");
-      const whatsappNumber = pagamento === "Dinheiro" ? "5511971590456" : "5511968778688";
+      const whatsappNumber = "5511971590456";
       window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
       setCheckoutOpen(false);
     setCartItems([]);

@@ -14,7 +14,7 @@ export default function SucessoPage() {
         <p>A equipe do Coletivo Rise entrará em contato pelo WhatsApp com a confirmação e as próximas informações.</p>
         <div className="success-actions">
           <Link href="/" className="button button-dark"><ArrowLeft size={18} /> Voltar ao início</Link>
-          <a href="https://wa.me/5511968778688" target="_blank" rel="noreferrer" className="button button-outline-dark"><MessageCircle size={18} /> Falar com a equipe</a>
+        <a href="https://wa.me/5511971590456" target="_blank" rel="noreferrer" className="button button-outline-dark"><MessageCircle size={18} /> Falar com a equipe</a>
         </div>
       </section>
     </main>
