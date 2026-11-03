@@ -13,6 +13,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { RotatingHero } from "./components/rotating-hero";
+import { LogoIntroTransition } from "./components/logo-intro-transition";
 
 const experiences = [
   {
@@ -48,6 +49,7 @@ const worshipMoments = [
 export default function Home() {
   return (
     <main>
+      <LogoIntroTransition />
       <RotatingHero />
 
       <section className="section-shell experience-section" aria-labelledby="experiencias-title">

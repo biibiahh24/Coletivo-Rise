@@ -16,9 +16,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TurnstileWidget } from "./turnstile-widget";
 
 const shirtVariants = [
-  { id: "rise-off-white", name: "Rise Off-white", edition: "Camiseta Rise — Levanta-te Off-white", color: "Off-white", image: "/assets/miniatura-rise-offwhite-wireframe.png", embeddedThumbnailCopy: true },
-  { id: "rise-roxa", name: "Rise Roxa", edition: "Camiseta Rise — Levanta-te Roxa", color: "Roxa", image: "/assets/miniatura-rise-roxa-wireframe.png", embeddedThumbnailCopy: true },
-  { id: "geracao", name: "Geração que se levanta", edition: "Camiseta Rise — Geração que se levanta", color: "Preta", image: "/assets/miniatura-rise-geracao-wireframe.png", embeddedThumbnailCopy: true },
+  { id: "rise-off-white", name: "Rise Off-white", edition: "Camiseta Rise — Levanta-te Off-white", color: "Off-white", image: "/assets/miniatura-rise-offwhite-wireframe.png", embeddedThumbnailCopy: true, available: false },
+  { id: "rise-roxa", name: "Rise Roxa", edition: "Camiseta Rise — Levanta-te Roxa", color: "Roxa", image: "/assets/miniatura-rise-roxa-wireframe.png", embeddedThumbnailCopy: true, available: false },
+  { id: "geracao", name: "Geração que se levanta", edition: "Camiseta Rise — Geração que se levanta", color: "Preta", image: "/assets/miniatura-rise-geracao-wireframe.png", embeddedThumbnailCopy: true, available: true },
 ] as const;
 
 const sizes = ["PP", "P", "M", "G", "GG"] as const;
@@ -80,6 +80,7 @@ export function ShirtOrder() {
   const handleToken = useCallback((token: string) => setTurnstileToken(token), []);
   const selectedVariant = shirtVariants[variantIndex];
   const isPresskit = product === "presskit";
+  const isPurchasable = !isPresskit && selectedVariant.available;
   const currentPhoto = isPresskit
     ? "/assets/presskit-rise-featured.jpg"
     : (variantPhotos[selectedVariant.id] ?? [selectedVariant.image])[photoIndex];
@@ -106,7 +107,7 @@ export function ShirtOrder() {
   }
 
   function addToCart() {
-    if (isPresskit) return;
+    if (!isPurchasable) return;
     const nextItem: CartItem = {
       id: `${selectedVariant.id}-${size}`,
       name: selectedVariant.name,
@@ -264,8 +265,8 @@ export function ShirtOrder() {
 
         <aside className="rise-purchase-card" aria-label="Configurar produto">
           <div className="rise-purchase-title"><div><h3>{isPresskit ? "Presskit Rise" : `${selectedVariant.name}.`}</h3><p>{isPresskit ? "Kit completo com produtos e materiais Rise." : "Camiseta oversized em algodão premium."}</p></div><i aria-hidden="true" /></div>
-          <strong className="rise-product-price">{isPresskit ? "EM BREVE" : "R$ 49,99"}</strong>
-          {!isPresskit && <>
+          <strong className="rise-product-price" aria-live="polite">{isPurchasable ? "R$ 49,99" : "Em breve"}</strong>
+          {isPurchasable && <>
             <fieldset className="rise-option-group"><legend>Tamanho</legend><div className="rise-size-options">{sizes.map((item) => <button key={item} type="button" className={size === item ? "is-selected" : ""} aria-pressed={size === item} onClick={() => setSize(item)}>{item}</button>)}</div></fieldset>
             <fieldset className="rise-option-group"><legend>Quantidade</legend><div className="rise-quantity-control">
               <button type="button" onClick={() => setQuantity((value) => Math.max(1, value - 1))} disabled={quantity === 1} aria-label="Diminuir quantidade"><Minus /></button>
@@ -273,7 +274,7 @@ export function ShirtOrder() {
               <button type="button" onClick={() => setQuantity((value) => Math.min(5, value + 1))} disabled={quantity === 5} aria-label="Aumentar quantidade"><Plus /></button>
             </div></fieldset>
           </>}
-          <button type="button" className="rise-add-cart" disabled={isPresskit} onClick={addToCart}>{isPresskit ? "EM BREVE" : "Adicionar ao carrinho"}<ShoppingCart aria-hidden="true" /></button>
+          <button type="button" className="rise-add-cart" disabled={!isPurchasable} onClick={addToCart}>{isPurchasable ? "Adicionar ao carrinho" : "Em breve"}<ShoppingCart aria-hidden="true" /></button>
           <div className="rise-purchase-message"><i aria-hidden="true" /><p>Mais que roupas,<br />uma mensagem em movimento.</p><ChevronRight aria-hidden="true" /></div>
         </aside>
       </div>

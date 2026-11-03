@@ -52,6 +52,7 @@ test("presents the Rise products in the interactive storefront", async () => {
   const storePage = await readFile(new URL("app/loja/page.tsx", root), "utf8");
   const editionCarousel = await readFile(new URL("app/components/edition-carousel.tsx", root), "utf8");
   const shirtOrder = await readFile(new URL("app/components/shirt-order.tsx", root), "utf8");
+  const logoIntro = await readFile(new URL("app/components/logo-intro-transition.tsx", root), "utf8");
   assert.match(storePage, /Loja oficial Rise/);
   assert.match(storePage, /store-intro-visual/);
   assert.doesNotMatch(storePage, /<ProductGallery \/>/);
@@ -68,11 +69,20 @@ test("presents the Rise products in the interactive storefront", async () => {
   assert.doesNotMatch(editionCarousel, /camiseta-rise-editorial\.jpeg/);
   assert.doesNotMatch(editionCarousel, /Edição 02|Edição 03/);
   assert.match(shirtOrder, /Produtos Rise/);
-  assert.match(shirtOrder, /EM BREVE/);
+  assert.match(shirtOrder, /id: "rise-off-white"[\s\S]*?available: false/);
+  assert.match(shirtOrder, /id: "rise-roxa"[\s\S]*?available: false/);
+  assert.match(shirtOrder, /id: "geracao"[\s\S]*?available: true/);
+  assert.match(shirtOrder, /isPurchasable \? "R\$ 49,99" : "Em breve"/);
+  assert.match(shirtOrder, /if \(!isPurchasable\) return/);
   assert.match(shirtOrder, /rise-cart-trigger/);
   assert.match(shirtOrder, /Finalizar compra/);
   assert.match(shirtOrder, /role="tablist"/);
   assert.match(shirtOrder, /presskit-rise-featured\.jpg/);
+  assert.match(logoIntro, /logo-rise-transparent\.png/);
+  assert.match(logoIntro, /logo-intro__lockup/);
+  assert.match(logoIntro, /logo-intro__letter/);
+  assert.match(logoIntro, /Pular animação/);
+  assert.doesNotMatch(logoIntro, /sessionStorage/);
 });
 
 test("shows unique memories from previous camp editions", async () => {
