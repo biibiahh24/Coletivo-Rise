@@ -87,6 +87,10 @@ test("presents the Rise products in the interactive storefront", async () => {
   assert.match(logoIntro, /logo-intro__letter/);
   assert.match(logoIntro, /Pular animação/);
   assert.doesNotMatch(logoIntro, /sessionStorage/);
+  const adminPage = await readFile(new URL("app/admin/page.tsx", root), "utf8");
+  const adminTabs = await readFile(new URL("app/admin/admin-section-tabs.tsx", root), "utf8");
+  assert.match(adminPage, /registrations_all/);
+  assert.match(adminTabs, />\s*Inscrições\s*</);
 });
 
 test("shows unique memories from previous camp editions", async () => {

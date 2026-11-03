@@ -100,7 +100,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
 
   const db = localDemo ? null : createSupabaseAdminClient();
   const params = await searchParams;
-  const view = params.view === "shirts" ? "shirts" : params.view === "carnets" ? "carnets" : params.view === "registrations_presskit" ? "registrations_presskit" : "registrations";
+  const view = params.view === "shirts" ? "shirts" : params.view === "carnets" ? "carnets" : params.view === "registrations_presskit" ? "registrations_presskit" : params.view === "registrations_all" ? "registrations_all" : "registrations";
   const query = (params.q ?? "").trim().slice(0, 120);
   const filterStatus = (params.status ?? "").trim();
   const counts = localDemo
@@ -129,11 +129,11 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
   let shirts: ShirtOrder[] = [];
   let carnets: CarnetPlan[] = [];
   let carnetPayments: CarnetPayment[] = [];
-  if (view === "registrations" || view === "registrations_presskit") {
+  if (view === "registrations" || view === "registrations_presskit" || view === "registrations_all") {
     if (localDemo) {
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
         registrations = demoRegistrations.filter((item) =>
-        (view === "registrations_presskit" ? hasPresskit(item) : !hasPresskit(item)) &&
+        (view === "registrations_all" || (view === "registrations_presskit" ? hasPresskit(item) : !hasPresskit(item))) &&
         (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))) &&
         (!filterStatus || item.registration_status === filterStatus),
       );
@@ -144,7 +144,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
       if (result.error) throw result.error;
       const normalizedQuery = query.toLocaleLowerCase("pt-BR");
       registrations = (result.data as Registration[]).filter((item) =>
-        (view === "registrations_presskit" ? hasPresskit(item) : !hasPresskit(item)) &&
+        (view === "registrations_all" || (view === "registrations_presskit" ? hasPresskit(item) : !hasPresskit(item))) &&
         (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))));
     }
   } else if (view === "shirts") {
@@ -228,7 +228,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
           <label><Search /><input name="q" defaultValue={query} placeholder="Buscar nome, protocolo ou telefone" /></label>
           <select name="status" defaultValue={filterStatus} aria-label="Filtrar por status">
             <option value="">Todos os status</option>
-            {(view === "registrations" || view === "registrations_presskit"
+            {(view === "registrations" || view === "registrations_presskit" || view === "registrations_all"
               ? [["pending", "Pendente"], ["confirmed", "Confirmada"], ["waitlist", "Lista de espera"], ["cancelled", "Cancelada"]]
               : view === "shirts" ? [["pending", "Novo"], ["separated", "Separado"], ["delivered", "Entregue"], ["cancelled", "Cancelado"]]
               : [["pending", "Pendente"], ["paid", "Pago"], ["overdue", "Atrasado"]]
@@ -237,7 +237,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
           <button type="submit">Filtrar</button>
         </form>
 
-        {view === "registrations" || view === "registrations_presskit" ? (
+        {view === "registrations" || view === "registrations_presskit" || view === "registrations_all" ? (
           <div className="admin-records">
             {registrations.length === 0 && <p className="admin-empty">Nenhuma inscrição encontrada.</p>}
             {registrations.map((item) => (

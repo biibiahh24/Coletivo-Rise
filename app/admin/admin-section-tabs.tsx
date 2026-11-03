@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-type AdminView = "registrations" | "registrations_presskit" | "shirts" | "carnets";
+type AdminView = "registrations" | "registrations_presskit" | "registrations_all" | "shirts" | "carnets";
 
 export function AdminSectionTabs({ view }: { view: AdminView }) {
   const pathname = usePathname();
@@ -25,6 +25,9 @@ export function AdminSectionTabs({ view }: { view: AdminView }) {
 
   return (
     <nav aria-label="Tipos de registro">
+      <Link className={view === "registrations_all" ? "active" : ""} href="/admin?view=registrations_all" onClick={resetScroll}>
+        Inscrições
+      </Link>
       <Link className={view === "registrations" ? "active" : ""} href="/admin?view=registrations" onClick={resetScroll}>
         Acampamento
       </Link>
