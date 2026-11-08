@@ -61,6 +61,7 @@ export default function AcampamentoPage() {
             <span><MapPin size={17} /> Mogi das Cruzes - Bairro Varinhas</span>
             <span><UsersRound size={17} /> Vagas limitadas</span>
             <span><Heart size={17} /> Ambiente preparado com cuidado</span>
+            <span><CalendarDays size={17} /> 5 dias para viver conexões, fé e transformação</span>
           </div>
         </div>
         <div className="gallery-mosaic">
