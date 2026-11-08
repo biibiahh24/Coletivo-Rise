@@ -58,7 +58,7 @@ export default function AcampamentoPage() {
           <h2 id="gallery-title">Conexões que continuam depois do último dia.</h2>
           <p>O acampamento é sobre estar presente: nas conversas, na adoração, nas amizades e no que Deus está construindo.</p>
           <div className="info-pills">
-            <span><MapPin size={17} /> Local divulgado pela equipe</span>
+            <span><MapPin size={17} /> Mogi das Cruzes - Bairro Varinhas</span>
             <span><UsersRound size={17} /> Vagas limitadas</span>
             <span><Heart size={17} /> Ambiente preparado com cuidado</span>
           </div>
