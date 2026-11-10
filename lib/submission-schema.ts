@@ -11,7 +11,7 @@ const securityFields = {
   turnstileToken: cleanText(2048).default(""),
   website: cleanText(0).optional().default(""),
   consent: z.literal(true),
-  privacyVersion: z.literal("2026-10"),
+  privacyVersion: z.literal("2026-11"),
 };
 
 export const registrationSubmission = z.object({

@@ -159,7 +159,7 @@ export function ShirtOrder() {
           turnstileToken,
           website: data.get("website"),
           consent: confirmed,
-          privacyVersion: "2026-10",
+          privacyVersion: "2026-11",
           nome: data.get("nome"),
           telefone: data.get("telefone"),
           edition: cartItem.edition,

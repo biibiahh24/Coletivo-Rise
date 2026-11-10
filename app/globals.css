@@ -653,7 +653,7 @@ h1, h2, h3 { overflow-wrap: break-word; }
 .gallery-mosaic img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }
 .gallery-mosaic .gallery-main { grid-row: span 2; }
 
-.camp-memory-wall { padding: 100px 0 120px; }
+.camp-memory-wall { position: relative; z-index: 1; clear: both; margin-top: 72px; padding: 100px 0 120px; background: var(--cream); }
 .camp-memory-heading { display: grid; grid-template-columns: 1.15fr .85fr; gap: 70px; align-items: end; margin-bottom: 42px; }
 .camp-memory-heading h2 { margin: 17px 0 0; max-width: 850px; font-size: clamp(2.8rem,5.3vw,5.5rem); }
 .camp-memory-heading h2 em { color: var(--orange); font-style: normal; }
@@ -1679,7 +1679,7 @@ body:has(.carnet-lookup-backdrop) { overflow: hidden; }
   .camp-gallery { padding-top: 25px; }
   .gallery-mosaic { height: 650px; grid-template-columns: 1fr 1fr; grid-template-rows: 1.15fr .85fr; }
   .gallery-mosaic .gallery-main { grid-column: span 2; grid-row: auto; }
-  .camp-memory-wall { padding: 55px 0 85px; }
+  .camp-memory-wall { margin-top: 96px; padding: 90px 0 85px; }
   .camp-memory-heading { gap: 18px; }
   .camp-memory-card { flex-basis: min(72vw,340px); height: 420px; }
   .camp-memory-card.wide { flex-basis: min(82vw,460px); }

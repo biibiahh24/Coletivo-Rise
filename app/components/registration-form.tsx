@@ -81,7 +81,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         turnstileToken,
         website: text("website"),
         consent: confirmed,
-        privacyVersion: "2026-10",
+        privacyVersion: "2026-11",
         nome: text("nome"),
         idade: text("idade"),
         responsavel: text("responsavel"),
@@ -212,13 +212,13 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
               </Select>
             </label>
             <label className="field"><span>Comprovante (opcional, caso já tenha pago)</span><Input name="comprovante" type="file" accept="image/*,application/pdf" /></label>
-            <label className="field field-wide"><span>Observações adicionais</span><Textarea name="obs" rows={4} placeholder="Algo importante que a equipe precisa saber?" /></label>
+            <label className="field field-wide"><span>Observações adicionais</span><Textarea name="obs" rows={4} maxLength={1000} placeholder="Somente informações necessárias para o cuidado no evento. Não informe documentos, senhas ou outros dados sensíveis." /></label>
           </div>
         </fieldset>
 
         <div className="form-confirm">
           <Checkbox id="confirmacao" checked={confirmed} onCheckedChange={(value) => setConfirmed(Boolean(value))} />
-          <label htmlFor="confirmacao">Confirmo que as informações são verdadeiras, autorizo o contato da equipe Rise e li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a>. Em caso de participante menor, declaro ser responsável ou possuir sua autorização.</label>
+          <label htmlFor="confirmacao">Confirmo que as informações são verdadeiras, li a <a href="/privacidade" target="_blank" rel="noreferrer">Política de Privacidade</a> e autorizo o tratamento necessário para organizar o evento, cuidar do participante, processar pagamentos e enviar comunicações sobre esta inscrição. Se o participante for menor, declaro ser o responsável legal ou ter autorização do responsável legal para realizar o cadastro.</label>
         </div>
 
         <TurnstileWidget action="registration" onToken={handleToken} resetSignal={resetSignal} />
