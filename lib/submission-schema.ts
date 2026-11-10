@@ -44,7 +44,7 @@ export const shirtSubmission = z.object({
   ...securityFields,
   nome: requiredText(120),
   telefone: phone,
-  edition: z.enum(["Camiseta Rise — Edição 01", "Camiseta Rise — Edição 02", "Camiseta Rise — Edição 03", "Presskit Rise"]),
+  edition: z.enum(["Camiseta Rise — Levanta-te Off-white", "Camiseta Rise — Levanta-te Roxa", "Camiseta Rise — Geração que se levanta", "Presskit Rise"]),
   size: z.enum(["P", "M", "G", "GG"]),
   quantity: z.coerce.number().int().min(1).max(5),
   pagamento: z.enum(["PIX", "Cartão", "Dinheiro"]),

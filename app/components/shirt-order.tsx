@@ -172,17 +172,6 @@ export function ShirtOrder() {
       const result = await response.json() as { protocol?: string; error?: string };
       if (!response.ok || !result.protocol) throw new Error(result.error ?? "O pedido não foi registrado.");
       idempotencyKey.current = null;
-      if (pagamento === "PIX" || pagamento === "Cartão") {
-        const checkoutResponse = await fetch("/api/mercadopago/checkout", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ kind: "shirt", protocol: result.protocol, pagamento, product: "shirt", quantity: cartQuantity }),
-        });
-        const checkout = await checkoutResponse.json() as { checkoutUrl?: string; error?: string };
-        if (!checkoutResponse.ok || !checkout.checkoutUrl) throw new Error(checkout.error ?? "O pedido foi salvo, mas não foi possível abrir o pagamento.");
-        window.location.assign(checkout.checkoutUrl);
-        return;
-      }
       const itemsMessage = cartItems.map((item) => `${item.name} — ${item.color}, tamanho ${item.size}, ${item.quantity} unidade${item.quantity === 1 ? "" : "s"}`).join("; ");
       const message = [
         "Olá, equipe Rise! Meu pedido foi registrado no site.", `Protocolo: ${result.protocol}`,

@@ -94,7 +94,7 @@ export function EditionCarousel() {
           <p>Uma única camiseta, apresentada por diferentes ângulos para você conhecer a estampa, o caimento e os detalhes.</p>
         </div>
 
-        <div className="edition-price"><span>A partir de</span><strong>R$ 49,90</strong></div>
+        <div className="edition-price"><span>A partir de</span><strong>R$ 49,99</strong></div>
 
         <div className="edition-carousel-footer">
           <div className="edition-carousel-controls">
