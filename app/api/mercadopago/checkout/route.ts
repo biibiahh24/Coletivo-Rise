@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   const registrationLabel = registrationPrice === 550 ? "inscrição com presskit" : registrationPrice === 500 ? "inscrição com camiseta" : registrationPrice === 400 ? "10 primeiras inscrições" : "demais inscrições";
   const items = data.kind === "registration"
     ? [{ id: "acampamento-rise-2027", title: `Inscrição Acampamento Rise — ${registrationLabel}`, description: "Inscrição para o Acampamento Rise 2027", quantity: 1, unit_price: registrationPrice, currency_id: "BRL" }]
-    : [{ id: data.product === "presskit" ? "presskit-rise" : "camiseta-rise-geracao", title: data.product === "presskit" ? "Presskit Rise" : (data.edition ?? "Camiseta Rise — Geração que se levanta"), description: data.product === "presskit" ? "Caixa completa com camiseta e acessórios" : "Camiseta oficial da coleção Rise", quantity: data.quantity ?? 1, unit_price: data.product === "presskit" ? 119.9 : 49.99, currency_id: "BRL" }];
+    : [{ id: data.product === "presskit" ? "presskit-rise" : "camiseta-rise-geracao", title: data.product === "presskit" ? "Presskit Rise" : (data.edition ?? "Camiseta Rise — Geração que se levanta"), description: data.product === "presskit" ? "Caixa completa com camiseta e acessórios" : "Camiseta oficial da coleção Rise", quantity: data.quantity ?? 1, unit_price: data.product === "presskit" ? 100 : 50, currency_id: "BRL" }];
   const origin = new URL(request.url).origin;
   const paymentMethods = data.pagamento === "PIX"
     ? { excluded_payment_types: [{ id: "credit_card" }, { id: "debit_card" }, { id: "ticket" }, { id: "atm" }] }

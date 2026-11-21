@@ -122,7 +122,7 @@ export function ShirtOrder() {
       color: selectedVariant.color,
       size,
       quantity,
-      unitPriceCents: 4999,
+      unitPriceCents: 5000,
       image: selectedVariant.image,
     };
     setCartItems((current) => {
@@ -261,7 +261,7 @@ export function ShirtOrder() {
 
         <aside className="rise-purchase-card" aria-label="Configurar produto">
           <div className="rise-purchase-title"><div><h3>{isPresskit ? "Presskit Rise" : `${selectedVariant.name}.`}</h3><p>{isPresskit ? "Kit completo com produtos e materiais Rise." : "Camiseta oversized em algodão premium."}</p></div><i aria-hidden="true" /></div>
-          <strong className="rise-product-price" aria-live="polite">{isPurchasable ? "R$ 49,99" : "Em breve"}</strong>
+          <strong className="rise-product-price" aria-live="polite">{isPresskit ? "R$ 100,00" : isPurchasable ? "R$ 50,00" : "Em breve"}</strong>
           {isPurchasable && <>
             <fieldset className="rise-option-group"><legend>Tamanho</legend><div className="rise-size-options">{sizes.map((item) => <button key={item} type="button" className={size === item ? "is-selected" : ""} aria-pressed={size === item} onClick={() => setSize(item)}>{item}</button>)}</div></fieldset>
             <fieldset className="rise-option-group"><legend>Quantidade</legend><div className="rise-quantity-control">

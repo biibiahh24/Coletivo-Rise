@@ -5,7 +5,7 @@ import { test } from "node:test";
 const root = new URL("..", import.meta.url);
 const read = (path) => readFile(new URL(path, root), "utf8");
 
-test("checkout de camiseta aceita as edições usadas pelo formulário e usa R$ 49,99", async () => {
+test("checkout de camiseta aceita as edições usadas pelo formulário e usa R$ 50,00", async () => {
   const schema = await read("lib/submission-schema.ts");
   const checkout = await read("app/api/mercadopago/checkout/route.ts");
   const form = await read("app/components/shirt-order.tsx");
@@ -15,8 +15,8 @@ test("checkout de camiseta aceita as edições usadas pelo formulário e usa R$ 
     assert.match(checkout, new RegExp(edition.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
   assert.match(form, /edition: cartItem\.edition/);
-  assert.match(checkout, /unit_price: data\.product === "presskit" \? 119\.9 : 49\.99/);
-  assert.doesNotMatch(checkout, /unit_price: data\.product === "presskit" \? 119\.9 : 149/);
+  assert.match(checkout, /unit_price: data\.product === "presskit" \? 100 : 50/);
+  assert.doesNotMatch(checkout, /unit_price: data\.product === "presskit" \? 119\.9 : 49\.99/);
 });
 
 test("checkout de inscrição mantém os quatro preços informados", async () => {

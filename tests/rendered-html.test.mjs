@@ -72,7 +72,7 @@ test("presents the Rise products in the interactive storefront", async () => {
   assert.match(shirtOrder, /id: "rise-off-white"[\s\S]*?available: false/);
   assert.match(shirtOrder, /id: "rise-roxa"[\s\S]*?available: false/);
   assert.match(shirtOrder, /id: "geracao"[\s\S]*?available: true/);
-  assert.match(shirtOrder, /isPurchasable \? "R\$ 49,99" : "Em breve"/);
+  assert.match(shirtOrder, /isPresskit \? "R\$ 100,00" : isPurchasable \? "R\$ 50,00" : "Em breve"/);
   assert.match(shirtOrder, /if \(!isPurchasable\) return/);
   assert.match(shirtOrder, /rise-cart-trigger/);
   assert.match(shirtOrder, /Finalizar compra/);
