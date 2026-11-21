@@ -27,8 +27,9 @@ export const registrationSubmission = z.object({
   medicacao: cleanText(300),
   restricao: cleanText(300),
   participou: z.enum(["Sim", "Não"]),
-  camiseta: z.enum(["PP", "P", "M", "G", "GG", "XG"]),
-  corCamiseta: z.enum(["Off-white", "Roxa"]),
+  inscricaoComCamiseta: z.enum(["Sim", "Não"]),
+  camiseta: z.enum(["", "PP", "P", "M", "G", "GG", "XG"]),
+  corCamiseta: z.enum(["", "Off-white", "Roxa"]),
   pagamento: z.enum(["PIX", "Cartão", "Dinheiro", "Carnê"]),
   presskit: z.enum(["Sim", "Não"]),
   comprovanteBase64: z.string().max(7_100_000).default(""),
@@ -58,6 +59,12 @@ export const submissionSchema = z.discriminatedUnion("kind", [registrationSubmis
       path: ["responsavel"],
       message: "Informe o responsável pelo participante menor de idade.",
     });
+  }
+  if (data.inscricaoComCamiseta === "Sim" && !data.camiseta) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["camiseta"], message: "Selecione o tamanho da camiseta." });
+  }
+  if (data.inscricaoComCamiseta === "Sim" && !data.corCamiseta) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["corCamiseta"], message: "Selecione a cor da camiseta." });
   }
   if (data.comprovanteBase64 && (!data.comprovanteNome || !data.comprovanteTipo)) {
     context.addIssue({

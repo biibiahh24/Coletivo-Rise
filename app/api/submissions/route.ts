@@ -63,6 +63,7 @@ async function syncOperationalSheet(runtime: RuntimeEnv, submission: Submission,
         igreja: submission.igreja,
         endereco: submission.endereco,
         participou: submission.participou,
+        inscricaoComCamiseta: submission.inscricaoComCamiseta,
         camiseta: submission.camiseta,
         corCamiseta: submission.corCamiseta,
         pagamento: submission.pagamento,
@@ -233,8 +234,8 @@ export async function POST(request: Request) {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?, ?, ?, ?, ?, ?, ?)`).bind(
           protocol, submission.idempotencyKey, submission.nome, submission.idade, submission.responsavel || null,
           submission.telefone, submission.igreja, submission.endereco, submission.alergias || null,
-          submission.medicacao || null, submission.restricao || null, submission.participou, submission.camiseta,
-          submission.pagamento, `${submission.presskit === "Sim" ? "Presskit: Sim — R$ 60,00. " : "Presskit: Não. "}Cor da camiseta: ${submission.corCamiseta}. ${submission.obs || ""}`, receiptKey, submission.comprovanteNome || null,
+          submission.medicacao || null, submission.restricao || null, submission.participou, submission.camiseta || null,
+          submission.pagamento, `${submission.inscricaoComCamiseta === "Sim" ? "Inscrição com camiseta — R$ 500,00. " : "Inscrição sem camiseta. "}${submission.presskit === "Sim" ? "Presskit: em breve. " : "Presskit: Não. "}${submission.corCamiseta ? `Cor da camiseta: ${submission.corCamiseta}. ` : ""}${submission.obs || ""}`, receiptKey, submission.comprovanteNome || null,
           submission.comprovanteTipo || null, now, submission.privacyVersion, now, now,
         ),
         runtime.DB.prepare("INSERT INTO submission_receipts (idempotency_key, protocol, kind, created_at) VALUES (?, ?, ?, ?)")

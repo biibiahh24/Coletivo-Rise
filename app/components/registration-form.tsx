@@ -23,6 +23,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
   const [idade, setIdade] = useState("");
   const [camiseta, setCamiseta] = useState("");
   const [corCamiseta, setCorCamiseta] = useState("");
+  const [inscricaoComCamiseta, setInscricaoComCamiseta] = useState("");
   const [lote, setLote] = useState(initialLote);
   const [pagamento, setPagamento] = useState("");
   const [presskit, setPresskit] = useState(initialPresskit);
@@ -48,12 +49,16 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
     event.preventDefault();
     const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
     const intent = submitter?.value === "pay-now" ? "pay-now" : "pay-later";
-    if (!participou || !camiseta || !corCamiseta || !lote || !pagamento || !presskit || !confirmed || !turnstileToken) {
+    if (!participou || !inscricaoComCamiseta || (inscricaoComCamiseta === "Sim" && (!camiseta || !corCamiseta)) || !lote || !pagamento || !presskit || !confirmed || !turnstileToken) {
       toast.error("Preencha as seleções e confirme as informações para continuar.");
       return;
     }
     if (intent === "pay-now" && pagamento !== "PIX" && pagamento !== "Cartão" && pagamento !== "Carnê") {
       toast.error("Para pagar agora, selecione PIX ou Cartão em forma de pagamento.");
+      return;
+    }
+    if (intent === "pay-now" && presskit === "Sim") {
+      toast.error("O presskit ainda está sem valor definido. Envie a inscrição para pagar depois.");
       return;
     }
 
@@ -92,6 +97,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         medicacao: text("medicacao"),
         restricao: text("restricao"),
         participou,
+        inscricaoComCamiseta,
         camiseta,
         corCamiseta,
         pagamento,
@@ -115,7 +121,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
         const checkoutResponse = await fetch("/api/mercadopago/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ kind: "registration", protocol: result.protocol, pagamento, lote: lote.startsWith("10 primeiras") ? "primeiras" : "proximas", presskit }),
+          body: JSON.stringify({ kind: "registration", protocol: result.protocol, pagamento, lote: lote.startsWith("10 primeiras") ? "primeiras" : "proximas", inscricaoComCamiseta, presskit }),
         });
         const checkout = await checkoutResponse.json() as { checkoutUrl?: string; error?: string };
         if (!checkoutResponse.ok || !checkout.checkoutUrl) throw new Error(checkout.error ?? "A inscrição foi salva, mas não foi possível abrir o pagamento.");
@@ -184,18 +190,24 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
                 <SelectContent><SelectItem value="Sim">Sim</SelectItem><SelectItem value="Não">Não</SelectItem></SelectContent>
               </Select>
             </label>
-            <label className="field"><span>Tamanho da camiseta *</span>
+            <label className="field"><span>Adicionar camiseta? *</span>
+              <Select value={inscricaoComCamiseta} onValueChange={(value) => { setInscricaoComCamiseta(value); if (value === "Não") { setCamiseta(""); setCorCamiseta(""); } }} required>
+                <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
+                <SelectContent><SelectItem value="Não">Não — inscrição por R$ 400,00 ou R$ 450,00</SelectItem><SelectItem value="Sim">Sim — inscrição com camiseta por R$ 500,00</SelectItem></SelectContent>
+              </Select>
+            </label>
+            {inscricaoComCamiseta === "Sim" && <label className="field"><span>Tamanho da camiseta *</span>
               <Select value={camiseta} onValueChange={setCamiseta} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
                 <SelectContent>{["PP", "P", "M", "G", "GG", "XG"].map((size) => <SelectItem value={size} key={size}>{size}</SelectItem>)}</SelectContent>
               </Select>
-            </label>
-            <label className="field"><span>Cor da camiseta *</span>
+            </label>}
+            {inscricaoComCamiseta === "Sim" && <label className="field"><span>Cor da camiseta *</span>
               <Select value={corCamiseta} onValueChange={setCorCamiseta} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
                 <SelectContent><SelectItem value="Off-white">Off-white</SelectItem><SelectItem value="Roxa">Roxa</SelectItem></SelectContent>
               </Select>
-            </label>
+            </label>}
             <label className="field"><span>Lote da inscrição *</span>
               <div className="form-select lote-readonly" aria-live="polite">{lote || "Calculando lote atual..."}</div>
             </label>
@@ -208,7 +220,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { i
             <label className="field"><span>Adicionar presskit? *</span>
               <Select value={presskit} onValueChange={setPresskit} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
-                <SelectContent><SelectItem value="Sim">Sim — adicionar presskit</SelectItem><SelectItem value="Não">Não, somente a inscrição</SelectItem></SelectContent>
+                <SelectContent><SelectItem value="Não">Não, somente a inscrição</SelectItem><SelectItem value="Sim">Sim — valor em breve, sem cobrança agora</SelectItem></SelectContent>
               </Select>
             </label>
             <label className="field"><span>Comprovante (opcional, caso já tenha pago)</span><Input name="comprovante" type="file" accept="image/*,application/pdf" /></label>

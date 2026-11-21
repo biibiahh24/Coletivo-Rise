@@ -8,6 +8,7 @@ const requestSchema = z.object({
   protocol: z.string().min(8).max(80),
   pagamento: z.enum(["PIX", "Cartão"]),
   lote: z.enum(["primeiras", "proximas"]).optional(),
+  inscricaoComCamiseta: z.enum(["Sim", "Não"]).optional(),
   presskit: z.enum(["Sim", "Não"]).optional(),
   product: z.enum(["shirt", "presskit"]).optional(),
   edition: z.enum(["Camiseta Rise — Levanta-te Off-white", "Camiseta Rise — Levanta-te Roxa", "Camiseta Rise — Geração que se levanta", "Presskit Rise"]).optional(),
@@ -27,8 +28,8 @@ export async function POST(request: Request) {
   const data = parsed.data;
   if (data.kind === "shirt") return reply({ error: "Pedidos de camisetas são confirmados pelo WhatsApp." }, 409);
   if (data.kind === "registration" && data.presskit === "Sim") return reply({ error: "O presskit ainda está sem preço definido e não pode ser cobrado." }, 409);
-  let registrationPrice = data.lote === "primeiras" ? 400 : 450;
-  let registrationLabel = data.lote === "primeiras" ? "1º lote" : "próximas vagas";
+  let registrationPrice = data.inscricaoComCamiseta === "Sim" ? 500 : (data.lote === "primeiras" ? 400 : 450);
+  let registrationLabel = data.inscricaoComCamiseta === "Sim" ? "inscrição com camiseta" : (data.lote === "primeiras" ? "1º lote" : "próximas vagas");
   if (data.kind === "registration" && isSupabaseAdminConfigured()) {
     const db = createSupabaseAdminClient();
     const [{ data: registration }, { count }] = await Promise.all([
@@ -36,8 +37,9 @@ export async function POST(request: Request) {
       db.from("camp_registrations").select("protocol", { count: "exact", head: true }),
     ]);
     if (!registration) return reply({ error: "Inscrição não encontrada." }, 404);
-    registrationPrice = (count ?? 0) <= 10 ? 400 : 450;
-    registrationLabel = registrationPrice === 400 ? "1º lote" : "próximas vagas";
+    const isFirstLot = (count ?? 0) <= 10;
+    registrationPrice = data.inscricaoComCamiseta === "Sim" ? 500 : (isFirstLot ? 400 : 450);
+    registrationLabel = data.inscricaoComCamiseta === "Sim" ? "inscrição com camiseta" : (isFirstLot ? "1º lote" : "próximas vagas");
   }
   const items = data.kind === "registration"
     ? [{ id: "acampamento-rise-2027", title: `Inscrição Acampamento Rise — ${registrationLabel}`, description: "Inscrição para o Acampamento Rise 2027", quantity: 1, unit_price: registrationPrice, currency_id: "BRL" }]

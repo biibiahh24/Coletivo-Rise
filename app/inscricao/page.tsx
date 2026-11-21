@@ -17,12 +17,12 @@ export default async function InscricaoPage({ searchParams }: { searchParams: Pr
         <div className="section-shell">
           <span className="hero-kicker"><Flame size={16} /> Inscrição Acampamento Rise 2027</span>
           <h1>Seu próximo passo <em>começa aqui.</em></h1>
-          <p>Preencha com atenção. Os 10 primeiros lugares custam R$ 400,00; depois, o valor passa a R$ 450,00. Camiseta e presskit ficam EM BREVE até a definição dos valores.</p>
+          <p>Inscrições abertas. As 10 primeiras vagas custam R$ 400,00; depois, o valor passa a R$ 450,00. A inscrição com camiseta custa R$ 500,00. O presskit fica EM BREVE até a definição do valor.</p>
           <div className="form-trust"><span><CheckCircle2 /> Informações organizadas</span><span><LockKeyhole /> Envio seguro</span></div>
         </div>
       </section>
       <section className="section-shell form-shell">
-        <div className="form-intro"><div><span className="eyebrow">Formulário</span><h2>Conte um pouco sobre você.</h2></div><p><strong>1º lote:</strong> R$ 400,00 para as 10 primeiras vagas.<br /><strong>Próximas vagas:</strong> R$ 450,00.<br /><strong>Camiseta e presskit:</strong> EM BREVE.</p></div>
+        <div className="form-intro"><div><span className="eyebrow">Formulário</span><h2>Conte um pouco sobre você.</h2></div><p><strong>10 primeiras vagas:</strong> R$ 400,00.<br /><strong>Inscrições normais:</strong> R$ 450,00.<br /><strong>Com camiseta:</strong> R$ 500,00.<br /><strong>Presskit:</strong> EM BREVE.</p></div>
         <RegistrationForm initialLote={initialLote} initialPresskit={initialPresskit} />
       </section>
     </main>
