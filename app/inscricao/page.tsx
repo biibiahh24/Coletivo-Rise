@@ -11,6 +11,7 @@ export default async function InscricaoPage({ searchParams }: { searchParams: Pr
   const params = await searchParams;
   const initialLote = params.kit === "1" || params.lote === "primeiras" ? "10 primeiras vagas — R$ 400,00" : params.kit === "2" || params.kit === "3" || params.lote === "proximas" ? "Próximas vagas — R$ 450,00" : "";
   const initialPresskit = params.kit === "1" ? "Não" : params.kit === "3" || params.presskit === "Sim" ? "Sim" : params.presskit === "Não" ? "Não" : "";
+  const initialComCamiseta = params.kit === "2" ? "Sim" : params.kit === "1" ? "Não" : "";
   return (
     <main className="form-page">
       <section className="form-hero">
@@ -22,8 +23,8 @@ export default async function InscricaoPage({ searchParams }: { searchParams: Pr
         </div>
       </section>
       <section className="section-shell form-shell">
-        <div className="form-intro"><div><span className="eyebrow">Formulário</span><h2>Conte um pouco sobre você.</h2></div><p><strong>10 primeiras vagas:</strong> R$ 400,00.<br /><strong>Inscrições normais:</strong> R$ 450,00.<br /><strong>Com camiseta:</strong> R$ 500,00.<br /><strong>Presskit:</strong> EM BREVE.</p></div>
-        <RegistrationForm initialLote={initialLote} initialPresskit={initialPresskit} />
+        <div className="form-intro"><div><span className="eyebrow">Formulário</span><h2>Conte um pouco sobre você.</h2></div></div>
+        <RegistrationForm initialLote={initialLote} initialPresskit={initialPresskit} initialComCamiseta={initialComCamiseta} />
       </section>
     </main>
   );

@@ -97,15 +97,15 @@ export default function AcampamentoPage() {
               <strong className="camp-price"><small>10 PRIMEIRAS VAGAS</small>R$ 400,00</strong>
               <strong className="camp-price"><small>PRÓXIMAS VAGAS</small>R$ 450,00</strong>
             </div>
-            <button className="camp-experience-button" type="button" disabled>Inscrições ainda não abertas</button>
+            <Link className="camp-experience-button" href="/inscricao?kit=1">Inscreva-se agora</Link>
           </article>
           <article className="camp-experience-card camp-experience-card-featured">
             <div className="camp-experience-card-top"><span>02</span><strong>COM CAMISETA</strong></div>
             <h3>Ingresso + <em>camiseta Rise</em></h3>
             <p>Ingresso para o acampamento e camiseta oversized.</p>
             <ShirtColorChoice />
-            <strong className="camp-price"><small>PREÇO</small>EM BREVE</strong>
-            <button className="camp-experience-button" type="button" disabled>Inscrições ainda não abertas</button>
+            <strong className="camp-price"><small>PREÇO</small>R$ 500,00</strong>
+            <Link className="camp-experience-button" href="/inscricao?kit=2">Inscreva-se com camiseta</Link>
           </article>
           <article className="camp-experience-card">
             <div className="camp-experience-card-top"><span>03</span><strong>KIT COMPLETO</strong></div>

@@ -18,12 +18,12 @@ function fileToBase64(file: File) {
   });
 }
 
-export function RegistrationForm({ initialLote = "", initialPresskit = "" }: { initialLote?: string; initialPresskit?: string }) {
+export function RegistrationForm({ initialLote = "", initialPresskit = "", initialComCamiseta = "" }: { initialLote?: string; initialPresskit?: string; initialComCamiseta?: string }) {
   const [participou, setParticipou] = useState("");
   const [idade, setIdade] = useState("");
   const [camiseta, setCamiseta] = useState("");
   const [corCamiseta, setCorCamiseta] = useState("");
-  const [inscricaoComCamiseta, setInscricaoComCamiseta] = useState("");
+  const [inscricaoComCamiseta, setInscricaoComCamiseta] = useState(initialComCamiseta);
   const [lote, setLote] = useState(initialLote);
   const [pagamento, setPagamento] = useState("");
   const [presskit, setPresskit] = useState(initialPresskit);
