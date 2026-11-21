@@ -86,7 +86,7 @@ export function ShirtOrder() {
   const handleToken = useCallback((token: string) => setTurnstileToken(token), []);
   const selectedVariant = shirtVariants[variantIndex];
   const isPresskit = product === "presskit";
-  const isPurchasable = !isPresskit && selectedVariant.available;
+  const isPurchasable = isPresskit || selectedVariant.available;
   const currentPhoto = isPresskit
     ? "/assets/presskit-rise-featured.jpg"
     : (variantPhotos[selectedVariant.id] ?? [selectedVariant.image])[photoIndex];
@@ -116,14 +116,14 @@ export function ShirtOrder() {
   function addToCart() {
     if (!isPurchasable) return;
     const nextItem: CartItem = {
-      id: `${selectedVariant.id}-${size}`,
-      name: selectedVariant.name,
-      edition: selectedVariant.edition,
-      color: selectedVariant.color,
+      id: `${isPresskit ? "presskit-rise" : selectedVariant.id}-${size}`,
+      name: isPresskit ? "Presskit Rise" : selectedVariant.name,
+      edition: isPresskit ? "Presskit Rise" : selectedVariant.edition,
+      color: isPresskit ? "Kit completo" : selectedVariant.color,
       size,
       quantity,
-      unitPriceCents: 5000,
-      image: selectedVariant.image,
+      unitPriceCents: isPresskit ? 10000 : 5000,
+      image: isPresskit ? "/assets/presskit-rise-featured.jpg" : selectedVariant.image,
     };
     setCartItems((current) => {
       const existing = current.find((item) => item.id === nextItem.id);
@@ -263,7 +263,7 @@ export function ShirtOrder() {
           <div className="rise-purchase-title"><div><h3>{isPresskit ? "Presskit Rise" : `${selectedVariant.name}.`}</h3><p>{isPresskit ? "Kit completo com produtos e materiais Rise." : "Camiseta oversized em algodão premium."}</p></div><i aria-hidden="true" /></div>
           <strong className="rise-product-price" aria-live="polite">{isPresskit ? "R$ 100,00" : isPurchasable ? "R$ 50,00" : "Em breve"}</strong>
           {isPurchasable && <>
-            <fieldset className="rise-option-group"><legend>Tamanho</legend><div className="rise-size-options">{sizes.map((item) => <button key={item} type="button" className={size === item ? "is-selected" : ""} aria-pressed={size === item} onClick={() => setSize(item)}>{item}</button>)}</div></fieldset>
+            <fieldset className="rise-option-group"><legend>{isPresskit ? "Tamanho da camiseta incluída" : "Tamanho"}</legend><div className="rise-size-options">{sizes.map((item) => <button key={item} type="button" className={size === item ? "is-selected" : ""} aria-pressed={size === item} onClick={() => setSize(item)}>{item}</button>)}</div></fieldset>
             <fieldset className="rise-option-group"><legend>Quantidade</legend><div className="rise-quantity-control">
               <button type="button" onClick={() => setQuantity((value) => Math.max(1, value - 1))} disabled={quantity === 1} aria-label="Diminuir quantidade"><Minus /></button>
               <output aria-live="polite" aria-label={`${quantity} unidade${quantity === 1 ? "" : "s"}`}>{quantity}</output>
