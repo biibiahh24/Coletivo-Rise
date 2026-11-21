@@ -28,6 +28,13 @@ test("checkout de inscrição mantém os quatro preços informados", async () =>
   assert.match(pricing, /includes\("Presskit: Sim"\).*return 550/);
 });
 
+test("presskit mantém a camiseta incluída no formulário", async () => {
+  const form = await read("app/components/registration-form.tsx");
+  assert.match(form, /if \(value === "Sim"\) setInscricaoComCamiseta\("Sim"\)/);
+  assert.match(form, /disabled=\{presskit === "Sim"\}/);
+  assert.match(form, /camiseta já está incluída no ingresso com presskit de R\$ 550,00/);
+});
+
 test("camisetas não são encaminhadas ao Mercado Pago", async () => {
   const form = await read("app/components/shirt-order.tsx");
   const checkout = await read("app/api/mercadopago/checkout/route.ts");

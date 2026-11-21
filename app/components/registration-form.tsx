@@ -185,11 +185,12 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "", initi
                 <SelectContent><SelectItem value="Sim">Sim</SelectItem><SelectItem value="Não">Não</SelectItem></SelectContent>
               </Select>
             </label>
-            <label className="field"><span>Adicionar camiseta? *</span>
-              <Select value={inscricaoComCamiseta} onValueChange={(value) => { setInscricaoComCamiseta(value); if (value === "Não") { setCamiseta(""); setCorCamiseta(""); setPresskit("Não"); } }} required>
-                <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
+            <label className="field"><span>{presskit === "Sim" ? "Camiseta incluída no presskit" : "Adicionar camiseta? *"}</span>
+              <Select value={inscricaoComCamiseta} onValueChange={(value) => { if (presskit === "Sim") return; setInscricaoComCamiseta(value); if (value === "Não") { setCamiseta(""); setCorCamiseta(""); } }} required>
+                <SelectTrigger className="form-select" disabled={presskit === "Sim"}><SelectValue placeholder="Selecionar" /></SelectTrigger>
                 <SelectContent><SelectItem value="Não">Não — inscrição por R$ 400,00 ou R$ 450,00</SelectItem><SelectItem value="Sim">Sim — inscrição com camiseta por R$ 500,00</SelectItem></SelectContent>
               </Select>
+              {presskit === "Sim" && <small className="field-help">A camiseta já está incluída no ingresso com presskit de R$ 550,00.</small>}
             </label>
             {inscricaoComCamiseta === "Sim" && <label className="field"><span>Tamanho da camiseta *</span>
               <Select value={camiseta} onValueChange={setCamiseta} required>
