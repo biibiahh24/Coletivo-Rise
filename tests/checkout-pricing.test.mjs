@@ -19,12 +19,13 @@ test("checkout de camiseta aceita as edições usadas pelo formulário e usa R$ 
   assert.doesNotMatch(checkout, /unit_price: data\.product === "presskit" \? 119\.9 : 149/);
 });
 
-test("checkout de inscrição mantém os três preços informados", async () => {
+test("checkout de inscrição mantém os quatro preços informados", async () => {
   const checkout = await read("app/api/mercadopago/checkout/route.ts");
   const pricing = await read("lib/registration-price.ts");
   assert.match(checkout, /await getRegistrationPrice\(data\.protocol\)/);
   assert.match(pricing, /return count <= 10 \? 400 : 450/);
   assert.match(pricing, /startsWith\("Inscrição com camiseta"\).*return 500/);
+  assert.match(pricing, /includes\("Presskit: Sim"\).*return 550/);
 });
 
 test("camisetas não são encaminhadas ao Mercado Pago", async () => {

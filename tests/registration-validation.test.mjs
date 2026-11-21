@@ -23,6 +23,8 @@ const cases = [
   ['camiseta com tamanho e cor', { inscricaoComCamiseta: 'Sim', camiseta: 'M', corCamiseta: 'Roxa' }, true],
   ['camiseta sem tamanho', { inscricaoComCamiseta: 'Sim', corCamiseta: 'Roxa' }, false],
   ['camiseta sem cor', { inscricaoComCamiseta: 'Sim', camiseta: 'M' }, false],
+  ['presskit completo', { presskit: 'Sim', inscricaoComCamiseta: 'Sim', camiseta: 'G', corCamiseta: 'Off-white' }, true],
+  ['presskit sem camiseta', { presskit: 'Sim', inscricaoComCamiseta: 'Não' }, false],
   ['menor sem responsável', { idade: 17 }, false],
   ['menor com responsável', { idade: 17, responsavel: 'Responsável Teste' }, true],
   ['responsável só com espaços', { idade: 17, responsavel: '  ' }, false],

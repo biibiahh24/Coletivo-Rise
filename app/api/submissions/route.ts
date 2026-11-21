@@ -235,7 +235,7 @@ export async function POST(request: Request) {
           protocol, submission.idempotencyKey, submission.nome, submission.idade, submission.responsavel || null,
           submission.telefone, submission.igreja, submission.endereco, submission.alergias || null,
           submission.medicacao || null, submission.restricao || null, submission.participou, submission.camiseta || "Sem camiseta",
-          submission.pagamento, `${submission.inscricaoComCamiseta === "Sim" ? "Inscrição com camiseta — R$ 500,00. " : "Inscrição sem camiseta. "}${submission.presskit === "Sim" ? "Presskit: em breve. " : "Presskit: Não. "}${submission.corCamiseta ? `Cor da camiseta: ${submission.corCamiseta}. ` : ""}${submission.obs || ""}`, receiptKey, submission.comprovanteNome || null,
+          submission.pagamento, `${submission.presskit === "Sim" ? "Inscrição com presskit — R$ 550,00. Presskit: Sim. " : submission.inscricaoComCamiseta === "Sim" ? "Inscrição com camiseta — R$ 500,00. Presskit: Não. " : "Inscrição sem camiseta. Presskit: Não. "}${submission.corCamiseta ? `Cor da camiseta: ${submission.corCamiseta}. ` : ""}${submission.obs || ""}`, receiptKey, submission.comprovanteNome || null,
           submission.comprovanteTipo || null, now, submission.privacyVersion, now, now,
         ),
         runtime.DB.prepare("INSERT INTO submission_receipts (idempotency_key, protocol, kind, created_at) VALUES (?, ?, ?, ?)")

@@ -16,8 +16,8 @@ export async function GET() {
     }
   }
   const currentLote = registrationCount < 10
-    ? "10 primeiras vagas — R$ 400,00"
-    : "Próximas vagas — R$ 450,00";
+    ? "10 primeiras inscrições — R$ 400,00"
+    : "Demais inscrições — R$ 450,00";
   return Response.json(
     { configured: Boolean(siteKey), siteKey, currentLote },
     { headers: { "Cache-Control": "no-store" } },

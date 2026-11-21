@@ -60,10 +60,13 @@ export const submissionSchema = z.discriminatedUnion("kind", [registrationSubmis
       message: "Informe o responsável pelo participante menor de idade.",
     });
   }
-  if (data.inscricaoComCamiseta === "Sim" && !data.camiseta) {
+  if (data.presskit === "Sim" && data.inscricaoComCamiseta !== "Sim") {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["inscricaoComCamiseta"], message: "O presskit inclui camiseta." });
+  }
+  if ((data.inscricaoComCamiseta === "Sim" || data.presskit === "Sim") && !data.camiseta) {
     context.addIssue({ code: z.ZodIssueCode.custom, path: ["camiseta"], message: "Selecione o tamanho da camiseta." });
   }
-  if (data.inscricaoComCamiseta === "Sim" && !data.corCamiseta) {
+  if ((data.inscricaoComCamiseta === "Sim" || data.presskit === "Sim") && !data.corCamiseta) {
     context.addIssue({ code: z.ZodIssueCode.custom, path: ["corCamiseta"], message: "Selecione a cor da camiseta." });
   }
   if (data.comprovanteBase64 && (!data.comprovanteNome || !data.comprovanteTipo)) {

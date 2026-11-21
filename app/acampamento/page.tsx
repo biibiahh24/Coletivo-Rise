@@ -94,8 +94,8 @@ export default function AcampamentoPage() {
             <p>Ingresso para o acampamento.</p>
             <ProductImageLightbox className="camp-ticket-lightbox" src="/assets/camp-ingresso-rise.png" alt="Ingresso Coletivo Rise Camp 2027" />
             <div className="camp-price-pair">
-              <strong className="camp-price"><small>10 PRIMEIRAS VAGAS</small>R$ 400,00</strong>
-              <strong className="camp-price"><small>PRÓXIMAS VAGAS</small>R$ 450,00</strong>
+              <strong className="camp-price"><small>10 PRIMEIRAS INSCRIÇÕES</small>R$ 400,00</strong>
+              <strong className="camp-price"><small>DEMAIS INSCRIÇÕES</small>R$ 450,00</strong>
             </div>
             <Link className="camp-experience-button" href="/inscricao?kit=1">Inscreva-se agora</Link>
           </article>
@@ -108,12 +108,12 @@ export default function AcampamentoPage() {
             <Link className="camp-experience-button" href="/inscricao?kit=2">Inscreva-se com camiseta</Link>
           </article>
           <article className="camp-experience-card">
-            <div className="camp-experience-card-top"><span>03</span><strong>KIT COMPLETO</strong></div>
-            <h3>Ingresso + <em>kit completo Rise</em></h3>
+            <div className="camp-experience-card-top"><span>03</span><strong>PRESSKIT</strong></div>
+            <h3>Ingresso + <em>presskit Rise</em></h3>
             <p>Ingresso e kit completo com camiseta, cordão, chaveiro, pulseira, adesivos e caixa personalizada.</p>
             <ProductImageLightbox className="camp-kit-lightbox" src="/assets/presskit-rise-featured.jpg" alt="Kit completo Rise" />
-            <strong className="camp-price"><small>PREÇO</small>EM BREVE</strong>
-            <button className="camp-experience-button" type="button" disabled>Inscrições ainda não abertas</button>
+            <strong className="camp-price"><small>PREÇO</small>R$ 550,00</strong>
+            <Link className="camp-experience-button" href="/inscricao?kit=3">Inscreva-se com presskit</Link>
           </article>
         </div>
       </section>

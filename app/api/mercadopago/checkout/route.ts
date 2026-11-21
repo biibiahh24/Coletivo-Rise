@@ -28,12 +28,11 @@ export async function POST(request: Request) {
   if (!parsed.success) return reply({ error: "Selecione uma opção válida antes de continuar." }, 400);
   const data = parsed.data;
   if (data.kind === "shirt") return reply({ error: "Pedidos de camisetas são confirmados pelo WhatsApp." }, 409);
-  if (data.kind === "registration" && data.presskit === "Sim") return reply({ error: "O presskit ainda está sem preço definido e não pode ser cobrado." }, 409);
   if (!isSupabaseAdminConfigured()) return reply({ error: "Inscrições temporariamente indisponíveis." }, 503);
   let registrationPrice: number;
   try { registrationPrice = await getRegistrationPrice(data.protocol); }
   catch { return reply({ error: "Não foi possível consultar o valor da inscrição." }, 503); }
-  const registrationLabel = registrationPrice === 500 ? "inscrição com camiseta" : registrationPrice === 400 ? "1º lote" : "próximas vagas";
+  const registrationLabel = registrationPrice === 550 ? "inscrição com presskit" : registrationPrice === 500 ? "inscrição com camiseta" : registrationPrice === 400 ? "10 primeiras inscrições" : "demais inscrições";
   const items = data.kind === "registration"
     ? [{ id: "acampamento-rise-2027", title: `Inscrição Acampamento Rise — ${registrationLabel}`, description: "Inscrição para o Acampamento Rise 2027", quantity: 1, unit_price: registrationPrice, currency_id: "BRL" }]
     : [{ id: data.product === "presskit" ? "presskit-rise" : "camiseta-rise-geracao", title: data.product === "presskit" ? "Presskit Rise" : (data.edition ?? "Camiseta Rise — Geração que se levanta"), description: data.product === "presskit" ? "Caixa completa com camiseta e acessórios" : "Camiseta oficial da coleção Rise", quantity: data.quantity ?? 1, unit_price: data.product === "presskit" ? 119.9 : 49.99, currency_id: "BRL" }];

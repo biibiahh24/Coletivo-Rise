@@ -49,7 +49,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "", initi
     event.preventDefault();
     const submitter = (event.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
     const intent = submitter?.value === "pay-now" ? "pay-now" : "pay-later";
-    if (!participou || !inscricaoComCamiseta || (inscricaoComCamiseta === "Sim" && (!camiseta || !corCamiseta)) || !lote || !pagamento || !presskit || !confirmed || !turnstileToken) {
+    if (!participou || !inscricaoComCamiseta || ((inscricaoComCamiseta === "Sim" || presskit === "Sim") && (!camiseta || !corCamiseta)) || !lote || !pagamento || !presskit || !confirmed || !turnstileToken) {
       toast.error("Preencha as seleções e confirme as informações para continuar.");
       return;
     }
@@ -57,11 +57,6 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "", initi
       toast.error("Para pagar agora, selecione PIX ou Cartão em forma de pagamento.");
       return;
     }
-    if (intent === "pay-now" && presskit === "Sim") {
-      toast.error("O presskit ainda está sem valor definido. Envie a inscrição para pagar depois.");
-      return;
-    }
-
     const form = event.currentTarget;
     const formData = new FormData(form);
     const idadeValue = Number(formData.get("idade"));
@@ -191,7 +186,7 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "", initi
               </Select>
             </label>
             <label className="field"><span>Adicionar camiseta? *</span>
-              <Select value={inscricaoComCamiseta} onValueChange={(value) => { setInscricaoComCamiseta(value); if (value === "Não") { setCamiseta(""); setCorCamiseta(""); } }} required>
+              <Select value={inscricaoComCamiseta} onValueChange={(value) => { setInscricaoComCamiseta(value); if (value === "Não") { setCamiseta(""); setCorCamiseta(""); setPresskit("Não"); } }} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
                 <SelectContent><SelectItem value="Não">Não — inscrição por R$ 400,00 ou R$ 450,00</SelectItem><SelectItem value="Sim">Sim — inscrição com camiseta por R$ 500,00</SelectItem></SelectContent>
               </Select>
@@ -218,9 +213,9 @@ export function RegistrationForm({ initialLote = "", initialPresskit = "", initi
               </Select>
             </label>
             <label className="field"><span>Adicionar presskit? *</span>
-              <Select value={presskit} onValueChange={setPresskit} required>
+              <Select value={presskit} onValueChange={(value) => { setPresskit(value); if (value === "Sim") setInscricaoComCamiseta("Sim"); }} required>
                 <SelectTrigger className="form-select"><SelectValue placeholder="Selecionar" /></SelectTrigger>
-                <SelectContent><SelectItem value="Não">Não, somente a inscrição</SelectItem><SelectItem value="Sim">Sim — valor em breve, sem cobrança agora</SelectItem></SelectContent>
+                <SelectContent><SelectItem value="Não">Não, sem presskit</SelectItem><SelectItem value="Sim">Sim — ingresso com presskit por R$ 550,00</SelectItem></SelectContent>
               </Select>
             </label>
             <label className="field"><span>Comprovante (opcional, caso já tenha pago)</span><Input name="comprovante" type="file" accept="image/*,application/pdf" /></label>

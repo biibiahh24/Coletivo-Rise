@@ -87,7 +87,8 @@ function statusLabel(value: string) {
 }
 
 function hasPresskit(item: Registration) {
-  return (item.notes ?? "").toLocaleLowerCase("pt-BR").includes("presskit: sim");
+  const notes = (item.notes ?? "").toLocaleLowerCase("pt-BR");
+  return notes.includes("presskit: sim") || notes.includes("presskit: em breve");
 }
 
 export default async function AdminPage({ searchParams }: { searchParams: SearchParams }) {
@@ -246,7 +247,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
                   <div><span className={`status-badge status-${item.registration_status}`}>{statusLabel(item.registration_status)}</span><small>{item.protocol}</small></div>
                   <h2>{item.full_name}</h2>
                   <p>{item.age} anos · {item.church} · {item.location}</p>
-                  <div className="admin-record-meta"><span>{item.phone}</span><span>Camiseta {item.shirt_size}</span><span>{item.payment_method} · {statusLabel(item.payment_status)}</span>{hasPresskit(item) && <span>Presskit + R$ 60,00</span>}<span>{formatDate(item.created_at)}</span></div>
+                  <div className="admin-record-meta"><span>{item.phone}</span><span>Camiseta {item.shirt_size}</span><span>{item.payment_method} · {statusLabel(item.payment_status)}</span>{hasPresskit(item) && <span>Ingresso + presskit · R$ 550,00</span>}<span>{formatDate(item.created_at)}</span></div>
                 </div>
                 <AdminActions id={item.id} kind="registration" status={item.registration_status} paymentStatus={item.payment_status} demo={localDemo} />
                 <details className="admin-details">
