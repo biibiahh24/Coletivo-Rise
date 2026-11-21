@@ -1,4 +1,5 @@
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { getRegistrationPrice } from "@/lib/registration-price";
 
 const DUE_DATE = "2027-01-25";
 
@@ -49,9 +50,7 @@ function createAccessToken() {
 
 export async function createCarnetPlan(input: { protocol: string; fullName: string; phone: string }) {
   const db = createSupabaseAdminClient();
-  const { count, error: countError } = await db.from("camp_registrations").select("protocol", { count: "exact", head: true });
-  if (countError) throw countError;
-  const totalAmountCents = (count ?? 0) <= 10 ? 40000 : 45000;
+  const totalAmountCents = (await getRegistrationPrice(input.protocol)) * 100;
   const accessToken = createAccessToken();
   const accessTokenHash = await hashCarnetToken(accessToken);
   const now = Math.floor(Date.now() / 1000);

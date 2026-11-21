@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const cleanText = (max: number) => z.preprocess((value) => value == null ? "" : value, z.string().trim().max(max));
 const requiredText = (max: number) => z.preprocess((value) => value == null ? "" : value, z.string().trim().min(1).max(max));
-const phone = z.preprocess((value) => value == null ? "" : value, z.string().trim().min(1).max(24).regex(/^[0-9()+\-\s]{8,24}$/, "Telefone inválido"));
+const phone = z.preprocess((value) => value == null ? "" : value, z.string().trim().regex(/^\d{10,11}$/, "Informe o telefone com DDD, usando 10 ou 11 dígitos."));
 const idempotencyKey = z.string().uuid();
 const securityFields = {
   idempotencyKey,

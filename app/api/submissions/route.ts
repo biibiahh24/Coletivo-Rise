@@ -234,7 +234,7 @@ export async function POST(request: Request) {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'pending', ?, ?, ?, ?, ?, ?, ?, ?)`).bind(
           protocol, submission.idempotencyKey, submission.nome, submission.idade, submission.responsavel || null,
           submission.telefone, submission.igreja, submission.endereco, submission.alergias || null,
-          submission.medicacao || null, submission.restricao || null, submission.participou, submission.camiseta || null,
+          submission.medicacao || null, submission.restricao || null, submission.participou, submission.camiseta || "Sem camiseta",
           submission.pagamento, `${submission.inscricaoComCamiseta === "Sim" ? "Inscrição com camiseta — R$ 500,00. " : "Inscrição sem camiseta. "}${submission.presskit === "Sim" ? "Presskit: em breve. " : "Presskit: Não. "}${submission.corCamiseta ? `Cor da camiseta: ${submission.corCamiseta}. ` : ""}${submission.obs || ""}`, receiptKey, submission.comprovanteNome || null,
           submission.comprovanteTipo || null, now, submission.privacyVersion, now, now,
         ),

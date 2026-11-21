@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { createSupabaseAdminClient, isSupabaseAdminConfigured } from "@/lib/supabase/admin";
+import { isSupabaseAdminConfigured } from "@/lib/supabase/admin";
+import { getRegistrationPrice } from "@/lib/registration-price";
 
 export const dynamic = "force-dynamic";
 
@@ -28,19 +29,11 @@ export async function POST(request: Request) {
   const data = parsed.data;
   if (data.kind === "shirt") return reply({ error: "Pedidos de camisetas são confirmados pelo WhatsApp." }, 409);
   if (data.kind === "registration" && data.presskit === "Sim") return reply({ error: "O presskit ainda está sem preço definido e não pode ser cobrado." }, 409);
-  let registrationPrice = data.inscricaoComCamiseta === "Sim" ? 500 : (data.lote === "primeiras" ? 400 : 450);
-  let registrationLabel = data.inscricaoComCamiseta === "Sim" ? "inscrição com camiseta" : (data.lote === "primeiras" ? "1º lote" : "próximas vagas");
-  if (data.kind === "registration" && isSupabaseAdminConfigured()) {
-    const db = createSupabaseAdminClient();
-    const [{ data: registration }, { count }] = await Promise.all([
-      db.from("camp_registrations").select("protocol").eq("protocol", data.protocol).maybeSingle(),
-      db.from("camp_registrations").select("protocol", { count: "exact", head: true }),
-    ]);
-    if (!registration) return reply({ error: "Inscrição não encontrada." }, 404);
-    const isFirstLot = (count ?? 0) <= 10;
-    registrationPrice = data.inscricaoComCamiseta === "Sim" ? 500 : (isFirstLot ? 400 : 450);
-    registrationLabel = data.inscricaoComCamiseta === "Sim" ? "inscrição com camiseta" : (isFirstLot ? "1º lote" : "próximas vagas");
-  }
+  if (!isSupabaseAdminConfigured()) return reply({ error: "Inscrições temporariamente indisponíveis." }, 503);
+  let registrationPrice: number;
+  try { registrationPrice = await getRegistrationPrice(data.protocol); }
+  catch { return reply({ error: "Não foi possível consultar o valor da inscrição." }, 503); }
+  const registrationLabel = registrationPrice === 500 ? "inscrição com camiseta" : registrationPrice === 400 ? "1º lote" : "próximas vagas";
   const items = data.kind === "registration"
     ? [{ id: "acampamento-rise-2027", title: `Inscrição Acampamento Rise — ${registrationLabel}`, description: "Inscrição para o Acampamento Rise 2027", quantity: 1, unit_price: registrationPrice, currency_id: "BRL" }]
     : [{ id: data.product === "presskit" ? "presskit-rise" : "camiseta-rise-geracao", title: data.product === "presskit" ? "Presskit Rise" : (data.edition ?? "Camiseta Rise — Geração que se levanta"), description: data.product === "presskit" ? "Caixa completa com camiseta e acessórios" : "Camiseta oficial da coleção Rise", quantity: data.quantity ?? 1, unit_price: data.product === "presskit" ? 119.9 : 49.99, currency_id: "BRL" }];

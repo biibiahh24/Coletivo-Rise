@@ -21,9 +21,10 @@ test("checkout de camiseta aceita as edições usadas pelo formulário e usa R$ 
 
 test("checkout de inscrição mantém os três preços informados", async () => {
   const checkout = await read("app/api/mercadopago/checkout/route.ts");
-  assert.match(checkout, /data\.lote === "primeiras" \? 400 : 450/);
-  assert.match(checkout, /data\.inscricaoComCamiseta === "Sim" \? 500/);
-  assert.match(checkout, /registrationLabel = data\.inscricaoComCamiseta === "Sim" \? "inscrição com camiseta"/);
+  const pricing = await read("lib/registration-price.ts");
+  assert.match(checkout, /await getRegistrationPrice\(data\.protocol\)/);
+  assert.match(pricing, /return count <= 10 \? 400 : 450/);
+  assert.match(pricing, /startsWith\("Inscrição com camiseta"\).*return 500/);
 });
 
 test("camisetas não são encaminhadas ao Mercado Pago", async () => {
