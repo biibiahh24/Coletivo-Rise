@@ -16,8 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TurnstileWidget } from "./turnstile-widget";
 
 const shirtVariants = [
-  { id: "rise-off-white", name: "Rise Off-white", edition: "Camiseta Rise — Levanta-te Off-white", color: "Off-white", image: "/assets/miniatura-rise-offwhite-wireframe.png", embeddedThumbnailCopy: true, available: false },
-  { id: "rise-roxa", name: "Rise Roxa", edition: "Camiseta Rise — Levanta-te Roxa", color: "Roxa", image: "/assets/miniatura-rise-roxa-wireframe.png", embeddedThumbnailCopy: true, available: false },
+  { id: "rise-off-white", name: "Rise Off-white", edition: "Camiseta Rise — Levanta-te Off-white", color: "Off-white", image: "/assets/miniatura-rise-offwhite-wireframe.png", embeddedThumbnailCopy: true, available: true },
+  { id: "rise-roxa", name: "Rise Roxa", edition: "Camiseta Rise — Levanta-te Roxa", color: "Roxa", image: "/assets/miniatura-rise-roxa-wireframe.png", embeddedThumbnailCopy: true, available: true },
   { id: "geracao", name: "Geração que se levanta", edition: "Camiseta Rise — Geração que se levanta", color: "Preta", image: "/assets/miniatura-rise-geracao-wireframe.png", embeddedThumbnailCopy: true, available: true },
 ] as const;
 

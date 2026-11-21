@@ -69,8 +69,8 @@ test("presents the Rise products in the interactive storefront", async () => {
   assert.doesNotMatch(editionCarousel, /camiseta-rise-editorial\.jpeg/);
   assert.doesNotMatch(editionCarousel, /Edição 02|Edição 03/);
   assert.match(shirtOrder, /Produtos Rise/);
-  assert.match(shirtOrder, /id: "rise-off-white"[\s\S]*?available: false/);
-  assert.match(shirtOrder, /id: "rise-roxa"[\s\S]*?available: false/);
+  assert.match(shirtOrder, /id: "rise-off-white"[\s\S]*?available: true/);
+  assert.match(shirtOrder, /id: "rise-roxa"[\s\S]*?available: true/);
   assert.match(shirtOrder, /id: "geracao"[\s\S]*?available: true/);
   assert.match(shirtOrder, /isPresskit \? "R\$ 100,00" : isPurchasable \? "R\$ 50,00" : "Em breve"/);
   assert.match(editionCarousel, /R\$ 50,00/);
