@@ -48,6 +48,21 @@ test("links the registration page to the protected admin area", async () => {
   assert.match(siteChrome, /Área administrativa/);
 });
 
+test("provides a phone-based registration status lookup", async () => {
+  const siteChrome = await readFile(new URL("app/components/site-chrome.tsx", root), "utf8");
+  const lookupRoute = await readFile(new URL("app/api/inscricoes/lookup/route.ts", root), "utf8");
+  const statusRoute = await readFile(new URL("app/api/inscricoes/[token]/route.ts", root), "utf8");
+  const portal = await readFile(new URL("app/components/registration-lookup-portal.tsx", root), "utf8");
+  assert.match(siteChrome, /Minha inscrição/);
+  assert.doesNotMatch(siteChrome, /Meus Carnês/);
+  assert.match(lookupRoute, /camp_registrations/);
+  assert.match(lookupRoute, /consumeRequestRateLimit/);
+  assert.match(statusRoute, /getRegistrationByToken/);
+  assert.match(portal, /Status da inscrição/);
+  assert.match(portal, /Abrir meu carnê/);
+  assert.match(await readFile(new URL("lib/carnet.ts", root), "utf8"), /registration_protocol/);
+});
+
 test("presents the Rise products in the interactive storefront", async () => {
   const storePage = await readFile(new URL("app/loja/page.tsx", root), "utf8");
   const editionCarousel = await readFile(new URL("app/components/edition-carousel.tsx", root), "utf8");
@@ -94,6 +109,14 @@ test("presents the Rise products in the interactive storefront", async () => {
   const adminTabs = await readFile(new URL("app/admin/admin-section-tabs.tsx", root), "utf8");
   assert.match(adminPage, /registrations_all/);
   assert.match(adminTabs, />\s*Inscrições\s*</);
+  assert.match(adminPage, /registrationPayments/);
+  assert.match(adminPage, /paidAmountCents/);
+  const adminActions = await readFile(new URL("app/admin/admin-actions.tsx", root), "utf8");
+  const adminPaymentRoute = await readFile(new URL("app/api/admin/registration-payments/route.ts", root), "utf8");
+  assert.match(adminActions, /Adicionar pagamento/);
+  assert.match(adminActions, /registration-payments/);
+  assert.match(adminPaymentRoute, /payment_recorded/);
+  assert.match(adminPaymentRoute, /paymentStatus = paidAfter >= totalCents \? "paid" : "partial"/);
 });
 
 test("shows unique memories from previous camp editions", async () => {

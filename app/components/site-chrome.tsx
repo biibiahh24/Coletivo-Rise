@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Camera, Menu, MessageCircle, ShieldCheck, X } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { CarnetLookupModal } from "./carnet-lookup-modal";
+import { useEffect, useState } from "react";
+import { RegistrationLookupModal } from "./registration-lookup-modal";
 
 const navigation = [
   { href: "/", label: "Início" },
@@ -16,8 +16,7 @@ const navigation = [
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [carnetLookupOpen, setCarnetLookupOpen] = useState(false);
-  const closeCarnetLookup = useCallback(() => setCarnetLookupOpen(false), []);
+  const [registrationLookupOpen, setRegistrationLookupOpen] = useState(false);
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -36,7 +35,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
                 {item.label}
               </Link>
             ))}
-            <button type="button" className="carnet-nav-trigger" onClick={() => setCarnetLookupOpen(true)}>Meus Carnês</button>
+            <button type="button" className="carnet-nav-trigger" onClick={() => setRegistrationLookupOpen(true)}>Minha inscrição</button>
           </nav>
 
           <div className="header-actions">
@@ -56,13 +55,13 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
             {navigation.map((item) => (
               <Link key={item.href} href={item.href} className={pathname === item.href ? "active" : ""}>{item.label}</Link>
             ))}
-            <button type="button" className="carnet-nav-trigger" onClick={() => { setOpen(false); setCarnetLookupOpen(true); }}>Meus Carnês</button>
+            <button type="button" className="carnet-nav-trigger" onClick={() => { setOpen(false); setRegistrationLookupOpen(true); }}>Minha inscrição</button>
             {pathname === "/inscricao" && <Link href="/admin" className="mobile-admin-link"><ShieldCheck /> Área administrativa</Link>}
           </nav>
         )}
       </header>
 
-      {carnetLookupOpen && <CarnetLookupModal onClose={closeCarnetLookup} />}
+      {registrationLookupOpen && <RegistrationLookupModal onClose={() => setRegistrationLookupOpen(false)} />}
 
       <div className="global-decoration-layer" aria-hidden="true">
         <span className="global-decoration global-decoration-top-left" />

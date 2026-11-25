@@ -1474,6 +1474,15 @@ body:has(.edition-lightbox) { overflow: hidden; }
 body:has(.carnet-lookup-backdrop) { overflow: hidden; }
 .carnet-admin-summary { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
 .carnet-admin-summary span { padding: 7px 10px; border-radius: 999px; background: var(--lilac-soft); color: var(--purple); font-size: .78rem; font-weight: 800; }
+.registration-status-card { display: grid; gap: 12px; margin: 28px 0; padding: 22px; border-radius: 18px; color: var(--purple); background: #eadfff; }
+.registration-status-card div { display: grid; gap: 4px; }
+.registration-status-card span { font-size: .8rem; color: #725b4c; }
+.registration-status-card strong { font-size: 1.15rem; }
+.registration-lookup-note { color: #725b4c; line-height: 1.6; }
+.registration-carnet-card { display: grid; gap: 8px; margin: 18px 0 26px; padding: 22px; color: var(--purple); border: 1px solid var(--line); border-radius: 18px; background: white; box-shadow: 0 12px 30px rgba(43,23,65,.08); }
+.registration-carnet-card strong { font-size: 1.7rem; }
+.registration-carnet-card > span:not(.eyebrow) { color: #725b4c; }
+.registration-carnet-card .button { justify-self: start; margin-top: 8px; text-decoration: none; }
 .privacy-page { min-height: 70vh; background: var(--cream-soft); }
 .privacy-shell { padding-top: 90px; padding-bottom: 110px; }
 .privacy-shell > h1 { max-width: 860px; margin: 18px 0; font-size: clamp(3rem, 7vw, 6.4rem); text-transform: uppercase; }
@@ -1925,6 +1934,14 @@ body:has(.carnet-lookup-backdrop) { overflow: hidden; }
 .admin-confirm-cancel { color: var(--purple); border: 1px solid var(--border); background: transparent; }
 .admin-confirm-delete { color: white; border: 1px solid #b42318; background: #b42318; }
 .admin-confirm-delete:hover { background: #8a1c24; }
+.admin-payment-button { grid-column: 1 / -1; width: 100% !important; min-height: 42px; display: inline-flex !important; align-items: center; justify-content: center; gap: 8px; color: var(--purple) !important; background: var(--lilac-soft) !important; border: 1px solid var(--border) !important; }
+.admin-payment-button:hover { background: #eadbff !important; }
+.admin-payment-button svg { width: 16px !important; height: 16px; }
+.admin-payment-dialog { text-align: left; }
+.admin-payment-dialog h2, .admin-payment-dialog > p { text-align: center; }
+.admin-payment-dialog label { display: grid; gap: 6px; margin-top: 14px; color: #806653; font-size: .78rem; font-weight: 850; }
+.admin-payment-dialog input, .admin-payment-dialog select, .admin-payment-dialog textarea { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fffaf4; color: var(--ink); font: inherit; }
+.admin-payment-dialog textarea { min-height: 76px; resize: vertical; }
 
 /* Rise palette: warm editorial canvas with solar orange and lilac details. */
 .site-header { background: rgba(52, 35, 63, .96); border-bottom-color: rgba(184, 154, 242, .24); }

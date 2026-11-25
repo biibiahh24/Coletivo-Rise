@@ -33,6 +33,7 @@ type Registration = {
   receipt_key: string | null;
   created_at: number;
 };
+type RegistrationPayment = { entity_id: number; details: { amountCents?: number } | null };
 
 type ShirtOrder = {
   id: number;
@@ -127,6 +128,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
       }));
 
   let registrations: Registration[] = [];
+  let registrationPayments: RegistrationPayment[] = [];
   let shirts: ShirtOrder[] = [];
   let carnets: CarnetPlan[] = [];
   let carnetPayments: CarnetPayment[] = [];
@@ -147,6 +149,12 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
       registrations = (result.data as Registration[]).filter((item) =>
         (view === "registrations_all" || (view === "registrations_presskit" ? hasPresskit(item) : !hasPresskit(item))) &&
         (!normalizedQuery || [item.full_name, item.protocol, item.phone].some((value) => value.toLocaleLowerCase("pt-BR").includes(normalizedQuery))));
+      const registrationIds = registrations.map((item) => item.id);
+      if (registrationIds.length) {
+        const payments = await db!.from("admin_audit_logs").select("entity_id, details").eq("entity_type", "registration_payment").in("entity_id", registrationIds);
+        if (payments.error) throw payments.error;
+        registrationPayments = payments.data as RegistrationPayment[];
+      }
     }
   } else if (view === "shirts") {
     if (localDemo) {
@@ -249,7 +257,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
                   <p>{item.age} anos · {item.church} · {item.location}</p>
                   <div className="admin-record-meta"><span>{item.phone}</span><span>Camiseta {item.shirt_size}</span><span>{item.payment_method} · {statusLabel(item.payment_status)}</span>{hasPresskit(item) && <span>Ingresso + presskit · R$ 550,00</span>}<span>{formatDate(item.created_at)}</span></div>
                 </div>
-                <AdminActions id={item.id} kind="registration" status={item.registration_status} paymentStatus={item.payment_status} demo={localDemo} />
+                <AdminActions id={item.id} kind="registration" status={item.registration_status} paymentStatus={item.payment_status} paidAmountCents={registrationPayments.filter((payment) => payment.entity_id === item.id).reduce((total, payment) => total + (payment.details?.amountCents ?? 0), 0)} demo={localDemo} />
                 <details className="admin-details">
                   <summary>Ver informações de cuidado e observações</summary>
                   <dl>

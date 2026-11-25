@@ -33,9 +33,40 @@ async function signLookupPayload(payload: string) {
   return encodeBase64Url(String.fromCharCode(...new Uint8Array(signature)));
 }
 
+async function verifyLookupToken(token: string) {
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature) throw new Error("invalid_token");
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(lookupSecret()), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+  const valid = await crypto.subtle.verify("HMAC", key, Uint8Array.from(atob(signature.replaceAll("-", "+").replaceAll("_", "/") + "=".repeat((4 - signature.length % 4) % 4)), (char) => char.charCodeAt(0)), new TextEncoder().encode(payload));
+  const parsed = JSON.parse(decodeBase64Url(payload)) as { id?: string; phone?: string; exp?: number };
+  if (!valid || !parsed.id || !parsed.phone || !parsed.exp || parsed.exp < Date.now()) throw new Error("invalid_token");
+  return parsed;
+}
+
 export async function createCarnetLookupToken(planId: string, phone: string) {
   const payload = encodeBase64Url(JSON.stringify({ id: planId, phone: normalizePhone(phone), exp: Date.now() + 30 * 60 * 1000 }));
   return `${payload}.${await signLookupPayload(payload)}`;
+}
+
+export async function createRegistrationLookupToken(registrationId: number, phone: string) {
+  const payload = encodeBase64Url(JSON.stringify({ id: String(registrationId), phone: normalizePhone(phone), exp: Date.now() + 30 * 60 * 1000 }));
+  return `${payload}.${await signLookupPayload(payload)}`;
+}
+
+export async function getRegistrationByToken(token: string) {
+  try {
+    const parsed = await verifyLookupToken(token);
+    const db = createSupabaseAdminClient();
+    const registration = await db.from("camp_registrations").select("id, protocol, full_name, phone, registration_status, payment_status, payment_method, shirt_size, notes, created_at").eq("id", Number(parsed.id)).eq("phone_normalized", parsed.phone).maybeSingle();
+    if (registration.error || !registration.data) return registration;
+    if (registration.data.payment_method !== "Carnê") return { data: registration.data, error: null };
+    const carnet = await db.from("carnet_plans").select("id, total_amount_cents, paid_amount_cents, due_date, status").eq("registration_protocol", registration.data.protocol).maybeSingle();
+    if (carnet.error || !carnet.data) return { data: registration.data, error: null };
+    const carnetToken = await createCarnetLookupToken(carnet.data.id, registration.data.phone);
+    return { data: { ...registration.data, carnet: { totalAmountCents: carnet.data.total_amount_cents, paidAmountCents: carnet.data.paid_amount_cents, remainingAmountCents: Math.max(0, carnet.data.total_amount_cents - carnet.data.paid_amount_cents), dueDate: carnet.data.due_date, status: carnet.data.status, url: `/carnes?token=${encodeURIComponent(carnetToken)}` } }, error: null };
+  } catch {
+    return { data: null, error: null };
+  }
 }
 
 export function hashCarnetToken(token: string) {
@@ -75,12 +106,7 @@ export async function getCarnetByToken(token: string) {
   const direct = await db.from("carnet_plans").select("id, registration_protocol, full_name, phone, total_amount_cents, paid_amount_cents, due_date, status").eq("access_token_hash", hash).maybeSingle();
   if (direct.data || direct.error) return direct;
   try {
-    const [payload, signature] = token.split(".");
-    if (!payload || !signature) throw new Error("invalid_token");
-    const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(lookupSecret()), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
-    const valid = await crypto.subtle.verify("HMAC", key, Uint8Array.from(atob(signature.replaceAll("-", "+").replaceAll("_", "/") + "=".repeat((4 - signature.length % 4) % 4)), (char) => char.charCodeAt(0)), new TextEncoder().encode(payload));
-    const parsed = JSON.parse(decodeBase64Url(payload)) as { id?: string; phone?: string; exp?: number };
-    if (!valid || !parsed.id || !parsed.phone || !parsed.exp || parsed.exp < Date.now()) throw new Error("invalid_token");
+    const parsed = await verifyLookupToken(token);
     return db.from("carnet_plans").select("id, registration_protocol, full_name, phone, total_amount_cents, paid_amount_cents, due_date, status").eq("id", parsed.id).eq("phone_normalized", parsed.phone).maybeSingle();
   } catch {
     return { data: null, error: null };

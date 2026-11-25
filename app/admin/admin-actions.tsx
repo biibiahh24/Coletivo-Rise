@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AlertTriangle, Check, LoaderCircle, Trash2 } from "lucide-react";
+import type { FormEvent } from "react";
+import { AlertTriangle, Check, DollarSign, LoaderCircle, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "sonner";
 
@@ -10,6 +11,7 @@ type Props = {
   kind: "registration" | "shirt";
   status: string;
   paymentStatus: string;
+  paidAmountCents?: number;
   demo?: boolean;
 };
 
@@ -34,13 +36,18 @@ const paymentStatuses = [
   ["refunded", "Estornado"],
 ] as const;
 
-export function AdminActions({ id, kind, status, paymentStatus, demo = false }: Props) {
+export function AdminActions({ id, kind, status, paymentStatus, paidAmountCents = 0, demo = false }: Props) {
   const router = useRouter();
   const [nextStatus, setNextStatus] = useState(status);
   const [nextPayment, setNextPayment] = useState(paymentStatus);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Pix");
+  const [paymentNotes, setPaymentNotes] = useState("");
+  const [addingPayment, setAddingPayment] = useState(false);
 
   async function save() {
     setSaving(true);
@@ -63,6 +70,25 @@ export function AdminActions({ id, kind, status, paymentStatus, demo = false }: 
 
   async function remove() {
     setConfirmOpen(true);
+  }
+
+  async function addPayment(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const amountCents = Math.round(Number(paymentAmount.replace(",", ".")) * 100);
+    if (!Number.isFinite(amountCents) || amountCents <= 0) {
+      toast.error("Informe um valor de pagamento válido.");
+      return;
+    }
+    setAddingPayment(true);
+    try {
+      const response = await fetch("/api/admin/registration-payments", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ registrationId: id, amountCents, paymentMethod, notes: paymentNotes }) });
+      const result = await response.json() as { error?: string };
+      if (!response.ok) throw new Error(result.error ?? "Não foi possível registrar o pagamento.");
+      toast.success("Pagamento adicionado à inscrição.");
+      setPaymentOpen(false); setPaymentAmount(""); setPaymentNotes(""); router.refresh();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível registrar o pagamento.");
+    } finally { setAddingPayment(false); }
   }
 
   async function confirmRemove() {
@@ -97,6 +123,9 @@ export function AdminActions({ id, kind, status, paymentStatus, demo = false }: 
           {paymentStatuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
         </select>
       </label>
+      {kind === "registration" && <button type="button" className="admin-payment-button" onClick={() => setPaymentOpen(true)} disabled={demo || addingPayment}>
+        <DollarSign /> Adicionar pagamento
+      </button>}
       <button type="button" onClick={save} disabled={demo || !changed || saving} aria-label={demo ? "Alterações desativadas na demonstração" : "Salvar alterações"}>
         {saving ? <LoaderCircle className="spinner" /> : <Check />}
       </button>
@@ -114,6 +143,19 @@ export function AdminActions({ id, kind, status, paymentStatus, demo = false }: 
               <button type="button" className="admin-confirm-delete" onClick={confirmRemove} disabled={deleting}>{deleting ? <LoaderCircle className="spinner" /> : "Apagar"}</button>
             </div>
           </section>
+        </div>
+      )}
+      {paymentOpen && (
+        <div className="admin-confirm-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !addingPayment) setPaymentOpen(false); }}>
+          <form className="admin-confirm-dialog admin-payment-dialog" onSubmit={addPayment}>
+            <div className="admin-confirm-icon"><DollarSign /></div>
+            <h2>Adicionar pagamento</h2>
+            <p>Já registrado: R$ {(paidAmountCents / 100).toFixed(2).replace(".", ",")}</p>
+            <label><span>Valor pago</span><input required inputMode="decimal" placeholder="0,00" value={paymentAmount} onChange={(event) => setPaymentAmount(event.target.value)} /></label>
+            <label><span>Método</span><select value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)}><option>Pix</option><option>Mercado Pago</option><option>Dinheiro</option><option>Transferência</option><option>Cartão</option><option>Outro</option></select></label>
+            <label><span>Observação (opcional)</span><textarea maxLength={300} value={paymentNotes} onChange={(event) => setPaymentNotes(event.target.value)} /></label>
+            <div className="admin-confirm-actions"><button type="button" className="admin-confirm-cancel" onClick={() => setPaymentOpen(false)} disabled={addingPayment}>Cancelar</button><button type="submit" className="admin-confirm-delete" disabled={addingPayment}>{addingPayment ? <LoaderCircle className="spinner" /> : "Registrar"}</button></div>
+          </form>
         </div>
       )}
     </div>
